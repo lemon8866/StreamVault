@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import com.alibaba.fastjson.JSONObject;
 import com.flower.spirit.config.Global;
@@ -86,10 +85,7 @@ public class YtDlpUtil {
 			command.add("--user-agent");
 			command.add(Global.useragent);
 		}
-		if (Global.ytdlpargs != null && !Global.ytdlpargs.isEmpty()) {
-		    String[] args = Global.ytdlpargs.split(" ");
-		    command.addAll(Arrays.asList(args));
-		}
+		// System.out.println(command.toString());
 		ProcessBuilder processBuilder = new ProcessBuilder(command);
 	    Process process = processBuilder.start();
 	    

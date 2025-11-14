@@ -1,4 +1,4 @@
-###docker buildx
+### docker buildx
     
 
     docker buildx build --platform linux/arm64,linux/amd64 -t qingfeng2336/stream-vault --push -f ./Dockerfile .
@@ -17,10 +17,23 @@
 	docker buildx build --platform linux/amd64 -t qingfeng2336/stream-vault:steam --push -f ./Dockerfile.steam .
 
 	docker buildx build --platform linux/arm64,linux/amd64 -t qingfeng2336/stream-vault:nouse --push -f ./Dockerfile.dev .
+ 
+## 修改打包地址
+    
+
+
+    RUN wget -O /usr/local/bin/yt-dlp https://github.com/lemon8866/yt-dlp/releases/download/${YT_DLP_VERSION}/yt-dlp && chmod a+rx /usr/local/bin/yt-dlp  
+    https://github.com/lemon8866  
+
+
+
+ 
+
+
+
 ## 映射目录
 
 /resources/video   to download addr
-
 
 eg 
 a2 down

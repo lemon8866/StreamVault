@@ -187,16 +187,16 @@ public class SystemService {
 	 * 
 	 * @return
 	 */
-	public AjaxEntity checkAndUpdate(String proxyup) {
+	public AjaxEntity checkAndUpdate() {
 		String message ="StreamVault 版本暂时无法通过在线更新<br />";
 
 		List<String> cmdList = new ArrayList<>();
 		cmdList.add("yt-dlp");
 		cmdList.add("-U");
-		if(Global.proxyinfo != null && (null !=proxyup && proxyup.equals("1"))){
-			cmdList.add("--proxy");
-			cmdList.add(Global.proxyinfo);
-		}
+		// if(Global.proxyinfo != null) {
+		// 	cmdList.add("--proxy");
+		// 	cmdList.add(Global.proxyinfo);
+		// }
 		String commandos = CommandUtil.runCommandList(cmdList);
 		String updateStatus = StringUtil.getUpdateStatus(commandos);
 		message= message+"yt-dlp版本:"+updateStatus;

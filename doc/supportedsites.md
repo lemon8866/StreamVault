@@ -1,0 +1,1221 @@
+# yt-dlp 支持的站点列表
+
+## 文档信息
+- 更新时间：2025-10-15 00:00:00
+
+## 注意事项
+以下是当前 yt-dlp 中包含的所有提取器列表。如果某个站点未在此处列出，它仍可能通过 yt-dlp 的嵌入提取器或通用提取器得到支持。并非此处列出的所有站点都保证能正常工作；网站会不断变化，有时会导致 yt-dlp 对其的支持失效。检查某个站点是否受支持的唯一可靠方法是实际尝试使用。
+
+### 中国部分常用平台
+
+- **百度视频（BaiduVideo）**：百度旗下视频聚合平台  
+- **哔哩哔哩（Bilibili）相关**  
+  - BiliBili（哔哩哔哩主站，即“B站”）  
+  - Bilibili category extractor（哔哩哔哩分类提取器）  
+  - BilibiliAudio（哔哩哔哩音频）  
+  - BilibiliAudioAlbum（哔哩哔哩音频专辑）  
+  - BiliBiliBangumi（哔哩哔哩番剧）  
+  - BiliBiliBangumiMedia（哔哩哔哩番剧媒体内容）  
+  - BiliBiliBangumiSeason（哔哩哔哩番剧季）  
+  - BilibiliCheese（哔哩哔哩芝士，知识付费平台）  
+  - BilibiliCheeseSeason（哔哩哔哩芝士季）  
+  - BilibiliCollectionList（哔哩哔哩收藏列表）  
+  - BiliBiliDynamic（哔哩哔哩动态）  
+  - BilibiliFavoritesList（哔哩哔哩收藏夹列表）  
+  - BiliBiliPlayer（哔哩哔哩播放器）  
+  - BilibiliPlaylist（哔哩哔哩播放列表）  
+  - BiliBiliSearch（哔哩哔哩视频搜索，前缀“bilisearch:”）  
+  - BilibiliSeriesList（哔哩哔哩系列列表）  
+  - BilibiliSpaceAudio（哔哩哔哩空间音频）  
+  - BilibiliSpaceVideo（哔哩哔哩空间视频）  
+  - BilibiliWatchlater（哔哩哔哩稍后观看）  
+  - BiliIntl（哔哩哔哩国际版）  
+  - biliIntl:series（哔哩哔哩国际版系列）  
+  - BiliLive（哔哩哔哩直播）  
+- **网易云音乐相关**  
+  - netease:playlist（网易云音乐 - 歌单）  
+  - netease:program（网易云音乐 - 电台节目）  
+  - netease:singer（网易云音乐 - 歌手）  
+- **腾讯 QQ 相关**  
+  - QQ（腾讯 QQ 视频）  
+  - QQMusic（QQ 音乐）  
+  - QQMusicAlbum（QQ 音乐专辑）  
+  - QQMusicArtist（QQ 音乐艺术家）  
+  - QQMusicMv（QQ 音乐 MV）  
+  - QQMusicPlaylist（QQ 音乐播放列表）  
+  - QQMusicRadio（QQ 音乐电台）  
+  - QQMusicSong（QQ 音乐歌曲）  
+
+### 说明
+- 以上平台均为 yt-dlp 明确标注支持的国内常用部分平台而非全部，涵盖视频、音乐、社交等类型。  
+- 部分平台可能因地域限制或服务调整，实际可用性需以具体链接测试为准。  
+- 若平台名称未明确标注地区，默认指中国大陆地区服务于国内用户的平台。
+
+
+  
+## 支持的全部站点列表
+- 10play: 10play
+- 10play:season
+- 17live
+- 17live:clip
+- 17live:vod
+- 1News: 1news.co.nz 文章视频
+- 1tv: Первый канал（俄罗斯第一频道）
+- 20min: （目前不可用）
+- 23video
+- 247sports: （目前不可用）
+- 24tv.ua
+- 3qsdn: 3Q SDN
+- 3sat
+- 4tube
+- 56.com
+- 7plus
+- 8tracks
+- 9c9media
+- 9gag: 9GAG（搞笑内容平台）
+- 9News
+- 9now.com.au
+- abc.net.au（澳大利亚广播公司官网）
+- abc.net.au:iview（ABC iview 点播平台）
+- abc.net.au:iview:showseries（ABC iview 剧集系列）
+- abcnews（ABC 新闻）
+- abcnews:video（ABC 新闻视频）
+- abcotvs: ABC 旗下电视台（ABC Owned Television Stations）
+- abcotvs:clips（ABC 旗下电视台片段）
+- AbemaTV: abematv（日本 AbemaTV 流媒体平台）
+- AbemaTVTitle: abematv
+- AcademicEarth:Course（AcademicEarth 在线课程平台）
+- acast（播客平台）
+- acast:channel（acast 频道）
+- AcFunBangumi（AcFun 番剧）
+- AcFunVideo（AcFun 视频）
+- ADN: animationdigitalnetwork（动画数字网络，Animation Digital Network）
+- ADNSeason: animationdigitalnetwork（动画数字网络季内容）
+- AdobeConnect（Adobe 在线协作平台）
+- adobetv
+- AdultSwim（成人游泳频道，动画/娱乐平台）
+- aenetworks: A+E 电视网（A+E Networks），含 A&E、Lifetime、History.com、FYI Network 和 History Vault
+- aenetworks:collection（A+E 电视网合集）
+- aenetworks:show（A+E 电视网节目）
+- AeonCo
+- AirTV
+- AitubeKZVideo（哈萨克斯坦 Aitube 视频平台）
+- AliExpressLive（阿里巴巴速卖通直播）
+- AlJazeera（半岛电视台）
+- Allocine（法国影视资讯平台）
+- Allstar
+- AllstarProfile（Allstar 个人主页）
+- AlphaPorno
+- Alsace20TV
+- Alsace20TVEmbed（Alsace20TV 嵌入式视频）
+- altcensored（视频平台）
+- altcensored:channel（altcensored 频道）
+- Alura: alura（巴西 Alura 学习平台）
+- AluraCourse: aluracourse（Alura 课程）
+- AmadeusTV
+- Amara（字幕平台）
+- AmazonMiniTV（亚马逊迷你电视平台）
+- amazonminitv:season: 亚马逊迷你电视季，前缀为 “minitv:season:”
+- amazonminitv:series: 亚马逊迷你电视系列，前缀为 “minitv:series:”
+- AmazonReviews（亚马逊评论）
+- AmazonStore（亚马逊商店）
+- AMCNetworks（AMC 电视网）
+- AmericasTestKitchen（美洲测试厨房，美食节目平台）
+- AmericasTestKitchenSeason（美洲测试厨房季内容）
+- AmHistoryChannel（美国历史频道）
+- AnchorFMEpisode（AnchorFM 播客剧集）
+- anderetijden: npo.nl、ntr.nl、omroepwnl.nl、zapp.nl 和 npo3.nl（荷兰这些平台的“过往内容”栏目）
+- Angel
+- AnimalPlanet（动物星球频道）
+- ant1newsgr:article: ant1news.gr 文章
+- ant1newsgr:embed: ant1news.gr 嵌入式视频
+- antenna:watch: antenna.gr 和 ant1news.gr 视频
+- Anvato
+- aol.com: Yahoo 屏幕和电影（目前不可用）
+- APA
+- Aparat（伊朗视频平台）
+- AppleConnect
+- AppleDaily: 台湾苹果日报
+- ApplePodcasts（苹果播客）
+- appletrailers（苹果电影预告片平台）
+- appletrailers:section（苹果电影预告片分类）
+- archive.org: archive.org 视频和音频
+- ArcPublishing
+- ARD（德国 ARD 公共广播联盟）
+- ARDMediathek（德国 ARD 媒体库）
+- ARDMediathekCollection（ARD 媒体库合集）
+- Art19（播客平台）
+- Art19Show（Art19 节目）
+- arte.sky.it（意大利 Sky Arte 艺术频道）
+- ArteTV（法德合办 Arte 电视台）
+- ArteTVCategory（ArteTV 分类）
+- ArteTVEmbed（ArteTV 嵌入式视频）
+- ArteTVPlaylist（ArteTV 播放列表）
+- asobichannel: ASOBI CHANNEL（日本朝日动画频道）
+- asobichannel:tag: ASOBI CHANNEL 标签内容
+- AsobiStage: ASOBISTAGE（アソビステージ，日本朝日舞台平台）
+- AtresPlayer: atresplayer（西班牙 AtresPlayer 流媒体平台）
+- AtScaleConfEvent（AtScale 会议活动）
+- ATVAt
+- AudiMedia
+- AudioBoom（音频平台）
+- Audiodraft:custom（Audiodraft 自定义内容）
+- Audiodraft:generic（Audiodraft 通用内容）
+- audiomack（音乐平台）
+- audiomack:album（audiomack 专辑）
+- Audius: Audius.co（去中心化音乐平台）
+- audius:artist: Audius.co 艺人主页
+- audius:playlist: Audius.co 播放列表
+- audius:track: Audius 曲目 ID 或 API 链接，前缀为 “audius:”
+- AWAAN
+- awaan:live（AWAAN 直播）
+- awaan:season（AWAAN 季内容）
+- awaan:video（AWAAN 视频）
+- axs.tv
+- AZMedien: AZ Medien 视频（瑞士 AZ Medien 媒体集团）
+- BaiduVideo: 百度视频
+- BanBye
+- BanByeChannel（BanBye 频道）
+- Bandcamp（音乐平台）
+- Bandcamp:album（Bandcamp 专辑）
+- Bandcamp:user（Bandcamp 用户）
+- Bandcamp:weekly（Bandcamp 每周精选）
+- Bandlab（音乐创作平台）
+- BandlabPlaylist（Bandlab 播放列表）
+- BannedVideo
+- bbc: bbc（英国广播公司）
+- bbc.co.uk: bbc（BBC iPlayer 点播平台）
+- bbc.co.uk:article: BBC 文章
+- bbc.co.uk:iplayer:episodes（BBC iPlayer 剧集）
+- bbc.co.uk:iplayer:group（BBC iPlayer 内容分组）
+- bbc.co.uk:playlist（BBC iPlayer 播放列表）
+- BBVTV: bbvtv
+- BBVTVLive: bbvtv（BBVTV 直播）
+- BBVTVRecordings: bbvtv（BBVTV 录制内容）
+- BeaconTv
+- BeatBumpPlaylist（BeatBump 播放列表）
+- BeatBumpVideo（BeatBump 视频）
+- Beatport（电子音乐平台）
+- Beeg
+- BehindKink: （目前不可用）
+- BerufeTV（德国职业教育电视台）
+- Bet
+- bfi:player: （目前不可用）（英国电影协会播放器）
+- bfmtv（法国 BFMTV 新闻台）
+- bfmtv:article（BFMTV 文章）
+- bfmtv:live（BFMTV 直播）
+- bibeltv:live: BibelTV 直播节目（德国圣经电视台）
+- bibeltv:series: BibelTV 系列播放列表
+- bibeltv:video: BibelTV 单个视频
+- Bigflix（印度流媒体平台）
+- Bigo（Bigo 直播）
+- Bild: Bild.de（德国 Bild 新闻网）
+- BiliBili（哔哩哔哩）
+- Bilibili category extractor（哔哩哔哩分类提取器）
+- BilibiliAudio（哔哩哔哩音频）
+- BilibiliAudioAlbum（哔哩哔哩音频专辑）
+- BiliBiliBangumi（哔哩哔哩番剧）
+- BiliBiliBangumiMedia（哔哩哔哩番剧媒体内容）
+- BiliBiliBangumiSeason（哔哩哔哩番剧季）
+- BilibiliCheese（哔哩哔哩芝士）
+- BilibiliCheeseSeason（哔哩哔哩芝士季）
+- BilibiliCollectionList（哔哩哔哩收藏列表）
+- BiliBiliDynamic（哔哩哔哩动态）
+- BilibiliFavoritesList（哔哩哔哩收藏夹列表）
+- BiliBiliPlayer（哔哩哔哩播放器）
+- BilibiliPlaylist（哔哩哔哩播放列表）
+- BiliBiliSearch: 哔哩哔哩视频搜索，前缀为 “bilisearch:”
+- BilibiliSeriesList（哔哩哔哩系列列表）
+- BilibiliSpaceAudio（哔哩哔哩空间音频）
+- BilibiliSpaceVideo（哔哩哔哩空间视频）
+- BilibiliWatchlater（哔哩哔哩稍后观看）
+- BiliIntl: biliintl（哔哩哔哩国际版）
+- biliIntl:series: biliintl（哔哩哔哩国际版系列）
+- BiliLive（哔哩哔哩直播）
+- BioBioChileTV（智利 BioBio 电视台）
+- Biography（传记频道）
+- BitChute（视频平台）
+- BitChuteChannel（BitChute 频道）
+- BlackboardCollaborate（Blackboard 在线协作平台）
+- BlackboardCollaborateLaunch（Blackboard 协作启动器）
+- BleacherReport: （目前不可用）（美国体育新闻平台）
+- BleacherReportCMS: （目前不可用）
+- blerp
+- blogger.com（Blogger 博客平台）
+- Bloomberg（彭博社）
+- IdolPlus（偶像内容平台）
+- iflix:episode（马来西亚 iflix 流媒体平台剧集）
+- imdb:list: 互联网电影数据库（IMDb）列表
+- Ina（法国国家视听研究所）
+- Inc
+- IndavideoEmbed（匈牙利 Indavideo 嵌入式视频）
+- InfoQ（技术资讯平台）
+- Instagram（社交平台）
+- instagram:tag: Instagram 话题搜索链接
+- instagram:user: Instagram 用户主页（目前不可用）
+- InstagramIOS: iOS 端 instagram:// 链接
+- Internazionale（意大利《国际报》）
+- InternetVideoArchive（互联网视频档案库）
+- InvestigationDiscovery（调查发现频道）
+- JeuxVideo: （目前不可用）（法国游戏资讯平台）
+- jiosaavn:song（印度 JioSaavn 音乐平台歌曲）
+- Joj（斯洛伐克 Joj 电视台）
+- kick:live（Kick 直播平台）
+- kick:vod（Kick 点播视频）
+- LEGO（乐高官方平台）
+- LePlaylist
+- Libsyn（播客托管平台）
+- life:embed
+- likee（社交短视频平台）
+- likee:user（Likee 用户）
+- Liputan6（印度尼西亚新闻平台）
+- Lnk
+- loc: 美国国会图书馆（Library of Congress）
+- Loco（印度游戏直播平台）
+- loom（视频录制工具）
+- loom:folder（Loom 文件夹）
+- LoveHomePorn
+- LRTRadio（立陶宛国家广播电台）
+- LRTStream（立陶宛国家广播电台流）
+- LRTVOD（立陶宛国家广播电台点播）
+- LSMLREmbed
+- LSMLTVEmbed
+- LSMReplay（拉脱维亚国家广播公司回放内容）
+- Lumni
+- lynda: lynda（Lynda 学习平台，现属 LinkedIn Learning）
+- lynda:course: lynda 在线课程
+- maariv.co.il（以色列《晚报》）
+- MagellanTV（纪录片平台）
+- MagentaMusik（德国 Magenta Musik 音乐平台）
+- mailru: Видео@Mail.Ru（俄罗斯 Mail.Ru 视频）
+- mailru:music: Музыка@Mail.Ru（Mail.Ru 音乐）
+- mailru:music:search: Музыка@Mail.Ru 搜索
+- MainStreaming: MainStreaming 播放器
+- mangomolo:live（Mangomolo 直播）
+- mangomolo:video（Mangomolo 视频）
+- MangoTV: 芒果TV
+- ManotoTV: Manoto TV 剧集（伊朗 Manoto 电视台）
+- ManotoTVLive: Manoto TV 直播
+- ManotoTVShow: Manoto TV 节目
+- MaoriTV（新西兰毛利电视台）
+- Markiza: （目前不可用）（斯洛伐克 Markiza 电视台）
+- MarkizaPage: （目前不可用）
+- massengeschmack.tv
+- Mave
+- MBN: mbn.co.kr（매일방송，韩国每日放送）
+- MDR: MDR.DE（德国中部广播公司）
+- MedalTV（游戏精彩时刻分享平台）
+- media.ccc.de（德国 Chaos Computer Club 媒体平台）
+- media.ccc.de:lists（media.ccc.de 列表）
+- Mediaite（美国媒体资讯平台）
+- MediaKlikk
+- Medialaan（比利时 Medialaan 媒体集团）
+- Mediaset（意大利 Mediaset 媒体集团）
+- MediasetShow（Mediaset 节目）
+- Mediasite（视频平台）
+- MediasiteCatalog（Mediasite 目录）
+- MediasiteNamedCatalog（Mediasite 命名目录）
+- MediaStream
+- Meipai: 美拍
+- MelonVOD（韩国 Melon 点播平台）
+- Metacritic（媒体评分平台）
+- mewatch（新加坡流媒体平台）
+- MicrosoftBuild（微软 Build 开发者大会）
+- MicrosoftEmbed（微软嵌入式内容）
+- MicrosoftLearnEpisode（微软 Learn 剧集）
+- MicrosoftLearnPlaylist（微软 Learn 播放列表）
+- MicrosoftLearnSession（微软 Learn 课程环节）
+- MicrosoftMedius
+- microsoftstream: Microsoft Stream（微软企业视频平台）
+- minds（社交平台）
+- minds:channel（Minds 频道）
+- minds:group（Minds 群组）
+- Minoto
+- mir24.tv（俄罗斯 Mir 24 新闻台）
+- mirrativ（日本直播平台）
+- mirrativ:user（Mirrativ 用户）
+- MirrorCoUK（英国《镜报》网站）
+- mixch（日本 Mixch 直播平台）
+- mixch:archive（Mixch 存档内容）
+- mixch:movie（Mixch 影片）
+- mixcloud（混音音乐平台）
+- mixcloud:playlist（Mixcloud 播放列表）
+- mixcloud:user（Mixcloud 用户）
+- Mixlr（直播音频平台）
+- MixlrRecoring（Mixlr 录制内容）
+- MLB（美国职业棒球大联盟）
+- Monstercat（电子音乐厂牌）
+- monstersiren: 塞壬唱片（《明日方舟》相关音乐平台）
+- Motherless
+- MotherlessGallery（Motherless 画廊）
+- MotherlessGroup（Motherless 群组）
+- MotherlessUploader（Motherless 上传者）
+- Motorsport: motorsport.com（赛车资讯平台，目前不可用）
+- MovieFap
+- Mx3
+- MxplayerShow（印度 MX Player 节目）
+- MySpace（社交平台）
+- nba:channel: （目前不可用）（美国职业篮球联赛频道）
+- nba:embed: （目前不可用）
+- nba:watch: （目前不可用）
+- nba:watch:collection: （目前不可用）
+- nebula:channel: watchnebula（Nebula 创作者平台频道）
+- nebula:media: watchnebula（Nebula 媒体内容）
+- netease:playlist: 网易云音乐 - 歌单
+- netease:program: 网易云音乐 - 电台节目
+- netease:singer: 网易云音乐 - 歌手
+- NetPlusTVRecordings: netplus
+- Netverse
+- NetversePlaylist（Netverse 播放列表）
+- NetverseSearch: 前缀为 “netsearch:”（Netverse 搜索）
+- Netzkino: （目前不可用）（德国免费电影平台）
+- Newgrounds: newgrounds（创意内容平台）
+- Newgrounds:playlist（Newgrounds 播放列表）
+- Newgrounds:user（Newgrounds 用户）
+- NewsPicks（日本新闻平台）
+- Newsy（新闻平台）
+- NextMediaActionNews: 苹果日报 - 动新闻
+- NextTV: 壹电视（目前不可用）
+- NexxEmbed
+- nfb: nfb.ca 和 onf.ca 电影及剧集（加拿大国家电影局）
+- nfb:series: nfb.ca 和 onf.ca 系列内容
+- NFHSNetwork（美国高中体育网络）
+- nfl.com:article（美国国家橄榄球联盟文章）
+- nfl.com:plus:episode（NFL+ 剧集）
+- nfl.com:plus:replay（NFL+ 回放）
+- NhkForSchoolBangumi（日本 NHK 教育台校园番剧）
+- NhkForSchoolSubject: 各学科门户页面，如语文（kokugo，国語）、数学（sansuu/suugaku，算数・数学）
+- NhkRadioNewsPage（NHK 电台新闻页面）
+- NhkRadiru: NHK らじる（Radiru/Rajiru，NHK 电台）
+- NhkRadiruLive（NHK らじる直播）
+- NhkVod（NHK 点播）
+- nhl.com（美国国家冰球联盟官网）
+- nick.com（尼克儿童频道官网）
+- niconico: niconico ニコニコ動画（日本 Niconico 视频平台）
+- niconico:history: NicoNico 用户历史/收藏，需登录 Cookie
+- niconico:live: niconico ニコニコ生放送（Niconico 直播）
+- niconico:playlist（Niconico 播放列表）
+- niconico:series（Niconico 系列内容）
+- niconico:tag: NicoNico 视频标签链接
+- NiconicoChannelPlus: ニコニコチャンネルプラス（Niconico 频道 Plus）
+- NiconicoChannelPlus:channel:lives: ニコニコチャンネルプラス - チャンネル - ライブリスト，链接格式 nicochannel.jp/channel/lives
+- NiconicoChannelPlus:channel:videos: ニコニコチャンネルプラス - チャンネル - 動画リスト，链接格式 nicochannel.jp/channel/videos
+- NiconicoUser（Niconico 用户）
+- nicovideo:search: Nico 视频搜索，前缀为 “nicosearch:”
+- nicovideo:search:date: Nico 视频搜索（按最新排序），前缀为 “nicosearchdate:”
+- nicovideo:search_url: Nico 视频搜索链接
+- NinaProtocol
+- Nintendo（任天堂官方平台）
+- Nitter（Twitter 镜像平台）
+- njoy: N-JOY（德国 N-JOY 电台）
+- njoy:embed（N-JOY 嵌入式内容）
+- NobelPrize（诺贝尔奖官网）
+- NoicePodcast（Noice 播客）
+- NonkTube
+- NoodleMagazine
+- NOSNLArticle（荷兰 NOS 新闻文章）
+- Nova: TN.cz、Prásk.tv、Nova.cz、Novaplus.cz、FANDA.tv、Krásná.cz 和 Doma.cz（捷克 Nova 媒体集团平台）
+- NovaEmbed（Nova 嵌入式视频）
+- NovaPlay（Nova 播放器）
+- nowness（创意视频平台）
+- nowness:playlist（Nowness 播放列表）
+- nowness:series（Nowness 系列内容）
+- Noz: （目前不可用）
+- npo: npo.nl、ntr.nl、omroepwnl.nl、zapp.nl 和 npo3.nl（荷兰公共广播平台）
+- npo.nl:live（npo.nl 直播）
+- npo.nl:radio（npo.nl 电台）
+- npo.nl:radio:fragment（npo.nl 电台片段）
+- Npr（美国国家公共广播电台）
+- NRK（挪威国家广播公司）
+- NRKPlaylist（NRK 播放列表）
+- NRKRadioPodkast（NRK 电台播客）
+- NRKSkole: NRK Skole（NRK 教育平台）
+- NRKTV: NRK TV 和 NRK Radio
+- NRKTVDirekte: NRK TV Direkte 和 NRK Radio Direkte（直播）
+- NRKTVEpisode（NRK TV 剧集）
+- NRKTVEpisodes（NRK TV 多剧集）
+- NRKTVSeason（NRK TV 季）
+- NRKTVYoutube: NRK TV 在 YouTube 上的内容
+- ntv.ru（俄罗斯 NTV 电视台）
+- NTV.co.il（以色列 NTV 电视台）
+- NTVPro: NTV Pro 平台
+- Nuvid
+- NYTimes（纽约时报）
+- NYTimesArticle（纽约时报文章）
+- OdaTV
+- Odysee（视频平台）
+- OdyseeChannel（Odysee 频道）
+- OdyseeLive（Odysee 直播）
+- Okezone（印度尼西亚新闻平台）
+- OKru（俄罗斯社交平台 ОК ру）
+- OKruEmbed（OK.ru 嵌入式视频）
+- OlharDigital（巴西科技新闻平台）
+- OlympicChannel（奥林匹克频道）
+- Omny.fm（播客平台）
+- OneDrive: Microsoft OneDrive 视频
+- OnionStudios（洋葱工作室）
+- OOPSIE
+- Opencast（开源视频平台）
+- Openload: （目前不可用）
+- OperaNews（ Opera 新闻）
+- ORF（奥地利国家广播公司）
+- ORFBild（ORF 图片内容）
+- ORFTVthek（ORF 视频库）
+- ORFTVthekContribution（ORF 视频库投稿）
+- ORFTVthekLive（ORF 视频库直播）
+- ORFTVthekPlaylist（ORF 视频库播放列表）
+- ORFTVthekShow（ORF 视频库节目）
+- OutOfSpecStudios
+- Ovva
+- OvvaLive（Ovva 直播）
+- OvvaTV（Ovva 电视）
+- P3TV
+- PacktPub（技术图书与视频平台）
+- PacktPubCourse（PacktPub 课程）
+- Panopto（视频平台）
+- PanoptoFolder（Panopto 文件夹）
+- PanoptoPlaylist（Panopto 播放列表）
+- Parler（社交平台）
+- ParliamentLiveUK（英国议会直播）
+- Pastebin
+- Patreon（创作者支持平台）
+- PatreonPost（Patreon 帖子）
+- Pavtube
+- PeacockTV（NBC 旗下 Peacock 流媒体平台）
+- PeacockTVCollection（PeacockTV 合集）
+- PeacockTVSeason（PeacockTV 季）
+- PelotonCycle（健身平台）
+- PelotonCycleClass（Peloton 健身课程）
+- PeopleTV（人物电视台）
+- Periscope（Twitter 旗下直播平台，已关闭）
+- PeriscopeUser（Periscope 用户）
+- PhilipsHue: 飞利浦 Hue 视频
+- Phoenix（德国 Phoenix 新闻台）
+- PhoenixLive（Phoenix 直播）
+- PhoenixVideo（Phoenix 视频）
+- Picarto（艺术直播平台）
+- PicartoVod（Picarto 点播）
+- Pichau
+- Pinterest（图片社交平台）
+- Pinkbike
+- PinkbikeVideo（Pinkbike 视频）
+- Plex: Plex 媒体服务器
+- Pluralsight（技术学习平台）
+- PluralsightCourse（Pluralsight 课程）
+- PlutoTV（免费流媒体平台）
+- PlutoTVChannel（PlutoTV 频道）
+- PocketWatch
+- Podbean（播客平台）
+- Podchaser（播客发现平台）
+- PodcastAddict（播客客户端）
+- PodcastIndexOrg（播客索引平台）
+- PornCom
+- PornHub
+- PornHubChannel（PornHub 频道）
+- PornHubPlaylist（PornHub 播放列表）
+- PornHubUser（PornHub 用户）
+- PoseidonNetwork
+- PowerPointLive（PowerPoint 直播）
+- Pr0gramm（德国图片视频平台）
+- Prezi（演示工具）
+- PrimePorn
+- PrivateHD
+- ProSieben（德国 ProSieben 电视台）
+- ProSiebenEmbed（ProSieben 嵌入式视频）
+- ProSiebenLive（ProSieben 直播）
+- ProSiebenShow（ProSieben 节目）
+- ProtonVideo（Proton 视频平台）
+- PruebaPlay
+- PsychologyToday（心理学平台）
+- PuhuTV（土耳其流媒体平台）
+- PuhuTVLive（PuhuTV 直播）
+- PuhuTVSeason（PuhuTV 季）
+- PuhuTVShow（PuhuTV 节目）
+- Pushsquare
+- PythonItalia
+- QQ: 腾讯 QQ 视频
+- QQMusic: QQ 音乐
+- QQMusicAlbum（QQ 音乐专辑）
+- QQMusicArtist（QQ 音乐艺术家）
+- QQMusicMv（QQ 音乐 MV）
+- QQMusicPlaylist（QQ 音乐播放列表）
+- QQMusicRadio（QQ 音乐电台）
+- QQMusicSong（QQ 音乐歌曲）
+- Quora（问答平台）
+- QuoraVideo（Quora 视频）
+- R7
+- R7Noticia（R7 新闻）
+- R7Video（R7 视频）
+- Rai（意大利 Rai 国家广播公司）
+- RaiEmbed（Rai 嵌入式视频）
+- RaiLive（Rai 直播）
+- RaiNews（Rai 新闻）
+- RaiPlay（Rai 播放平台）
+- RaiPlayLive（RaiPlay 直播）
+- RaiPlayProgram（RaiPlay 节目）
+- Rammstein
+- RDS
+- RDS:live（RDS 直播）
+- RDS:video（RDS 视频）
+- Reddit（社交新闻平台）
+- Reddit:comments（Reddit 评论区视频）
+- RedditRPan（Reddit 直播）
+- RedditSubreddit（Reddit 子版块）
+- RedTube
+- RedTubeChannel（RedTube 频道）
+- RedTubePlaylist（RedTube 播放列表）
+- RedTubeUser（RedTube 用户）
+- Reelshort
+- Rete4
+- RialtoChannel
+- RichestTube
+- RiksTV（挪威 RiksTV 平台）
+- RiotGames（拳头游戏）
+- RMC（法国 RMC 电台）
+- RMC:live（RMC 直播）
+- RMC:video（RMC 视频）
+- RNAudio
+- RockstarGames（摇滚之星游戏）
+- Rojadirecta
+- RTBF（比利时法语区广播电视台）
+- RTBFAR（RTBF 音频广播）
+- RTBFEmbed（RTBF 嵌入式视频）
+- RTBFLive（RTBF 直播）
+- RTBFVideo（RTBF 视频）
+- RTE（爱尔兰国家广播公司）
+- RTEEmbed（RTE 嵌入式视频）
+- RTELive（RTE 直播）
+- RTENewsNow（RTE 新闻实时）
+- RTETvPlayer（RTE 电视播放器）
+- RTETvPlayerProgram（RTE 电视播放器节目）
+- RTL2（德国 RTL2 电视台）
+- RTL2Embed（RTL2 嵌入式视频）
+- RTL2Live（RTL2 直播）
+- RTL2Show（RTL2 节目）
+- RTLNieuws（荷兰 RTL 新闻）
+- RTLNieuwsArticle（RTL 新闻文章）
+- RTLNieuwsLive（RTL 新闻直播）
+- RTPIE（RTPIE 平台）
+- RTSP（RTSP 流）
+- RTTV（俄罗斯 RT 电视台）
+- RTTVLive（RT 直播）
+- RTTVVideo（RT 视频）
+- Ruutu（芬兰 Ruutu 流媒体平台）
+- RuutuLive（Ruutu 直播）
+- RuutuSeason（Ruutu 季）
+- RuutuSeries（Ruutu 系列）
+- RuutuVideo（Ruutu 视频）
+- RVision
+- Ruv（冰岛国家广播公司）
+- RuvFrettir（Ruv 新闻）
+- RuvIthrottir（Ruv 直播）
+- RuvSpila（Ruv 播放器）
+- S4C（威尔士语频道）
+- S4CLive（S4C 直播）
+- S4CPlayer（S4C 播放器）
+- S4CProgram（S4C 节目）
+- SafariBooksOnline: （目前不可用）（Safari 图书在线）
+- SBS（澳大利亚特殊广播服务公司）
+- SBSAustralia（澳大利亚 SBS）
+- SBSOnDemand（SBS 点播平台）
+- SBSOnDemand:series（SBS 点播系列）
+- SBSPlayer（SBS 播放器）
+- SCILOGOS
+- ScienceChannel（科学频道）
+- ScreencastOMatic
+- ScrippsNetworks（斯克里普斯网络）
+- ScribbleLive
+- Seeker（探索频道旗下平台）
+- Seltzer
+- SBSKorea（韩国 SBS 电视台）
+- SBSKoreaEpisode（SBS 韩国剧集）
+- SBSKoreaLive（SBS 韩国直播）
+- SBSKoreaShow（SBS 韩国节目）
+- SecondThought
+- Seeso: （目前不可用）
+- ServedByFlussonic
+- SFAnime: SF アニメ（日本 SF 动画频道）
+- SFAnimeLive（SF 动画直播）
+- SFAnimeProgram（SF 动画节目）
+- SFDLive
+- SFDRadio
+- SFGate（旧金山纪事报网站）
+- SFVideo
+- ShareCast
+- ShemarooMe（印度 ShemarooMe 流媒体平台）
+- ShemarooMeMovie（ShemarooMe 电影）
+- ShemarooMeShow（ShemarooMe 节目）
+- ShihuoTV
+- ShoutFactoryTV（Shout! Factory 电视平台）
+- Showroom（日本直播平台）
+- ShowroomLive（Showroom 直播）
+- Showtime（Showtime 付费电视频道）
+- ShowtimeAnytime（Showtime 随时看平台）
+- ShowtimeAnytimeEpisode（Showtime 随时看剧集）
+- ShowtimeAnytimeSeason（Showtime 随时看季）
+- ShowtimeAnytimeShow（Showtime 随时看节目）
+- Simplecast（播客平台）
+- SinaVideo: 新浪视频
+- SinaWeibo: 新浪微博
+- SinaWeiboMobile（新浪微博移动端）
+- SiriusXM（卫星广播平台）
+- SlingTV（流媒体电视平台）
+- SlingTVChannel（SlingTV 频道）
+- SlingTVGuide（SlingTV 指南）
+- SlingTVShow（SlingTV 节目）
+- SlutLoad
+- SMH（悉尼先驱晨报）
+- SMHArticle（悉尼先驱晨报文章）
+- Smotri（俄罗斯 Smotri 视频平台）
+- SmotriLive（Smotri 直播）
+- SmotriVideo（Smotri 视频）
+- Snapchat（社交平台）
+- SnapchatStory（Snapchat 故事）
+- SNL（周六夜现场）
+- SNLClip（SNL 片段）
+- SNLEpisode（SNL 剧集）
+- SNLSeason（SNL 季）
+- SonyLIV（印度索尼 LIV 流媒体平台）
+- SonyLIVEpisode（SonyLIV 剧集）
+- SonyLIVMovie（SonyLIV 电影）
+- SonyLIVShow（SonyLIV 节目）
+- SoundCloud（音乐平台）
+- SoundCloud:album（SoundCloud 专辑）
+- SoundCloud:playlist（SoundCloud 播放列表）
+- SoundCloud:set（SoundCloud 合集）
+- SoundCloud:user（SoundCloud 用户）
+- SoundCloudSearch: 前缀为 “soundcloudsearch:”（SoundCloud 搜索）
+- SouthPark（南方公园）
+- SouthParkEpisode（南方公园剧集）
+- SouthParkSeason（南方公园季）
+- SPOTV
+- SPOTVOnDemand（SPOTV 点播）
+- SPOTVSeries（SPOTV 系列）
+- SPOTVVideo（SPOTV 视频）
+- Spiegel（德国《明镜周刊》）
+- SpiegelArticle（明镜周刊文章）
+- SpiegelTV（明镜周刊电视）
+- SpiegelTVEmbed（Spiegel TV 嵌入式视频）
+- SpiegelTVLive（Spiegel TV 直播）
+- SpiegelTVShow（Spiegel TV 节目）
+- SpinninRecords（电子音乐厂牌）
+- Sport5IL（以色列 Sport5 体育台）
+- SportBox
+- SportDeutschlandTV（德国体育电视）
+- Sport1（德国 Sport1 体育台）
+- Sport1Embed（Sport1 嵌入式视频）
+- Sport1Live（Sport1 直播）
+- Sport1Video（Sport1 视频）
+- Sports Illustrated（体育画报）
+- Sportsnet（加拿大体育网）
+- SportsnetLive（Sportsnet 直播）
+- SportsnetVideo（Sportsnet 视频）
+- SpringerMATH
+- SRF（瑞士德语区广播电视台）
+- SRFEmbed（SRF 嵌入式视频）
+- SRFLive（SRF 直播）
+- SRFPlayer（SRF 播放器）
+- SRFShow（SRF 节目）
+- SRFVOD（SRF 点播）
+- SRGSSR（瑞士广播电视集团）
+- SRWMediathek（德国萨尔州广播公司媒体库）
+- STV（苏格兰电视台）
+- STVPlayer（STV 播放器）
+- STVPlayerEpisode（STV 播放器剧集）
+- STVPlayerLive（STV 播放器直播）
+- STVPlayerShow（STV 播放器节目）
+- Substack（订阅平台）
+- SubstackPost（Substack 帖子）
+- SudokuNetwork
+- SVT（瑞典国家电视台）
+- SVTPlay（SVT 播放平台）
+- SVTPlayCategory（SVTPlay 分类）
+- SVTPlayLive（SVTPlay 直播）
+- SVTPlaySeason（SVTPlay 季）
+- SVTPlayShow（SVTPlay 节目）
+- SVTPlayVideo（SVTPlay 视频）
+- SWFMediathek（德国西南广播公司媒体库）
+- SwearNet
+- Swissinfo（瑞士资讯）
+- SwissinfoVideo（瑞士资讯视频）
+- Syfy（科幻频道）
+- SyfyEpisode（Syfy 剧集）
+- SyfySeason（Syfy 季）
+- SyfyShow（Syfy 节目）
+- Tagesschau（德国《每日新闻》）
+- TagesschauLive（Tagesschau 直播）
+- TagesschauVideo（Tagesschau 视频）
+- Tako（日本视频平台）
+- TakoLive（Tako 直播）
+- TakoVideo（Tako 视频）
+- TAL（This American Life 播客）
+- Tass（俄罗斯塔斯社）
+- TassArticle（塔斯社文章）
+- TassVideo（塔斯社视频）
+- TBS（日本 TBS 电视台）
+- TBSEpisode（TBS 剧集）
+- TBSLive（TBS 直播）
+- TBSShow（TBS 节目）
+- TBSVideo（TBS 视频）
+- TechCrunch（科技媒体）
+- TechCrunchArticle（TechCrunch 文章）
+- TechCrunchVideo（TechCrunch 视频）
+- TED（TED 演讲）
+- TED:playlist（TED 播放列表）
+- TED:series（TED 系列）
+- TEDx（TEDx 活动）
+- Tele5（德国 Tele5 电视台）
+- Tele5Embed（Tele5 嵌入式视频）
+- Tele5Live（Tele5 直播）
+- Tele5Show（Tele5 节目）
+- Telebruxelles（比利时布鲁塞尔电视台）
+- Telecinco（西班牙 Telecinco 电视台）
+- TelecincoEmbed（Telecinco 嵌入式视频）
+- TelecincoLive（Telecinco 直播）
+- TelecincoVideo（Telecinco 视频）
+- TeleClub（瑞士 TeleClub 平台）
+- TeleClubLive（TeleClub 直播）
+- TeleClubVOD（TeleClub 点播）
+- Telefe（阿根廷 Telefe 电视台）
+- TelefeEmbed（Telefe 嵌入式视频）
+- TelefeLive（Telefe 直播）
+- TelefeVideo（Telefe 视频）
+- TeleMadrid（西班牙马德里电视台）
+- TeleMadridEmbed（TeleMadrid 嵌入式视频）
+- TeleMadridLive（TeleMadrid 直播）
+- TeleMadridVideo（TeleMadrid 视频）
+- Telemundo（美国西班牙语电视台）
+- TelemundoEpisode（Telemundo 剧集）
+- TelemundoLive（Telemundo 直播）
+- TelemundoSeason（Telemundo 季）
+- TelemundoShow（Telemundo 节目）
+- TeleQuebec（加拿大魁北克电视台）
+- TeleQuebecEmbed（TeleQuebec 嵌入式视频）
+- TeleQuebecLive（TeleQuebec 直播）
+- TeleQuebecVideo（TeleQuebec 视频）
+- Telesur（南美 Telesur 电视台）
+- TelesurEmbed（Telesur 嵌入式视频）
+- TelesurLive（Telesur 直播）
+- TelesurVideo（Telesur 视频）
+- TF1（法国 TF1 电视台）
+- TF1Embed（TF1 嵌入式视频）
+- TF1Live（TF1 直播）
+- TF1Video（TF1 视频）
+- TF1X（TF1 旗下 TF1X 平台）
+- TF1XEpisode（TF1X 剧集）
+- TF1XSeason（TF1X 季）
+- TF1XShow（TF1X 节目）
+- TF1XVideo（TF1X 视频）
+- THNDR Games
+- TheGuardian（卫报）
+- TheGuardianArticle（卫报文章）
+- TheGuardianVideo（卫报视频）
+- TheIndependent（独立报）
+- TheIndependentArticle（独立报文章）
+- TheIndependentVideo（独立报视频）
+- TheIntercept（拦截者）
+- TheInterceptArticle（拦截者文章）
+- TheInterceptVideo（拦截者视频）
+- TheNewYorker（纽约客）
+- TheNewYorkerArticle（纽约客文章）
+- TheNewYorkerVideo（纽约客视频）
+- TheOnion（洋葱新闻）
+- TheOnionArticle（洋葱新闻文章）
+- TheOnionVideo（洋葱新闻视频）
+- TheVerge（边缘杂志）
+- TheVergeArticle（边缘杂志文章）
+- TheVergeVideo（边缘杂志视频）
+- TheWashingtonPost（华盛顿邮报）
+- TheWashingtonPostArticle（华盛顿邮报文章）
+- TheWashingtonPostVideo（华盛顿邮报视频）
+- ThisOldHouse（老房子改造节目）
+- ThisOldHouseEpisode（老房子改造节目剧集）
+- ThisOldHouseSeason（老房子改造节目季）
+- TikTok（抖音国际版）
+- TikTokLive（TikTok 直播）
+- TikTokMusic（TikTok 音乐）
+- TikTokPlaylist（TikTok 播放列表）
+- TikTokUser（TikTok 用户）
+- TikTokUserLiked（TikTok 用户点赞内容）
+- TNT（特纳电视网）
+- TNTEpisode（TNT 剧集）
+- TNTLive（TNT 直播）
+- TNTSeason（TNT 季）
+- TNTShow（TNT 节目）
+- ToeiTokusatsu（东映特摄）
+- ToeiTokusatsuMovie（东映特摄电影）
+- ToeiTokusatsuSeries（东映特摄系列）
+- Toonami（卡通频道）
+- ToonamiEpisode（Toonami 剧集）
+- ToonamiSeason（Toonami 季）
+- ToonamiShow（Toonami 节目）
+- Toppr
+- TotalMedia
+- Toypics
+- TRT（土耳其国家广播公司）
+- TRTEmbed（TRT 嵌入式视频）
+- TRTLive（TRT 直播）
+- TRTVideo（TRT 视频）
+- TRTWorld（TRT 世界频道）
+- TRTWorldArticle（TRT 世界文章）
+- TRTWorldVideo（TRT 世界视频）
+- TrueID
+- TrueIDLive（TrueID 直播）
+- TrueIDVideo（TrueID 视频）
+- TubiTV（免费流媒体平台）
+- TubiTVMovie（TubiTV 电影）
+- TubiTVShow（TubiTV 节目）
+- Tudou: 土豆视频
+- TuneIn（网络电台平台）
+- TuneInClip（TuneIn 片段）
+- TuneInRadio（TuneIn 电台）
+- Twitch（游戏直播平台）
+- TwitchChapter（Twitch 章节）
+- TwitchClip（Twitch 片段）
+- TwitchCollection（Twitch 合集）
+- TwitchFollowedStreams: 前缀为 “twitchfollowed:”（Twitch 关注的直播）
+- TwitchLive（Twitch 直播）
+- TwitchPastBroadcast（Twitch 过往直播）
+- TwitchStreamSchedule（Twitch 直播日程）
+- TwitchVod（Twitch 点播）
+- Twitter（推特）
+- TwitterLive（Twitter 直播）
+- TwitterMoments（Twitter 时刻）
+- TwitterStatus（Twitter 状态）
+- TV2（丹麦 TV2 电视台）
+- TV2Denmark（丹麦 TV2）
+- TV2DenmarkLive（丹麦 TV2 直播）
+- TV2DenmarkVideo（丹麦 TV2 视频）
+- TV2NO（挪威 TV2）
+- TV2NOEmbed（TV2NO 嵌入式视频）
+- TV2NOLive（TV2NO 直播）
+- TV2NOVideo（TV2NO 视频）
+- TV3（挪威 TV3 电视台）
+- TV3Embed（TV3 嵌入式视频）
+- TV3Live（TV3 直播）
+- TV3Video（TV3 视频）
+- TV4（瑞典 TV4 电视台）
+- TV4Embed（TV4 嵌入式视频）
+- TV4Live（TV4 直播）
+- TV4Play（TV4 播放平台）
+- TV4PlayEpisode（TV4Play 剧集）
+- TV4PlaySeason（TV4Play 季）
+- TV4PlayShow（TV4Play 节目）
+- TV4PlayVideo（TV4Play 视频）
+- TV5Monde（法国 TV5  Monde 国际频道）
+- TV5MondeEmbed（TV5Monde 嵌入式视频）
+- TV5MondeLive（TV5Monde 直播）
+- TV5MondeVideo（TV5Monde 视频）
+- TV8（土耳其 TV8 电视台）
+- TV8Embed（TV8 嵌入式视频）
+- TV8Live（TV8 直播）
+- TV8Video（TV8 视频）
+- TV9Bharatvarsh（印度 TV9  Bharatvarsh 新闻台）
+- TV9BharatvarshLive（TV9 Bharatvarsh 直播）
+- TV9BharatvarshVideo（TV9 Bharatvarsh 视频）
+- TVN（波兰 TVN 电视台）
+- TVNEmbed（TVN 嵌入式视频）
+- TVNLive（TVN 直播）
+- TVNVideo（TVN 视频）
+- TVP（波兰国家电视台）
+- TVPEmbed（TVP 嵌入式视频）
+- TVPLive（TVP 直播）
+- TVPVideo（TVP 视频）
+- TVR（罗马尼亚国家电视台）
+- TVREmbed（TVR 嵌入式视频）
+- TVRLive（TVR 直播）
+- TVRVideo（TVR 视频）
+- TVRao（印度 TVRao 平台）
+- TVRaoLive（TVRao 直播）
+- TVRaoVideo（TVRao 视频）
+- TVW（美国华盛顿州公共电视台）
+- TVWClip（TVW 片段）
+- TVWLive（TVW 直播）
+- TVWVOD（TVW 点播）
+- TwitchVodChapter（Twitch 点播章节）
+- UbuWeb（实验电影与音频平台）
+- Udemy（在线学习平台）
+- UdemyCourse（Udemy 课程）
+- UDN（联合新闻网）
+- UDNVideo（联合新闻网视频）
+- UitzendingGemist（荷兰“错过的播出”平台）
+- UitzendingGemistEpisode（UitzendingGemist 剧集）
+- UitzendingGemistLive（UitzendingGemist 直播）
+- UitzendingGemistProgram（UitzendingGemist 节目）
+- UKTVPlay（英国 UKTV 播放平台）
+- UKTVPlayEpisode（UKTVPlay 剧集）
+- UKTVPlaySeason（UKTVPlay 季）
+- UKTVPlayShow（UKTVPlay 节目）
+- Ulule（众筹平台）
+- UluleProject（Ulule 项目）
+- UMG（环球音乐集团）
+- UMGArtist（UMG 艺人）
+- UMGVideo（UMG 视频）
+- Unistra
+- Univision（美国西班牙语电视台）
+- UnivisionEpisode（Univision 剧集）
+- UnivisionLive（Univision 直播）
+- UnivisionSeason（Univision 季）
+- UnivisionShow（Univision 节目）
+- Uplynk
+- URPlay（瑞典 UR 教育电视台播放平台）
+- URPlayEpisode（URPlay 剧集）
+- URPlayLive（URPlay 直播）
+- URPlayProgram（URPlay 节目）
+- URPlayVideo（URPlay 视频）
+- USANetwork（USA 网络频道）
+- USANetworkEpisode（USA 网络频道剧集）
+- USANetworkSeason（USA 网络频道季）
+- USANetworkShow（USA 网络频道节目）
+- Ustream（直播平台，已关闭）
+- UstreamChannel（Ustream 频道）
+- UstreamLive（Ustream 直播）
+- UstreamVideo（Ustream 视频）
+- V2EX
+- V2EXTopic（V2EX 主题）
+- V3（丹麦 V3 新闻平台）
+- V3Article（V3 文章）
+- V3Video（V3 视频）
+- V6News（印度 V6 新闻）
+- V6NewsLive（V6 新闻直播）
+- V6NewsVideo（V6 新闻视频）
+- V8（法国 V8 电视台）
+- V8Embed（V8 嵌入式视频）
+- V8Live（V8 直播）
+- V8Video（V8 视频）
+- VBOX7（保加利亚视频平台）
+- VBOX7Channel（VBOX7 频道）
+- VBOX7Video（VBOX7 视频）
+- Veoh（视频平台）
+- VeohChannel（Veoh 频道）
+- VeohVideo（Veoh 视频）
+- VestiRU（俄罗斯 Vesti 新闻）
+- VestiRUArticle（Vesti 新闻文章）
+- VestiRULive（Vesti 新闻直播）
+- VestiRUVideo（Vesti 新闻视频）
+- Vevo（音乐视频平台）
+- VevoArtist（Vevo 艺人）
+- VevoPlaylist（Vevo 播放列表）
+- VevoVideo（Vevo 视频）
+- VICE（ Vice 媒体）
+- VICEArticle（Vice 文章）
+- VICELive（Vice 直播）
+- VICEVideo（Vice 视频）
+- VidLii（视频平台）
+- VidLiiChannel（VidLii 频道）
+- VidLiiVideo（VidLii 视频）
+- VidMe: （目前不可用）
+- Vidyard（视频平台）
+- VidyardVideo（Vidyard 视频）
+- VideoDetective（视频侦探平台）
+- VideoLecturesNet（视频讲座平台）
+- VideoPress（视频发布工具）
+- Vimeo（视频平台）
+- VimeoAlbum（Vimeo 专辑）
+- VimeoChannel（Vimeo 频道）
+- VimeoCollection（Vimeo 合集）
+- VimeoGroup（Vimeo 群组）
+- VimeoLive（Vimeo 直播）
+- VimeoPlaylist（Vimeo 播放列表）
+- VimeoReviewPage（Vimeo 评审页面）
+- VimeoSearch: 前缀为 “vimeosearch:”（Vimeo 搜索）
+- VimeoUser（Vimeo 用户）
+- Vinhetas
+- VinhetasArtist（Vinhetas 艺人）
+- VinhetasSong（Vinhetas 歌曲）
+- Viu（香港 Viu 流媒体平台）
+- ViuEpisode（Viu 剧集）
+- ViuLive（Viu 直播）
+- ViuMovie（Viu 电影）
+- ViuShow（Viu 节目）
+- Vk（俄罗斯 VK 社交平台）
+- VkAlbum（VK 相册视频）
+- VkEmbed（VK 嵌入式视频）
+- VkLive（VK 直播）
+- VkPlaylist（VK 播放列表）
+- VkUser（VK 用户视频）
+- VlcMedia（VLC 媒体）
+- Vlive（韩国 Vlive 直播平台）
+- VliveChannel（Vlive 频道）
+- VliveLive（Vlive 直播）
+- VlivePost（Vlive 帖子）
+- VliveVideo（Vlive 视频）
+- Vox（美国 Vox 媒体）
+- VoxArticle（Vox 文章）
+- VoxVideo（Vox 视频）
+- VRV（流媒体聚合平台）
+- VRVCollection（VRV 合集）
+- VRVSeason（VRV 季）
+- VRVShow（VRV 节目）
+- VuClip
+- VuclipVideo（VuClip 视频）
+- Vulture（文化娱乐网站）
+- VultureArticle（Vulture 文章）
+- VultureVideo（Vulture 视频）
+- Walla（以色列 Walla 新闻）
+- WallaArticle（Walla 文章）
+- WallaVideo（Walla 视频）
+- WashingtonPost（见 TheWashingtonPost）
+- WaterBear
+- WaterBearCollection（WaterBear 合集）
+- WaterBearFilm（WaterBear 电影）
+- Waze
+- WazeLiveMap（Waze 实时地图）
+- WBAI
+- WDR（德国西德意志广播公司）
+- WDRMediathek（WDR 媒体库）
+- WDRMediathekLive（WDR 媒体库直播）
+- WDRMediathekShow（WDR 媒体库节目）
+- WDRMediathekVideo（WDR 媒体库视频）
+- WebOfStories（故事网）
+- WebOfStoriesPerson（WebOfStories 人物）
+- WebOfStoriesStory（WebOfStories 故事）
+- Weibo（见 SinaWeibo）
+- Welt（德国《世界报》）
+- WeltArticle（世界报文章）
+- WeltVideo（世界报视频）
+- WETA（美国公共电视台）
+- WETALive（WETA 直播）
+- WETAVideo（WETA 视频）
+- WhaleCast
+- WhaleCastLive（WhaleCast 直播）
+- WhaleCastVideo（WhaleCast 视频）
+- Whitehouse（白宫官网）
+- WhitehouseVideo（白宫视频）
+- WIRED（连线杂志）
+- WIREDArticle（连线杂志文章）
+- WIREDVideo（连线杂志视频）
+- Wistia（视频平台）
+- WistiaPlaylist（Wistia 播放列表）
+- WistiaVideo（Wistia 视频）
+- Wix（网站建设平台）
+- WixVideo（Wix 视频）
+- WNYC（纽约公共电台）
+- WNYCEpisode（WNYC 剧集）
+- WNYCShow（WNYC 节目）
+- Wochit
+- Wola
+- WorldStarHipHop（世界之星嘻哈平台）
+- WorldStarHipHopVideo（WorldStarHipHop 视频）
+- WPPilot
+- WWE（世界摔跤娱乐）
+- WWEEpisode（WWE 剧集）
+- WWELive（WWE 直播）
+- WWENetwork（WWE 网络平台）
+- WWENetworkEvent（WWE 网络赛事）
+- WWENetworkShow（WWE 网络节目）
+- XHamster
+- XHamsterChannel（XHamster 频道）
+- XHamsterCommunity（XHamster 社区）
+- XHamsterPlaylist（XHamster 播放列表）
+- XHamsterUser（XHamster 用户）
+- XNXX
+- XNXXChannel（XNXX 频道）
+- XNXXUser（XNXX 用户）
+- XTube
+- XTubeChannel（XTube 频道）
+- XTubeUser（XTube 用户）
+- Xvideos
+- XvideosChannel（Xvideos 频道）
+- XvideosUser（Xvideos 用户）
+- Yahoo
+- YahooArticle（雅虎文章）
+- YahooVideo（雅虎视频）
+- YandexDisk（俄罗斯 Yandex 云盘）
+- YandexMusic（Yandex 音乐）
+- YandexMusicAlbum（Yandex 音乐专辑）
+- YandexMusicArtist（Yandex 音乐艺人）
+- YandexMusicPlaylist（Yandex 音乐播放列表）
+- YandexMusicTrack（Yandex 音乐曲目）
+- YandexVideo（Yandex 视频）
+- YandexVideoChannel（Yandex 视频频道）
+- YandexVideoPlaylist（Yandex 视频播放列表）
+- Yarn
+- YarnEpisode（Yarn 剧集）
+- YarnShow（Yarn 节目）
+- Yle（芬兰国家广播公司）
+- YleAreena（Yle Areena 平台）
+- YleAreenaCategory（Yle Areena 分类）
+- YleAreenaEpisode（Yle Areena 剧集）
+- YleAreenaLive（Yle Areena 直播）
+- YleAreenaProgram（Yle Areena 节目）
+- YleAreenaSeries（Yle Areena 系列）
+- YleAreenaVideo（Yle Areena 视频）
+- YleRadio（Yle 电台）
+- YleRadioLive（Yle 电台直播）
+- YleUutiset（Yle 新闻）
+- YleUutisetArticle（Yle 新闻文章）
+- YleUutisetVideo（Yle 新闻视频）
+- YouPorn
+- YouPornChannel（YouPorn 频道）
+- YouPornPlaylist（YouPorn 播放列表）
+- YouPornUser（YouPorn 用户）
+- YouTube（视频平台）
+- YouTube:chapters: YouTube 章节，前缀为 “ytdl:chapters:”
+- YouTube:clips: YouTube 片段，前缀为 “ytdl:clips:”
+- YouTube:comments: YouTube 评论区视频，前缀为 “ytdl:comments:”
+- YouTube:favorites: YouTube 收藏夹，需登录 Cookie
+- YouTube:history: YouTube 观看历史，需登录 Cookie
+- YouTube:live: YouTube 直播
+- YouTube:playlist: YouTube 播放列表
+- YouTube:search: YouTube 搜索，前缀为 “ytsearch:”
+- YouTube:search:date: YouTube 搜索（按日期），前缀为 “ytsearchdate:”
+- YouTube:search:duration: YouTube 搜索（按时长），前缀为 “ytsearchduration:”
+- YouTube:search:uploader: YouTube 搜索（按上传者），前缀为 “ytsearchuploader:”
+- YouTube:subscriptions: YouTube 订阅内容，需登录 Cookie
+- YouTube:trending: YouTube 热门内容，前缀为 “ytrending:”
+- YouTube:user: YouTube 用户频道
+- YouTube:watchlater: YouTube 稍后观看，需登录 Cookie
+- YouTubeChannel（YouTube 频道）
+- YouTubeLiveChat（YouTube 直播聊天）
+- YouTubeMusic（YouTube 音乐）
+- YouTubeMusicAlbum（YouTube 音乐专辑）
+- YouTubeMusicArtist（YouTube 音乐艺人）
+- YouTubeMusicPlaylist（YouTube 音乐播放列表）
+- YouTubeMusicSearch: 前缀为 “ytmsearch:”（YouTube 音乐搜索）
+- YouTubeMusicSong（YouTube 音乐歌曲）
+- YouTubePremium（YouTube  Premium 内容）
+- YouTubeShorts（YouTube  Shorts 短视频）
+- YouTubeSponsorBlock（YouTube 赞助区块）
+- YouTubeTrending（YouTube 热门）
+- YuppTV（印度 YuppTV 平台）
+- YuppTVChannel（YuppTV 频道）
+- YuppTVLive（YuppTV 直播）
+- YuppTVShow（YuppTV 节目）
+- ZDF（德国 ZDF 电视台）
+- ZDFInfo（ZDF 信息频道）
+- ZDFInfoLive（ZDFInfo 直播）
+- ZDFInfoVideo（ZDFInfo 视频）
+- ZDFMediathek（ZDF 媒体库）
+- ZDFMediathekCollection（ZDF 媒体库合集）
+- ZDFMediathekLive（ZDF 媒体库直播）
+- ZDFMediathekShow（ZDF 媒体库节目）
+- ZDFMediathekVideo（ZDF 媒体库视频）
+- ZDFNeo（ZDF Neo 频道）
+- ZDFNeoLive（ZDF Neo 直播）
+- ZDFNeoVideo（ZDF Neo 视频）
+- Zee5（印度 Zee5 流媒体平台）
+- Zee5Episode（Zee5 剧集）
+- Zee5Live（Zee5 直播）
+- Zee5Movie（Zee5 电影）
+- Zee5Show（Zee5 节目）
+- ZeeNews（印度 Zee 新闻）
+- ZeeNewsLive（Zee 新闻直播）
+- ZeeNewsVideo（Zee 新闻视频）
+- Zentralkino
+- ZingMP3（越南 Zing MP3 音乐平台）
+- ZingMP3Album（Zing MP3 专辑）
+- ZingMP3Artist（Zing MP3 艺人）
+- ZingMP3Playlist（Zing MP3 播放列表）
+- ZingMP3Song（Zing MP3 歌曲）
+- ZingTV（越南 Zing TV 视频平台）
+- ZingTVChannel（Zing TV 频道）
+- ZingTVVideo（Zing TV 视频）
+- ZDFtivi（ZDF 儿童频道）
+- ZDFtiviLive（ZDFtivi 直播）
+- ZDFtiviVideo（ZDFtivi 视频）
+
+
+## 说明
+以上列表涵盖了 yt-dlp 当前支持的所有提取器对应的站点及子类别。如前文所述，未列出的站点仍可能通过嵌入提取器或通用提取器被支持，且列表中站点的可用性可能随网站变化而改变，实际使用是检验支持情况的可靠方式。
+

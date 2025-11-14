@@ -1,4 +1,13 @@
 ### 更新记录
+```
+2025/10/31  Tagged the version as 20251031 on Docker Hub. 
+推送latest新版本
+```
+```
+2025/10/30  Tagged the version as 20250106 on Docker Hub. 
+注释yt-dlp代理更新，修改video页面
+```
+
 
 ```
 2025/10/29  Tagged the version as 251029 on Docker Hub. Merged the 251029 tag into the latest tag.

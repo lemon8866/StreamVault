@@ -1,0 +1,1599 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    <meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet">
+    <meta name="baiduspider" content="noindex, nofollow">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    <meta http-equiv="Strict-Transport-Security" content="max-age=31536000; includeSubDomains">
+    <meta http-equiv="x-dns-prefetch-control" content="off">
+    <meta name="referrer" content="no-referrer">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta name="format-detection" content="telephone=no, email=no, address=no">
+    <title>生如夏花之绚烂，死如秋叶之静美</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/axios/1.7.4/axios.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* 自定义样式 */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+        
+        @media (min-width: 640px) {
+            .video-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (min-width: 768px) {
+            .video-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .video-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        
+        @media (min-width: 1280px) {
+            .video-grid {
+                grid-template-columns: repeat(5, 1fr);
+            }
+        }
+
+        .video-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .video-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .video-thumbnail {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%; /* 16:9 比例 */
+            overflow: hidden;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .video-thumbnail img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .video-card:hover .video-thumbnail img {
+            transform: scale(1.05);
+        }
+
+        .video-platform-tag {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: white;
+            background: rgba(0, 0, 0, 0.7);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .video-platform-tag.cursor-pointer:hover {
+            transform: scale(1.05);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+
+
+        .play-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .video-card:hover .play-button {
+            opacity: 1;
+        }
+
+        .line-clamp-1 {
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* 模态框样式 */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 90vw;
+            max-height: 90vh;
+            overflow: auto;
+        }
+
+        /* 导航栏固定 */
+        .nav-container {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        /* 加载动画 */
+        .loading-spinner {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 40;
+        }
+
+        .loading-spinner.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+
+        .spinner {
+            width: 2rem;
+            height: 2rem;
+            border: 3px solid #e5e7eb;
+            border-top-color: #3b82f6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* 骨架屏动画 */
+        @keyframes shimmer {
+            0% { background-position: -1000px 0; }
+            100% { background-position: 1000px 0; }
+        }
+
+        .skeleton {
+            animation: shimmer 2s infinite linear;
+            background: linear-gradient(to right, #f6f7f8 4%, #edeef1 25%, #f6f7f8 36%);
+            background-size: 1000px 100%;
+        }
+
+        /* 加载更多提示优化 */
+        .load-more-trigger {
+            text-align: center;
+            padding: 1rem;
+            margin-top: 1rem;
+            margin-bottom: 2rem;
+            color: #666;
+            font-size: 0.875rem;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+
+
+        /* 添加下拉框样式 */
+        select {
+            background-image: none;
+        }
+        
+        select option {
+            padding: 8px;
+            background-color: white;
+        }
+        
+        select:focus option:checked {
+            background-color: #e6f7ff;
+        }
+
+        /* 播放页面样式 */
+        .video-container {
+            position: relative;
+            width: 100%;
+            max-width: 100%;
+            margin: 0 auto;
+            background: #000;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .video-container.landscape {
+            aspect-ratio: 16/9;
+            max-width: 1200px;
+        }
+
+        .video-container.portrait {
+            aspect-ratio: 9/16;
+            max-width: 400px;
+        }
+
+        .video-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .nav-back {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-back:hover {
+            background: rgba(0, 0, 0, 0.9);
+            transform: scale(1.1);
+        }
+
+        .platform-tag {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: white;
+        }
+
+        .platform-bilibili {
+            background: linear-gradient(45deg, #00a1d6, #fb7299);
+        }
+
+        .platform-douyin {
+            background: linear-gradient(45deg, #ff0050, #ff4081);
+        }
+
+        .platform-youtube {
+            background: linear-gradient(45deg, #ff0000, #ff4444);
+        }
+
+        .platform-twitter {
+            background: linear-gradient(45deg, #1da1f2, #1a91da);
+        }
+
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .video-container {
+                border-radius: 8px;
+            }
+            
+            .nav-back {
+                width: 40px;
+                height: 40px;
+                top: 16px;
+                left: 16px;
+            }
+        }
+
+        /* 隐藏播放页面 */
+        .play-page {
+            display: none;
+        }
+
+        .play-page.active {
+            display: block;
+        }
+
+        /* 隐藏列表页面 */
+        .list-page.hidden {
+            display: none;
+        }
+
+        /* Twitter视频控制样式 */
+        .video-card[data-platform="twitter"] {
+            display: none;
+        }
+        
+        .twitter-filter-active .video-card[data-platform="twitter"] {
+            display: block;
+        }
+        
+        .twitter-filter-active .video-card:not([data-platform="twitter"]) {
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <!-- 视频列表页面 -->
+    <div id="listPage" class="list-page">
+        <!-- 导航栏 -->
+        <nav class="bg-white shadow-lg p-4 nav-container">
+            <div class="container mx-auto">
+                <div class="flex flex-col sm:flex-row items-center gap-4">
+                    <h1 id="mainTitle" class="hidden sm:block text-2xl font-bold text-blue-600">无名小站</h1>
+                    
+                    <!-- 搜索和平台选择 -->
+                    <div class="w-full flex-1 flex items-center gap-1 sm:gap-2">
+                        <div class="flex-1 flex items-center bg-white rounded-full border border-gray-300 focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500 transition-all duration-200">
+                            <input type="search" 
+                                   id="searchInput"
+                                   placeholder="搜索..." 
+                                   class="flex-1 px-2 sm:px-4 py-2 text-sm bg-transparent border-none focus:outline-none focus:ring-0">
+                            <div class="h-6 w-px bg-gray-300"></div>
+                            <div class="relative flex-shrink-0">
+                                <select id="platformSelect" 
+                                        class="pl-2 sm:pl-4 pr-6 sm:pr-8 py-2 text-sm bg-transparent border-none focus:outline-none focus:ring-0 appearance-none cursor-pointer">
+                                    <option value="">全部</option>
+                                    <option value="哔哩">哔哩</option>
+                                    <option value="抖音">抖音</option>
+                                    <option value="youtube">youtube</option>
+                                    <option value="twitter">twitter</option>
+                                    <option value="instagram">instagram</option>
+                                </select>
+                                <div class="absolute right-1 sm:right-2 top-1/2 -translate-y-1/2 pointer-events-none">
+                                    <svg class="w-3 h-3 sm:w-4 sm:h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <button id="resetFilterBtn" 
+                                    class="p-1.5 sm:p-2 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors duration-200 ml-1 hidden">
+                                <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                </svg>
+                            </button>
+                        </div>
+                        
+                        <!-- 操作按钮 -->
+                        <div class="flex items-center gap-1 sm:gap-2">
+                            <button onclick="openSubmitModal()" 
+                                    class="p-1.5 sm:p-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-colors duration-200">
+                                <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                                </svg>
+                            </button>
+                            <button onclick="openSettings()" 
+                                    class="p-1.5 sm:p-2 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors duration-200">
+                                <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- 设置模态框 -->
+        <div id="settingsModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-[100]">
+            <div class="bg-white rounded-lg w-full max-w-lg relative z-[101]">
+                <div class="p-4 border-b">
+                    <h2 class="text-xl font-bold">设置</h2>
+                </div>
+                <div class="p-4">
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2">网站标题</label>
+                        <input type="text" id="siteTitle" class="w-full px-3 py-2 border rounded" placeholder="请输入网站标题">
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Token</label>
+                        <input type="text" id="serverToken" class="w-full px-3 py-2 border rounded" placeholder="请输入Token">
+                    </div>
+                </div>
+                <div class="p-4 border-t flex justify-end space-x-2">
+                    <button onclick="closeSettingsModal()" class="px-4 py-2 border rounded">取消</button>
+                    <button onclick="saveSettings()" class="px-4 py-2 bg-blue-500 text-white rounded">保存</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 提交链接弹窗 -->
+        <div id="submitModal" class="modal">
+            <div class="modal-content m-auto bg-white p-6 w-96">
+                <h2 class="text-xl font-bold mb-4">提交视频链接</h2>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">视频链接或分享口令</label>
+                        <input type="text" id="videoUrl" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" placeholder="请输入视频链接或分享口令">
+                    </div>
+                    <div class="flex justify-end space-x-3">
+                        <button onclick="closeSubmitModal()" class="px-4 py-2 bg-gray-100 rounded-md hover:bg-gray-200">取消</button>
+                        <button onclick="submitVideo()" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">提交</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 确认提交弹窗 -->
+        <div id="confirmModal" class="modal">
+            <div class="modal-content m-auto bg-white p-6 w-96">
+                <h2 class="text-xl font-bold mb-4">检测到视频链接</h2>
+                <div class="space-y-4">
+                    <p class="text-gray-600 break-all" id="clipboardContent"></p>
+                    <div class="flex justify-end space-x-3">
+                        <button onclick="closeConfirmModal()" class="px-4 py-2 bg-gray-100 rounded-md hover:bg-gray-200">取消</button>
+                        <button onclick="confirmSubmit()" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">提交</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 主要内容 -->
+        <div class="container mx-auto py-4 sm:py-8">
+            <!-- 服务器未配置提示 -->
+            <div id="configError" class="hidden">
+                <div class="flex flex-col items-center justify-center p-8 bg-white rounded-lg shadow-sm">
+                    <svg class="w-16 h-16 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
+                    <h2 class="text-xl font-semibold text-gray-900 mb-2">未配置Token</h2>
+                    <p class="text-gray-600 text-center mb-4">请先配置Token</p>
+                    <button onclick="openSettings()" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                        前往设置
+                    </button>
+                </div>
+            </div>
+
+            <!-- 数据为空提示 -->
+            <div id="emptyState" class="hidden">
+                <div class="flex flex-col items-center justify-center p-8 bg-white rounded-lg shadow-sm">
+                    <svg class="w-16 h-16 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"></path>
+                    </svg>
+                    <h2 class="text-xl font-semibold text-gray-900 mb-2">暂无视频</h2>
+                    <p class="text-gray-600 text-center">当前没有找到任何视频</p>
+                </div>
+            </div>
+
+            <!-- 骨架屏 -->
+            <div id="skeletonLoader" class="video-grid">
+                <!-- 骨架屏项目将通过JavaScript动态生成 -->
+            </div>
+
+            <div id="videoList" class="video-grid hidden">
+                <!-- 视频卡片将通过JavaScript动态加载 -->
+            </div>
+            
+            <!-- 加载动画优化 -->
+            <div id="loadingSpinner" class="loading-spinner">
+                <div class="spinner"></div>
+                <p class="mt-2 text-sm text-gray-600">加载中...</p>
+            </div>
+
+            <!-- 加载更多提示 -->
+            <div id="loadMoreTrigger" class="load-more-trigger">
+                <div class="flex items-center justify-center">
+                    <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <p>滚动加载更多内容</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 免责声明 -->
+        <footer class="bg-white shadow-lg p-4 mt-8">
+            <div class="container mx-auto text-center text-gray-500 text-sm max-w-5xl">
+                <p class="whitespace-normal">免责声明：本站仅作为展示平台，不存储、不处理任何数据，不提供任何解析、下载、转码等服务。所有资源均来自第三方平台，本站不对其内容负责。用户应遵守当地相关法律法规，合理使用本站服务。</p>
+                <p class="mt-2">© 2025 <span id="footerTitle">xxx</span> - 仅供学习交流使用</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- 视频播放页面 -->
+    <div id="playPage" class="play-page">
+        <div class="min-h-screen bg-gray-100 p-4">
+            <div class="container mx-auto max-w-6xl">
+                <!-- 视频播放器 -->
+                <div class="video-container mb-6">
+                    <video id="videoFrame" controls preload="metadata" class="w-full h-full">
+                        您的浏览器不支持视频播放
+                    </video>
+                </div>
+                
+                <!-- 视频信息 -->
+                <div class="bg-white rounded-lg shadow-sm p-4 sm:p-6">
+                    <div class="space-y-4">
+                        <!-- 视频标题和平台信息 -->
+                        <div>
+                            <h1 id="videoTitle" class="text-lg font-semibold text-gray-900 mb-3 line-clamp-2"></h1>
+                            <div class="flex items-center gap-3 text-sm text-gray-600">
+                                <span id="platformTag" class="platform-tag"></span>
+                                <span id="createTime" class=""></span>
+                            </div>
+                        </div>
+
+                        <!-- 视频简介 -->
+                        <div class="pt-3 border-t border-gray-100">
+                            <h2 class="text-sm font-medium text-gray-700 mb-2">视频简介</h2>
+                            <p id="videoDesc" class="text-sm text-gray-600 leading-relaxed whitespace-pre-wrap break-all"></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 返回按钮 -->
+                <div class="nav-back" onclick="showListPage()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M19 12H5M12 19l-7-7 7-7"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 全局变量
+        let currentPage = 1;
+        let isLoading = false;
+        let hasMore = true;
+        let currentSearch = '';
+        let currentPlatform = '';
+        let currentVideoId = null;
+        let serverToken = null;
+        let observer = null;
+
+        
+        // 防抖函数
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+        
+        // 页面初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSettings();
+            setupEventListeners(); // 这里会初始化重置按钮状态
+            setupInfiniteScroll();
+            loadVideoList();
+            
+            // 监听剪贴板变化
+            setupClipboardListener();
+            
+            // 显示平台标签筛选提示
+            setTimeout(() => {
+                showMessage('提示：点击视频卡片上的平台标签可筛选相同平台的视频');
+            }, 2000);
+            
+            // 从URL参数中恢复筛选状态
+            restoreFilterFromUrl();
+        });
+        
+        // 从URL参数中恢复筛选状态
+        function restoreFilterFromUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const platformParam = urlParams.get('platform');
+            const searchParam = urlParams.get('search');
+            
+            // 恢复平台筛选
+            if (platformParam) {
+                filterByPlatform(platformParam);
+            }
+            
+            // 恢复搜索筛选
+            if (searchParam) {
+                const searchInput = document.getElementById('searchInput');
+                searchInput.value = searchParam;
+                currentSearch = searchParam;
+                updateResetFilterButton();
+                resetAndLoad();
+            }
+        }
+        
+        // 页面大小调整
+        window.addEventListener('resize', debounce(() => {
+            adjustVideoContainer();
+        }, 250));
+        
+        // 加载设置
+        function loadSettings() {
+            const savedTitle = localStorage.getItem('siteTitle');
+            if (savedTitle) {
+                document.getElementById('mainTitle').textContent = savedTitle;
+                document.getElementById('footerTitle').textContent = savedTitle;
+                document.title = savedTitle;
+            }
+            
+            // 加载Token配置
+            const savedToken = localStorage.getItem('serverToken');
+            if (savedToken) {
+                serverToken = savedToken;
+            }
+        }
+        
+
+        
+        // 设置保存
+        function saveSettings() {
+            const siteTitle = document.getElementById('siteTitle').value;
+            const token = document.getElementById('serverToken').value;
+            
+            if (siteTitle) {
+                localStorage.setItem('siteTitle', siteTitle);
+                document.getElementById('mainTitle').textContent = siteTitle;
+                document.getElementById('footerTitle').textContent = siteTitle;
+                document.title = siteTitle;
+            }
+            
+            if (token) {
+                localStorage.setItem('serverToken', token);
+                serverToken = token;
+            }
+            
+            closeSettingsModal();
+            showMessage('设置已保存');
+            
+            // 重新加载视频列表
+            currentPage = 1;
+            hasMore = true;
+            loadVideoList();
+        }
+        
+        // 事件监听器设置
+        function setupEventListeners() {
+            // 搜索输入
+            const searchInput = document.getElementById('searchInput');
+            searchInput.addEventListener('input', debounce(() => {
+                currentSearch = searchInput.value.trim();
+                updateResetFilterButton();
+                resetAndLoad();
+            }, 500));
+            
+            // 平台选择
+            const platformSelect = document.getElementById('platformSelect');
+            platformSelect.addEventListener('change', () => {
+                currentPlatform = platformSelect.value;
+                updateResetFilterButton();
+                resetAndLoad();
+            });
+            
+            // 重置筛选按钮
+            const resetFilterBtn = document.getElementById('resetFilterBtn');
+            resetFilterBtn.addEventListener('click', () => {
+                // 重置搜索和平台筛选
+                searchInput.value = '';
+                currentSearch = '';
+                platformSelect.selectedIndex = 0;
+                currentPlatform = '';
+                
+                // 隐藏重置按钮
+                resetFilterBtn.classList.add('hidden');
+                
+                // 重新加载视频列表
+                resetAndLoad();
+                
+                // 显示提示
+                showMessage('已重置所有筛选条件');
+            });
+            
+            // 初始化重置按钮状态
+            updateResetFilterButton();
+        }
+        
+        // 更新重置筛选按钮显示状态
+        function updateResetFilterButton() {
+            const resetFilterBtn = document.getElementById('resetFilterBtn');
+            if (currentSearch || currentPlatform) {
+                resetFilterBtn.classList.remove('hidden');
+                // 更新URL参数
+                updateUrlParams();
+            } else {
+                resetFilterBtn.classList.add('hidden');
+                // 清除URL参数
+                clearUrlParams();
+            }
+            
+            // 处理Twitter筛选的特殊情况
+            const listPage = document.getElementById('listPage');
+            if (currentPlatform === 'twitter') {
+                listPage.classList.add('twitter-filter-active');
+            } else {
+                listPage.classList.remove('twitter-filter-active');
+            }
+        }
+        
+        // 更新URL参数
+        function updateUrlParams() {
+            const urlParams = new URLSearchParams();
+            
+            if (currentPlatform) {
+                urlParams.set('platform', currentPlatform);
+            }
+            
+            if (currentSearch) {
+                urlParams.set('search', currentSearch);
+            }
+            
+            // 更新URL，不刷新页面
+            const newUrl = window.location.pathname + (urlParams.toString() ? '?' + urlParams.toString() : '');
+            window.history.replaceState({}, '', newUrl);
+        }
+        
+        // 清除URL参数
+        function clearUrlParams() {
+            window.history.replaceState({}, '', window.location.pathname);
+        }
+        
+        // 通过平台标签筛选视频
+        function filterByPlatform(platform) {
+            console.log('筛选平台:', platform);
+            // 更新平台选择下拉框
+            const platformSelect = document.getElementById('platformSelect');
+            
+            if (platform && platform.trim() !== '') {
+                // 查找匹配的选项
+                let found = false;
+                for (let i = 0; i < platformSelect.options.length; i++) {
+                    if (platformSelect.options[i].value === platform) {
+                        platformSelect.selectedIndex = i;
+                        found = true;
+                        break;
+                    }
+                }
+                
+                // 如果下拉框中没有匹配的选项，添加一个新选项
+                if (!found) {
+                    const option = document.createElement('option');
+                    option.value = platform;
+                    option.textContent = platform;
+                    platformSelect.appendChild(option);
+                    platformSelect.value = platform;
+                }
+                
+                // 设置当前平台并重新加载
+                currentPlatform = platform;
+                updateResetFilterButton();
+                resetAndLoad();
+                
+                // 显示筛选提示
+                showMessage(`已筛选平台: ${platform}，点击平台标签可筛选相同平台视频`);
+            } else {
+                // 重置为全部
+                platformSelect.selectedIndex = 0; // 选择"全部"选项
+                currentPlatform = '';
+                updateResetFilterButton();
+                resetAndLoad();
+                
+                // 显示重置提示
+                showMessage('已重置平台筛选，显示全部视频');
+            }
+        }
+        
+        // 重置并加载
+        function resetAndLoad() {
+            currentPage = 1;
+            hasMore = true;
+            document.getElementById('videoList').innerHTML = '';
+            loadVideoList();
+            // 滚动到顶部
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        // 无限滚动设置
+        function setupInfiniteScroll() {
+            if ('IntersectionObserver' in window) {
+                observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting && hasMore && !isLoading) {
+                            loadMoreVideos();
+                        }
+                    });
+                }, {
+                    rootMargin: '100px'
+                });
+                
+                const trigger = document.getElementById('loadMoreTrigger');
+                if (trigger) {
+                    observer.observe(trigger);
+                    console.log('已设置滚动监听');
+                }
+            } else {
+                // 降级到滚动事件
+                window.addEventListener('scroll', debounce(() => {
+                    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 200) {
+                        if (hasMore && !isLoading) {
+                            console.log('触发滚动加载');
+                            loadMoreVideos();
+                        }
+                    }
+                }, 250));
+            }
+        }
+        
+        // 显示/隐藏加载动画
+        function showLoading() {
+            document.getElementById('loadingSpinner').classList.add('show');
+        }
+        
+        function hideLoading() {
+            document.getElementById('loadingSpinner').classList.remove('show');
+        }
+        
+        // 动态生成骨架屏
+        function generateSkeletonItems(count = 12) {
+            const skeletonLoader = document.getElementById('skeletonLoader');
+            skeletonLoader.innerHTML = '';
+            for (let i = 0; i < count; i++) {
+                const skeletonItem = document.createElement('div');
+                skeletonItem.className = 'bg-white rounded-lg shadow-sm overflow-hidden';
+                skeletonItem.innerHTML = `
+                    <div class="skeleton w-full" style="padding-top: 56.25%"></div>
+                    <div class="p-3 space-y-2">
+                        <div class="skeleton h-4 w-3/4 rounded"></div>
+                        <div class="skeleton h-3 w-1/2 rounded"></div>
+                        <div class="skeleton h-3 w-2/3 rounded"></div>
+                    </div>
+                `;
+                skeletonLoader.appendChild(skeletonItem);
+            }
+        }
+        
+        // 加载视频列表
+        async function loadVideoList() {
+            if (!serverToken) {
+                hideSkeleton();
+                hideEmptyState();
+                hideVideoList();
+                showConfigError();
+                return;
+            }
+            
+            hideConfigError();
+            showSkeleton();
+            isLoading = true;
+            
+            try {
+                const response = await fetchVideos();
+                
+                if (response && response.data && response.data.length > 0) {
+                    hideSkeleton();
+                    hideEmptyState();
+                    showVideoList();
+                    
+                    const videoListEl = document.getElementById('videoList');
+                    videoListEl.innerHTML = '';
+                    
+                    response.data.forEach(video => {
+                        const videoCard = createVideoCard(video);
+                        videoListEl.appendChild(videoCard);
+                    });
+                    
+                    hasMore = response.hasMore;
+                    
+                    if (hasMore) {
+                        showLoadMoreTrigger();
+                    } else {
+                        hideLoadMoreTrigger();
+                    }
+                } else {
+                    hideSkeleton();
+                    hideVideoList();
+                    showEmptyState();
+                }
+            } catch (error) {
+                console.error('加载视频列表失败:', error);
+                hideSkeleton();
+                showMessage('加载失败，请检查网络连接', 'error');
+            } finally {
+                isLoading = false;
+                hideLoading();
+            }
+        }
+        
+        // 加载更多视频
+        async function loadMoreVideos() {
+            if (isLoading || !hasMore) {
+                console.log('跳过加载更多：', isLoading ? '正在加载中' : '没有更多数据');
+                return;
+            }
+            
+            console.log('开始加载更多视频，当前页码：', currentPage);
+            currentPage++;
+            isLoading = true;
+            showLoading();
+            
+            try {
+                const response = await fetchVideos();
+                console.log('加载更多响应：', response);
+                
+                if (response && response.data && response.data.length > 0) {
+                    const videoListEl = document.getElementById('videoList');
+                    
+                    response.data.forEach(video => {
+                        const videoCard = createVideoCard(video);
+                        videoListEl.appendChild(videoCard);
+                    });
+                    
+                    hasMore = response.hasMore;
+                    console.log('是否有更多数据：', hasMore);
+                    
+                    if (hasMore) {
+                        showLoadMoreTrigger();
+                    } else {
+                        hideLoadMoreTrigger();
+                    }
+                } else {
+                    hasMore = false;
+                    hideLoadMoreTrigger();
+                    console.log('没有更多数据');
+                }
+            } catch (error) {
+                console.error('加载更多视频失败:', error);
+                showMessage('加载失败，请检查网络连接', 'error');
+                currentPage--; // 回退页码
+            } finally {
+                isLoading = false;
+                hideLoading();
+            }
+        }
+        
+        // 获取视频数据
+        async function fetchVideos() {
+            const params = new URLSearchParams({
+                pageNo: currentPage,
+                pageSize: 20
+            });
+            
+            if (currentSearch) {
+                params.append('videoname', currentSearch);
+                params.append('videodesc', currentSearch);
+            }
+            
+            if (currentPlatform) {
+                params.append('videoplatform', currentPlatform);
+            }
+            
+            const url = addTokenToUrl(`/api/findVideos?${params.toString()}`);
+
+            console.log('请求URL:', url);
+            
+            const response = await axios.get(url, {
+                timeout: 10000
+            });
+            
+            console.log('服务器响应:', response.data);
+            
+            // 根据实际响应结构返回数据
+            if (response.data && response.data.record && response.data.record.content) {
+                const hasMore = !response.data.record.last;
+                console.log('当前页:', currentPage, '总页数:', response.data.record.totalPages, '是否有更多:', hasMore);
+                
+                return {
+                    data: response.data.record.content,
+                    totalPages: response.data.record.page.totalPages,
+                    totalElements: response.data.record.page.totalElements,
+                    hasMore: hasMore
+                };
+            }
+            
+            return { data: [], totalPages: 0, totalElements: 0, hasMore: false };
+        }
+        
+        // 生成视频卡片HTML
+        /**
+         * 创建视频卡片元素
+         * @param {Object} video - 视频数据对象
+         * @returns {HTMLElement} 视频卡片DOM元素
+         */
+        function createVideoCard(video) {
+            const card = document.createElement('div');
+            card.className = 'video-card bg-white rounded-lg shadow-sm overflow-hidden';
+            
+            // 适配实际响应数据字段
+            const title = video.videoname || video.title || '未知标题';
+            const cover = video.videocover || video.cover;
+            const platform = video.videoplatform || video.platform || '未知平台';
+            const createTime = video.createtime || video.createTime;
+            const videoAddr = video.videounrealaddr || video.videoAddr || '';
+            
+            // 将视频播放地址进行base64编码存储在data属性中，避免特殊符号问题
+            const encodedVideoAddr = btoa(encodeURIComponent(videoAddr));
+            card.setAttribute('data-video-id', video.id);
+            card.setAttribute('data-video-addr', encodedVideoAddr);
+            card.setAttribute('data-video-title', btoa(encodeURIComponent(title)));
+            card.setAttribute('data-video-desc', btoa(encodeURIComponent(video.videodesc || video.description || '')));
+            card.setAttribute('data-video-platform', btoa(encodeURIComponent(platform)));
+            card.setAttribute('data-create-time', createTime || '');
+            
+            // 添加平台标识用于筛选
+            const platformLower = platform.toLowerCase();
+            if (platformLower.includes('twitter')) {
+                card.setAttribute('data-platform', 'twitter');
+            }
+            
+            // 点击事件使用data属性中的信息
+            card.onclick = () => playVideoFromCard(card);
+            
+            const platformClass = getPlatformClass(platform);
+            const formattedDate = formatDate(createTime);
+            
+            // 拼接缩略图路径，添加token参数
+			const coverUrl = addAppTokenToUrl(cover);
+            card.innerHTML = `
+                <div class="video-thumbnail">
+                    <img src="${coverUrl}" 
+                         alt="${title}" 
+                         loading="lazy">
+                    <div class="video-platform-tag ${platformClass} cursor-pointer" data-platform="${platform}">
+                        ${platform}
+                    </div>
+                    <div class="play-button">
+                        <svg class="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M8 5v14l11-7z"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="p-3">
+                    <h3 class="font-medium text-gray-900 line-clamp-2 mb-2">${title}</h3>
+                    <div class="flex items-center justify-between text-sm text-gray-500">
+                        <span class="${platformClass} text-white px-2 py-1 rounded text-xs cursor-pointer hover:shadow-md transition-all" data-platform="${platform}">
+                            ${platform}
+                        </span>
+                        <span>${formattedDate}</span>
+                    </div>
+                </div>
+            `;
+            
+            // 为平台标签添加点击事件
+            const platformTags = card.querySelectorAll('[data-platform]');
+            platformTags.forEach(tag => {
+                tag.addEventListener('click', (event) => {
+                    event.stopPropagation(); // 阻止事件冒泡，避免触发卡片的点击事件
+                    const platform = event.target.getAttribute('data-platform');
+                    filterByPlatform(platform);
+                });
+            });
+            
+            return card;
+        }
+        
+        // 获取平台样式类
+        function getPlatformClass(platform) {
+            const platformLower = platform.toLowerCase();
+            if (platformLower.includes('哔哩') || platformLower.includes('bilibili')) {
+                return 'platform-bilibili';
+            } else if (platformLower.includes('抖音') || platformLower.includes('douyin')) {
+                return 'platform-douyin';
+            } else if (platformLower.includes('youtube')) {
+                return 'platform-youtube';
+            } else if (platformLower.includes('twitter')) {
+                return 'platform-twitter';
+            }
+            return 'bg-gray-500';
+        }
+        
+        // 格式化日期
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const now = new Date();
+            const diff = now - date;
+            
+            const minutes = Math.floor(diff / 60000);
+            const hours = Math.floor(diff / 3600000);
+            const days = Math.floor(diff / 86400000);
+            
+            if (minutes < 60) {
+                return `${minutes}分钟前`;
+            } else if (hours < 24) {
+                return `${hours}小时前`;
+            } else if (days < 30) {
+                return `${days}天前`;
+            } else {
+                return date.toLocaleDateString('zh-CN');
+            }
+        }
+        
+        // URL添加token
+        function addTokenToUrl(url) {
+            if (serverToken) {
+                const separator = url.includes('?') ? '&' : '?';
+                return `${url}${separator}token=${encodeURIComponent(serverToken)}`;
+            }
+            return url;
+        }
+
+        // URL添加apptoken（用于缩略图和视频地址）
+        function addAppTokenToUrl(url) {
+            if (serverToken) {
+                const separator = url.includes('?') ? '&' : '?';
+                return `${url}${separator}apptoken=${encodeURIComponent(serverToken)}`;
+            }
+            return url;
+        }
+        // 设置弹窗
+        function openSettings() {
+            document.getElementById('siteTitle').value = localStorage.getItem('siteTitle') || '';
+            document.getElementById('settingsModal').classList.remove('hidden');
+        }
+        
+        function closeSettingsModal() {
+            document.getElementById('settingsModal').classList.add('hidden');
+        }
+        
+        // 消息提示
+        function showMessage(message, type = 'success') {
+            // 创建消息元素
+            const messageEl = document.createElement('div');
+            messageEl.className = `fixed top-4 right-4 px-4 py-2 rounded-md text-white z-50 transition-all duration-300 ${
+                type === 'error' ? 'bg-red-500' : 'bg-green-500'
+            }`;
+            messageEl.textContent = message;
+            
+            document.body.appendChild(messageEl);
+            
+            // 3秒后自动移除
+            setTimeout(() => {
+                messageEl.style.opacity = '0';
+                setTimeout(() => {
+                    document.body.removeChild(messageEl);
+                }, 300);
+            }, 3000);
+        }
+        
+        // 显示/隐藏各种状态
+        function showConfigError() {
+            document.getElementById('configError').classList.remove('hidden');
+        }
+        
+        function hideConfigError() {
+            document.getElementById('configError').classList.add('hidden');
+        }
+        
+        function showEmptyState() {
+            document.getElementById('emptyState').classList.remove('hidden');
+        }
+        
+        function hideEmptyState() {
+            document.getElementById('emptyState').classList.add('hidden');
+        }
+        
+        function showSkeleton() {
+            generateSkeletonItems(12);
+            document.getElementById('skeletonLoader').classList.remove('hidden');
+        }
+        
+        function hideSkeleton() {
+            document.getElementById('skeletonLoader').classList.add('hidden');
+        }
+        
+        function showVideoList() {
+            document.getElementById('videoList').classList.remove('hidden');
+        }
+        
+        function hideVideoList() {
+            document.getElementById('videoList').classList.add('hidden');
+        }
+        
+        function showLoadMoreTrigger() {
+            const trigger = document.getElementById('loadMoreTrigger');
+            trigger.classList.remove('hidden');
+            trigger.style.display = 'block';
+            console.log('显示加载更多触发器');
+        }
+        
+        function hideLoadMoreTrigger() {
+            const trigger = document.getElementById('loadMoreTrigger');
+            trigger.classList.add('hidden');
+            trigger.style.display = 'none';
+            console.log('隐藏加载更多触发器');
+        }
+        
+        // 获取服务器配置（已废弃，保留兼容性）
+        function getServerConfig() {
+            return { token: serverToken };
+        }
+        
+        // 剪贴板监听
+        function setupClipboardListener() {
+            let lastClipboardContent = '';
+            
+            // 定期检查剪贴板内容
+            setInterval(async () => {
+                try {
+                    if (navigator.clipboard && navigator.clipboard.readText) {
+                        const clipboardText = await navigator.clipboard.readText();
+                        
+                        if (clipboardText !== lastClipboardContent && isVideoUrl(clipboardText)) {
+                            lastClipboardContent = clipboardText;
+                            showConfirmModal(clipboardText);
+                        }
+                    }
+                } catch (error) {
+                    // 忽略剪贴板访问错误
+                }
+            }, 2000);
+        }
+        
+        // 检查是否为视频URL
+        function isVideoUrl(text) {
+            const videoPatterns = [
+                /bilibili\.com/,
+                /douyin\.com/,
+                /youtube\.com/,
+                /youtu\.be/,
+                /twitter\.com/,
+                /instagram\.com/,
+                /抖音/,
+                /复制这条信息/
+            ];
+            
+            return videoPatterns.some(pattern => pattern.test(text));
+        }
+        
+        // 确认弹窗
+        function showConfirmModal(content) {
+            document.getElementById('clipboardContent').textContent = content;
+            document.getElementById('confirmModal').classList.add('show');
+        }
+        
+        function closeConfirmModal() {
+            document.getElementById('confirmModal').classList.remove('show');
+        }
+        
+        function confirmSubmit() {
+            const content = document.getElementById('clipboardContent').textContent;
+            submitVideoUrl(content);
+            closeConfirmModal();
+        }
+        
+        // 视频提交弹窗
+        function openSubmitModal() {
+            document.getElementById('submitModal').classList.add('show');
+        }
+        
+        function closeSubmitModal() {
+            document.getElementById('submitModal').classList.remove('show');
+            document.getElementById('videoUrl').value = '';
+        }
+        
+        function submitVideo() {
+            const url = document.getElementById('videoUrl').value.trim();
+            if (url) {
+                submitVideoUrl(url);
+                closeSubmitModal();
+            }
+        }
+        
+        // 提交视频URL
+        async function submitVideoUrl(url) {
+        	if (!serverToken) {
+        		  showMessage('请先配置 Token', 'error');
+        		  return;
+        	}
+            
+            try {
+            	const submitUrl = '/api/processingVideos';
+                
+                const formData = new URLSearchParams();
+                formData.append('video', url);
+                formData.append('token', serverToken);
+                
+                await axios.post(submitUrl, formData, {
+                    timeout: 30000,
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    }
+                });
+                
+                showMessage('提交成功，正在处理中...');
+                
+                // 延迟刷新列表
+                setTimeout(() => {
+                    resetAndLoad();
+                }, 2000);
+            } catch (error) {
+                console.error('提交失败:', error);
+                showMessage('提交失败，请稍后重试', 'error');
+            }
+        }
+        
+
+        
+        /**
+         * 从视频卡片的data属性中播放视频
+         * @param {HTMLElement} card - 视频卡片DOM元素
+         */
+        function playVideoFromCard(card) {
+            if (!serverToken) {
+                showMessage('请先配置Token', 'error');
+                return;
+            }
+            
+            try {
+                // 从卡片data属性中解码视频信息
+                const videoId = card.getAttribute('data-video-id');
+                const encodedVideoAddr = card.getAttribute('data-video-addr');
+                const encodedTitle = card.getAttribute('data-video-title');
+                const encodedDesc = card.getAttribute('data-video-desc');
+                const encodedPlatform = card.getAttribute('data-video-platform');
+                const createTime = card.getAttribute('data-create-time');
+                
+                // base64解码视频信息
+                const videoAddr = decodeURIComponent(atob(encodedVideoAddr));
+                const title = decodeURIComponent(atob(encodedTitle));
+                const description = decodeURIComponent(atob(encodedDesc));
+                const platform = decodeURIComponent(atob(encodedPlatform));
+                
+                // 构建视频信息对象
+                const videoInfo = {
+                    id: videoId,
+                    videounrealaddr: videoAddr,
+                    videoname: title,
+                    videodesc: description,
+                    videoplatform: platform,
+                    createtime: createTime
+                };
+                currentVideoId = videoId;
+                
+                // 显示播放页面
+                showPlayPage(videoInfo);
+                
+                // 保存播放历史
+                savePlayHistory(videoInfo);
+            } catch (error) {
+                console.error('播放视频失败:', error);
+                showMessage('播放视频失败', 'error');
+            }
+        }
+        
+        /**
+         * 播放视频（兼容旧版本调用）
+         * @param {string} videoId - 视频ID
+         */
+        function playVideo(videoId) {
+            if (!serverToken) {
+                showMessage('请先配置Token', 'error');
+                return;
+            }
+            
+            currentVideoId = videoId;
+            
+            try {
+                // 注意：此函数保留用于兼容旧版本调用
+                // 新版本建议使用 playVideoFromCard 函数
+                console.warn('playVideo函数已过时，建议使用playVideoFromCard');
+                showMessage('视频信息获取失败，请刷新页面重试', 'error');
+                return;
+                
+                // 显示播放页面
+                showPlayPage(videoInfo);
+                
+                // 保存播放历史
+                savePlayHistory(videoInfo);
+            } catch (error) {
+                console.error('播放视频失败:', error);
+                showMessage('播放视频失败', 'error');
+            }
+        }
+        
+        // 显示播放页面
+        function showPlayPage(videoInfo) {
+            // 隐藏列表页面
+            document.getElementById('listPage').classList.add('hidden');
+            
+            // 显示播放页面
+            const playPage = document.getElementById('playPage');
+            playPage.classList.add('active');
+            
+            // 设置视频信息
+            document.getElementById('videoTitle').textContent = videoInfo.videoname || videoInfo.title;
+            document.getElementById('videoDesc').textContent = videoInfo.videodesc || videoInfo.description || '暂无简介';
+            document.getElementById('createTime').textContent = formatDate(videoInfo.createtime || videoInfo.createTime);
+            
+            // 设置平台标签
+            const platformTag = document.getElementById('platformTag');
+            platformTag.textContent = videoInfo.videoplatform || videoInfo.platform;
+            platformTag.className = `platform-tag ${getPlatformClass(videoInfo.videoplatform || videoInfo.platform)}`;
+            
+            // 设置视频播放器
+            const videoFrame = document.getElementById('videoFrame');
+            // 使用videounrealaddr作为视频播放地址，添加token参数
+			const videoUrl = addAppTokenToUrl(videoInfo.videounrealaddr);
+            videoFrame.src = videoUrl;
+            
+            // 检测视频比例并调整容器
+            videoFrame.onloadedmetadata = () => {
+                adjustVideoContainer();
+            };
+            
+            // 加载播放进度
+            loadPlayProgress();
+            
+            // 监听播放进度
+            videoFrame.ontimeupdate = () => {
+                savePlayProgress();
+            };
+            
+            // 视频结束时清除进度
+            videoFrame.onended = () => {
+                clearPlayProgress();
+            };
+            
+            // 滚动到顶部
+            window.scrollTo(0, 0);
+        }
+        
+        // 显示列表页面
+        function showListPage() {
+            // 隐藏播放页面
+            const playPage = document.getElementById('playPage');
+            playPage.classList.remove('active');
+            
+            // 显示列表页面
+            document.getElementById('listPage').classList.remove('hidden');
+            
+            // 停止视频播放
+            const videoFrame = document.getElementById('videoFrame');
+            videoFrame.src = '';
+            
+            currentVideoId = null;
+        }
+        
+        // 调整视频容器
+        function adjustVideoContainer() {
+            const videoFrame = document.getElementById('videoFrame');
+            const container = videoFrame.closest('.video-container');
+            
+            if (videoFrame.videoWidth && videoFrame.videoHeight) {
+                const aspectRatio = videoFrame.videoWidth / videoFrame.videoHeight;
+                
+                if (aspectRatio > 1) {
+                    // 横屏视频
+                    container.classList.add('landscape');
+                    container.classList.remove('portrait');
+                } else {
+                    // 竖屏视频
+                    container.classList.add('portrait');
+                    container.classList.remove('landscape');
+                }
+            }
+        }
+        
+        // 清理过期历史记录
+        function cleanupExpiredHistory() {
+            const history = JSON.parse(localStorage.getItem('playHistory') || '[]');
+            const oneWeekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
+            
+            const validHistory = history.filter(item => item.timestamp > oneWeekAgo);
+            localStorage.setItem('playHistory', JSON.stringify(validHistory));
+        }
+        
+        // 保存播放历史
+        function savePlayHistory(videoInfo) {
+            cleanupExpiredHistory();
+            
+            const history = JSON.parse(localStorage.getItem('playHistory') || '[]');
+            const existingIndex = history.findIndex(item => item.id === videoInfo.id);
+            
+            const historyItem = {
+                id: videoInfo.id,
+                title: videoInfo.videoname || videoInfo.title,
+                platform: videoInfo.videoplatform || videoInfo.platform,
+                cover: videoInfo.videocover || videoInfo.cover,
+                timestamp: Date.now()
+            };
+            
+            if (existingIndex >= 0) {
+                history[existingIndex] = historyItem;
+            } else {
+                history.unshift(historyItem);
+            }
+            
+            // 只保留最近50条记录
+            if (history.length > 50) {
+                history.splice(50);
+            }
+            
+            localStorage.setItem('playHistory', JSON.stringify(history));
+        }
+        
+        // 加载播放进度
+        function loadPlayProgress() {
+            if (!currentVideoId) return;
+            
+            const progress = localStorage.getItem(`progress_${currentVideoId}`);
+            if (progress) {
+                const videoFrame = document.getElementById('videoFrame');
+                videoFrame.currentTime = parseFloat(progress);
+            }
+        }
+        
+        // 保存播放进度
+        function savePlayProgress() {
+            if (!currentVideoId) return;
+            
+            const videoFrame = document.getElementById('videoFrame');
+            if (videoFrame.currentTime > 0 && videoFrame.duration > 0) {
+                // 只在播放超过5秒且未接近结尾时保存进度
+                if (videoFrame.currentTime > 5 && (videoFrame.duration - videoFrame.currentTime) > 10) {
+                    localStorage.setItem(`progress_${currentVideoId}`, videoFrame.currentTime.toString());
+                }
+            }
+        }
+        
+        // 清除播放进度
+        function clearPlayProgress() {
+            if (currentVideoId) {
+                localStorage.removeItem(`progress_${currentVideoId}`);
+            }
+        }
+
+    </script>
+</body>
+</html>

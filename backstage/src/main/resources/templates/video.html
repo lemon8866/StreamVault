@@ -323,6 +323,10 @@
             background: linear-gradient(45deg, #ff0000, #ff4444);
         }
 
+        .platform-twitter {
+            background: linear-gradient(45deg, #1da1f2, #1a91da);
+        }
+
         /* 响应式调整 */
         @media (max-width: 768px) {
             .video-container {
@@ -348,6 +352,19 @@
 
         /* 隐藏列表页面 */
         .list-page.hidden {
+            display: none;
+        }
+
+        /* Twitter视频控制样式 */
+        .video-card[data-platform="twitter"] {
+            display: none;
+        }
+        
+        .twitter-filter-active .video-card[data-platform="twitter"] {
+            display: block;
+        }
+        
+        .twitter-filter-active .video-card:not([data-platform="twitter"]) {
             display: none;
         }
     </style>
@@ -741,6 +758,14 @@
                 // 清除URL参数
                 clearUrlParams();
             }
+            
+            // 处理Twitter筛选的特殊情况
+            const listPage = document.getElementById('listPage');
+            if (currentPlatform === 'twitter') {
+                listPage.classList.add('twitter-filter-active');
+            } else {
+                listPage.classList.remove('twitter-filter-active');
+            }
         }
         
         // 更新URL参数
@@ -1046,6 +1071,12 @@
             card.setAttribute('data-video-platform', btoa(encodeURIComponent(platform)));
             card.setAttribute('data-create-time', createTime || '');
             
+            // 添加平台标识用于筛选
+            const platformLower = platform.toLowerCase();
+            if (platformLower.includes('twitter')) {
+                card.setAttribute('data-platform', 'twitter');
+            }
+            
             // 点击事件使用data属性中的信息
             card.onclick = () => playVideoFromCard(card);
             
@@ -1101,6 +1132,8 @@
                 return 'platform-douyin';
             } else if (platformLower.includes('youtube')) {
                 return 'platform-youtube';
+            } else if (platformLower.includes('twitter')) {
+                return 'platform-twitter';
             }
             return 'bg-gray-500';
         }
@@ -1563,4 +1596,5 @@
 
     </script>
 </body>
+
 </html>

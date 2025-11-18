@@ -63,6 +63,9 @@ public class ConfigService {
 		if(null!=configEntity.getYtdlpmode() && !"".equals(configEntity.getYtdlpmode())) {
 			Global.ytdlpmode = configEntity.getYtdlpmode();
 		}
+		if(null!=configEntity.getYtdlpargs() && !"".equals(configEntity.getYtdlpargs())) {
+			Global.ytdlpargs = configEntity.getYtdlpargs();
+		}
 		if(null!=configEntity.getNfonetaddr() && !"".equals(configEntity.getNfonetaddr())) {
 			Global.nfonetaddr = configEntity.getNfonetaddr();
 		}

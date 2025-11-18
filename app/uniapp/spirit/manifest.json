@@ -2,8 +2,8 @@
     "name" : "StreamVault",
     "appid" : "__UNI__24DF0DA",
     "description" : "",
-    "versionName" : "1.0.6",
-    "versionCode" : 106,
+    "versionName" : "1.0.7",
+    "versionCode" : 107,
     "transformPx" : false,
     /* 5+App特有相关 */
     "app-plus" : {
@@ -77,7 +77,7 @@
     "quickapp" : {},
     /* 小程序特有相关 */
     "mp-weixin" : {
-        "appid" : "wxb2d94375cc001c77",
+        "appid" : "",
         "setting" : {
             "urlCheck" : false
         },

@@ -28,6 +28,16 @@
 						placeholder-class="placeholder"
 					/>
 				</view>
+
+				<!-- 记住密码复选框 -->
+				<view class="remember-group">
+					<checkbox-group @change="onRememberChange">
+						<label class="remember-label">
+							<checkbox value="remember" :checked="rememberMe" />
+							<text class="remember-text">记住密码</text>
+						</label>
+					</checkbox-group>
+				</view>
 				
 				<button class="login-btn" @tap="handleLogin" :disabled="!username || !password">
 					登录
@@ -42,10 +52,32 @@
 		data() {
 			return {
 				username: '',
-				password: ''
+				password: '',
+				rememberMe: false
 			}
 		},
+		onLoad() {
+			try {
+				const remembered = uni.getStorageSync('adminRemember');
+				if (remembered) {
+					const savedUsername = uni.getStorageSync('adminUsername');
+					const savedPassword = uni.getStorageSync('adminPassword');
+					if (savedUsername) this.username = savedUsername;
+					if (savedPassword) this.password = savedPassword;
+					this.rememberMe = true;
+				} else {
+				}
+			} catch (e) {
+			}
+		},
+
 		methods: {
+			onRememberChange(e) {
+				const values = e?.detail?.value || [];
+				this.rememberMe = values.includes('remember');
+				console.log('记住密码状态:', this.rememberMe);
+			},
+
 			handleLogin() {
 				if (!this.username || !this.password) {
 					uni.showToast({
@@ -54,6 +86,8 @@
 					});
 					return;
 				}
+
+				console.log('开始登录，用户名:', this.username);
 				
 				const serveraddr = uni.getStorageSync('serveraddr');
 				const serverport = uni.getStorageSync('serverport');
@@ -63,13 +97,17 @@
 						title: '请先设置服务器地址',
 						icon: 'none'
 					});
+					setTimeout(() => {
+						uni.switchTab({
+							url: '../index/index'
+						});
+					}, 1500);
 					return;
 				}
 				
 				uni.showLoading({
 					title: '登录中...'
 				});
-				
 				uni.request({
 					url: `${serveraddr}:${serverport}/admin/api/login`,
 					method: 'POST',
@@ -81,14 +119,27 @@
 						password: this.password
 					},
 					success: (res) => {
+						uni.hideLoading()
+						console.log(res);
 						if (res.data.resCode === '000001') {
-							// 获取响应头中的cookie
 							const cookies = res.header['Set-Cookie'] || res.header['set-cookie'];
 							if (cookies) {
-								// 设置cookie过期时间为24小时
 								const expireTime = new Date().getTime() + 24 * 60 * 60 * 1000;
 								uni.setStorageSync('adminCookie', cookies);
 								uni.setStorageSync('adminCookieExpire', expireTime);
+							}
+							try {
+								if (this.rememberMe) {
+									uni.setStorageSync('adminRemember', true);
+									uni.setStorageSync('adminUsername', this.username);
+									uni.setStorageSync('adminPassword', this.password);
+								} else {
+									uni.removeStorageSync('adminRemember');
+									uni.removeStorageSync('adminUsername');
+									uni.removeStorageSync('adminPassword');
+								}
+							} catch (e) {
+								console.log('保存本地存储失败', e);
 							}
 							
 							uni.showToast({
@@ -101,8 +152,9 @@
 								});
 							}, 1500);
 						} else {
+							console.log("else")
 							uni.showToast({
-								title: res.data.resMsg || '登录失败',
+								title: res.data.message || '登录失败',
 								icon: 'none'
 							});
 						}
@@ -227,8 +279,24 @@
 }
 
 .login-btn[disabled] {
-	background: #a8d4e8;
-	box-shadow: none;
-	transform: none;
+    background: #a8d4e8;
+    box-shadow: none;
+    transform: none;
+}
+
+/* 记住密码样式 */
+.remember-group {
+    display: flex;
+    align-items: center;
+    padding: 0 8rpx;
+}
+.remember-label {
+    display: flex;
+    align-items: center;
+    gap: 12rpx;
+}
+.remember-text {
+    font-size: 28rpx;
+    color: #666;
 }
 </style>

@@ -121,6 +121,8 @@ public class Global {
 	}
 	
 	public static String ytdlpmode = "0";
+	
+	public static String ytdlpargs =null;
 
 	public static String nfonetaddr = "";
 

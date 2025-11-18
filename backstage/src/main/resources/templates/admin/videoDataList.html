@@ -536,6 +536,13 @@
                                             </div>
                                             <div class="col-lg-3 col-md-6 col-sm-12">
                                                 <div class="form-group mb-3">
+                                                    <label class="control-label">视频作者</label>
+                                                    <input type="text" class="form-control videoauthor" name="videoauthor"
+                                                        placeholder="请输入视频作者" />
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3 col-md-6 col-sm-12">
+                                                <div class="form-group mb-3">
                                                     <label class="control-label">视频简介</label>
                                                     <input type="text" class="form-control videodesc" name="videodesc"
                                                         placeholder="视频简介" />
@@ -613,13 +620,14 @@
                                                             <label class="custom-control-label" for="check-all"></label>
                                                         </div>
                                                     </th>
-                                                    <th style="width: 60px">编号</th>
-                                                    <th style="width: 100px">封面</th>
-                                                    <th style="width: 550px">视频信息</th>
-                                                    <th style="width: 150px">标签</th>
-                                                    <th style="width: 100px">平台</th>
-                                                    <th style="width: 150px">下载时间</th>
-                                                    <th style="width: 120px">操作</th>
+										            <th style="width: 5%;">编号</th>         
+													<th style="width: 8%;">封面</th>        
+													<th style="width: 35%;">视频信息</th>     
+													<th style="width: 10%;">视频作者</th>   
+													<th style="width: 12%;">标签</th>       
+													<th style="width: 7%;">平台</th>          
+													<th style="width: 13%;">下载时间</th>    
+													<th style="width: 10%;">操作</th> 
                                                 </tr>
                                             </thead>
                                             <tbody class="tableData">
@@ -1294,6 +1302,10 @@
             if (videotag != "") {
                 option['videotag'] = videotag;
             }
+            var videoauthor = $('.videoauthor').val();
+            if (videoauthor != "") {
+                option['videoauthor'] = videoauthor;
+            }
 
             var loadIndex = layer.load(1, { shade: [0.3, '#000'] });
             $.post("/admin/api/findVideoDataList", option,
@@ -1311,6 +1323,7 @@
                             html += '<td>' + list[i].id + '</td>';
                             html += '<td>' + getImage(list[i].videocover, isPrivate) + '</td>';
                             html += '<td><div class="video-info">' + formatVideoInfo(list[i]) + '</div></td>';
+                            html += '<td>' + (list[i].videoauthor ==null?'':list[i].videoauthor) + '</td>';
                             html += '<td>' + formatTags(list[i].videotag) + '</td>';
                             html += '<td><span class="status-badge badge badge-info content-field" data-id="' + list[i].id + '">' + (isPrivate ? '****' : list[i].videoplatform) + '</span></td>';
                             html += '<td>' + formatTime(list[i].createtime) + '</td>';

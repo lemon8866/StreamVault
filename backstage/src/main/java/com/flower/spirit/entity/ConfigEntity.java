@@ -56,6 +56,8 @@ public class ConfigEntity implements Serializable {
 	
 	private String ytdlpmode;
 	
+	private String ytdlpargs;
+	
 	private String nfonetaddr;
 	
 	private String rangenum;
@@ -194,6 +196,14 @@ public class ConfigEntity implements Serializable {
 
 	public void setDanmudown(String danmudown) {
 		this.danmudown = danmudown;
+	}
+
+	public String getYtdlpargs() {
+		return ytdlpargs;
+	}
+
+	public void setYtdlpargs(String ytdlpargs) {
+		this.ytdlpargs = ytdlpargs;
 	}
 
 	

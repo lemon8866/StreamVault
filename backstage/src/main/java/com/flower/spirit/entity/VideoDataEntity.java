@@ -44,6 +44,8 @@ public class VideoDataEntity  extends DataEntity<VideoDataEntity> implements Ser
 	
 	private String videoname;
 	
+	private String videoauthor;
+	
 	private String videodesc;
 	
 	private String videoprivacy;  //视频是否隐私模式  隐私模式 则不会直接显示 图片
@@ -185,6 +187,14 @@ public class VideoDataEntity  extends DataEntity<VideoDataEntity> implements Ser
 
 	public void setVideoinfo(String videoinfo) {
 		this.videoinfo = videoinfo;
+	}
+
+	public String getVideoauthor() {
+		return videoauthor;
+	}
+
+	public void setVideoauthor(String videoauthor) {
+		this.videoauthor = videoauthor;
 	}
 	
 	

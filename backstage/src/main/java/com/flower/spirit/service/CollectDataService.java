@@ -350,6 +350,7 @@ public class CollectDataService {
 						        videoInfoJson.put("duration", duration);
 						        videoDataEntity.setVideoinfo(videoInfoJson.toJSONString());
 							}
+							videoDataEntity.setVideoauthor(upname);
 							videoDataDao.save(videoDataEntity);
 						}else {
 							logger.info(vt + (i + 1) + "-"+filename+"非常规类视频  当前不支持bangumi模式");
@@ -408,6 +409,7 @@ public class CollectDataService {
 
 		}
 		int videoaddcount = 0;
+		int graphiccount = 0;
 		logger.info("任务开始" + entity.getOriginaladdress());
 		JSONArray allDYData = this.getDYData(entity, monitor);
 		// System.out.println(allDYData.size());
@@ -447,6 +449,7 @@ public class CollectDataService {
 								: String.valueOf(Integer.parseInt(entity.getCarriedout()) + 1);
 						entity.setCarriedout(carriedout);
 						collectdDataDao.save(entity);
+						graphiccount++;
 					} catch (Exception e) {
 						logger.error("收藏类模块中抖音图集下载异常");
 						logger.error(e.getMessage());
@@ -508,8 +511,6 @@ public class CollectDataService {
 					VideoDataEntity videoDataEntity = new VideoDataEntity(awemeId, desc, desc, "抖音", coverunaddr,
 							FileUtil.generateDir(true, Global.platform.douyin.name(), false, filename, taskname, "mp4"),
 							videounrealaddr, entity.getOriginaladdress());
-					videoDataDao.save(videoDataEntity);
-
 					if (Global.getGeneratenfo) {
 						String nickname = aweme_detail.getString("nickname");
 						String uid = aweme_detail.getString("uid");
@@ -536,7 +537,9 @@ public class CollectDataService {
 						map.put("cid", awemeId);
 						map.put("upface", publisher);
 						EmbyMetadataGenerator.createFavoriteEpisodeDouNfo(map, dir, i + 1, temporaryDirectory);
+						videoDataEntity.setVideoauthor(nickname);
 					}
+					videoDataDao.save(videoDataEntity);
 					logger.info("下载流程结束");
 					Thread.sleep(5000);
 					logger.info("等待五秒在继续下一个");
@@ -567,8 +570,9 @@ public class CollectDataService {
 
 			}
 		}
-		if (videoaddcount > 0) {
-			sendNotify.sendMessage(videoaddcount, entity.getTaskname());
+		int totalCount = videoaddcount + graphiccount;
+		if (totalCount > 0) {
+		    sendNotify.sendMessage(totalCount, entity.getTaskname());
 		}
 		entity.setTaskstatus("处理完成");
 		if (risk.equals("1")) {

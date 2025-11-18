@@ -121,10 +121,11 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label>主页配置&nbsp;<a href="https://vm0n.vercel.app" onclick="return confirmRedirect(this);" style="font-size: 12px;" title="该demo非本仓库提供">播放主页DEMO</a></label>
+                                                <label>主页配置&nbsp;<a href="https://bd.kwaie.com" onclick="return confirmRedirect(this);" style="font-size: 12px;" title="该demo非本仓库提供">播放主页DEMO</a></label>
                                                  <select id="frontend" class="form-control frontend" name="frontend">
                                                     <option value="blank" th:selected="${config.frontend} eq 'blank'">空白主页</option>
                                                     <option value="video" th:selected="${config.frontend} eq 'video'">播放主页(dev版)</option>
+                                                    <option value="admin" th:selected="${config.frontend} eq 'admin'">后台主页</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -139,16 +140,25 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
+                                                <label>YT-DLP 参数追加 <i class="mdi mdi-help" style="cursor: pointer; font-size: 12px;" onclick="layer.alert('需要熟悉了解yt-dlp,请不要追加已存在的参数.如不熟悉当前项目 请保持为空<br/>错误的参数追加可能会造成yt-dlp相关平台的下载错误<br/>追加格式为-xxxx vlaue -xxxx value -value') "></i></label>
+                                                <input class="form-control" type="text" id="ytdlpargs" name="ytdlpargs" placeholder="无特殊情况,保持为空" th:value="${config.ytdlpargs}">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
                                                 <label>分片下载 <i class="mdi mdi-help" style="cursor: pointer; font-size: 12px;" onclick="layer.alert('无特殊情况建议默认为1,不分片') "></i></label>
                                                 <input class="form-control" type="text" id="rangenum" name="rangenum" placeholder="默认为1" th:value="${config.rangenum}">
                                             </div>
                                         </div>
+                                         <div class="col-md-6">
+                                            <div class="form-group">
+		                                        <label>userAgent</label>
+		                                        <input class="form-control" type="text" id="userAgent" name="userAgent" th:value="${config.useragent}" placeholder="传递给youtube  x 等平台 降低风控可能 不填则不传">
+		                                    </div>
+                                         </div>
                                     </div>
                                     
-                                    <div class="form-group">
-                                        <label>userAgent</label>
-                                        <input class="form-control" type="text" id="userAgent" name="userAgent" th:value="${config.useragent}" placeholder="传递给youtube  x 等平台 降低风控可能 不填则不传">
-                                    </div>
+                         
                                     
                                     <div class="form-group">
                                         <button class="btn btn-primary saveConfig" type="button">保存</button>
@@ -236,7 +246,6 @@
                                         <label>代理端口</label>
                                         <input type="type" name="agentport"  autocomplete="off" class="form-control agentport" th:value="${config.agentport}"   placeholder="16666">
                                     </div>
-									 
                                     <div class="form-group">
                                         <label>账号及密码</label>
                                         <input type="type" name="agentaccpass"  autocomplete="off" class="form-control agentaccpass" th:value="${config.agentaccpass}"   placeholder="username:pass">
@@ -541,6 +550,7 @@
               option['rangenum'] = $("#rangenum").val();
               option['frontend'] = $("#frontend").val();
               option['danmudown'] = $("#danmudown").val();
+              option['ytdlpargs'] = $("#ytdlpargs").val();
               $.post("/admin/api/saveConfig",option,function(data,status){
                   if(data.resCode =="000001"){
                       layer.closeAll();
@@ -699,6 +709,7 @@
             option['rangenum'] = $("#rangenum").val();
             option['frontend'] = $("#frontend").val();
             option['danmudown'] = $("#danmudown").val();
+            option['ytdlpargs'] = $("#ytdlpargs").val();
             $.post("/admin/api/saveConfig",option,function(data,status){
                 if(data.resCode =="000001"){
                     layer.closeAll();

@@ -91,6 +91,9 @@ public class AppConfig {
 		if(null!=data.getYtdlpmode() && !"".equals(data.getYtdlpmode())) {
 			Global.ytdlpmode = data.getYtdlpmode();
 		}
+		if(null!=data.getYtdlpargs() && !"".equals(data.getYtdlpargs())) {
+			Global.ytdlpargs = data.getYtdlpargs();
+		}
 		if(null!=data.getNfonetaddr() && !"".equals(data.getNfonetaddr())) {
 			Global.nfonetaddr = data.getNfonetaddr();
 		}

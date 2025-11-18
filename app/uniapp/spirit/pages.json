@@ -57,22 +57,16 @@
 			}
 		},
 		{
-			"path" : "pages/video/whoosh",
-			"style" : 
-			{
-				"navigationBarTitleText" : "",
-				"navigationStyle": "custom",
-				"app-plus": {
-					"titleNView": false,
-					"bounce": "none"
-				}
-			}
-		},
-		{
 			"path" : "pages/admin/favData",
 			"style" : 
 			{
 				"navigationBarTitleText" : ""
+			}
+		},
+		{
+			"path": "pages/video/fallsVideo",
+			"style": {
+				"navigationBarTitleText": ""
 			}
 		}
     ],
@@ -89,16 +83,16 @@
 				"text": "推送"
 			},
 			{
-				"pagePath": "pages/video/whoosh",
-				"iconPath": "static/icon/xiuxiu.png",
-				"selectedIconPath": "/static/icon/xiuxiu.png",
-				"text": "咻咻"
-			},
-			{
 				"pagePath": "pages/video/videolist",
 				"iconPath": "static/icon/play.png",
 				"selectedIconPath": "static/icon/play.png",
 				"text": "列表"
+			},
+			{
+				"pagePath": "pages/video/fallsVideo",
+				"iconPath": "/static/icon/xiuxiu.png",
+				"selectedIconPath": "static/icon/xiuxiu.png",
+				"text": "咻咻"
 			},
 			{
 				"pagePath": "pages/admin/admin",

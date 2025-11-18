@@ -21,6 +21,9 @@ public class FrontController {
 		if(Global.frontend.equals("video")) {
 			return "video";
 		}
+		if(Global.frontend.equals("admin")) {
+			return "redirect:/admin/admin";
+		}
 		return "index";
 	}
 	

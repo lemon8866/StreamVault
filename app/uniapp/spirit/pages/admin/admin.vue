@@ -54,14 +54,14 @@
 				// cookie已过期，清除存储并跳转到登录页
 				uni.removeStorageSync('adminCookie');
 				uni.removeStorageSync('adminCookieExpire');
-				uni.redirectTo({
+				uni.navigateTo({
 					url: '/pages/admin/login'
 				});
 				return;
 			}
 		},
 		onLoad() {
-			this.checkLogin();
+			// this.checkLogin();
 		},
 		methods: {
 			checkLogin() {
@@ -73,7 +73,7 @@
 						duration: 1500
 					});
 					setTimeout(() => {
-						uni.redirectTo({
+						uni.navigateTo({
 							url: '/pages/admin/login'
 						});
 					}, 1500);

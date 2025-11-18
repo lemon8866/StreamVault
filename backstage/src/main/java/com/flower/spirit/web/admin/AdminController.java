@@ -514,11 +514,10 @@ public class AdminController {
 	 * @return
 	 */
 	@GetMapping(value = "/checkAndUpdate")
-	public AjaxEntity checkAndUpdate() {
-		return systemService.checkAndUpdate();
+	public AjaxEntity checkAndUpdate(String proxyup) {
+		return systemService.checkAndUpdate(proxyup);
 	}
-
-
+	
 	/**
 	 * 直链提交
 	 * @param directData

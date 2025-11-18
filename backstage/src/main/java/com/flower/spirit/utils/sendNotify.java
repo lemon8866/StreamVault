@@ -59,7 +59,7 @@ public class sendNotify {
             CompletableFuture.runAsync(() -> {
                 try {
                     String title = "StreamVault任务完成通知";
-                    String contents = "任务"+p+"完成通知"+"\n"+"本次完成视频数量为:"+count+"\n"+"完成时间:"+DateUtils.getDate("yyyy-MM-dd HH:mm:ss");
+                    String contents = "任务"+p+"完成通知"+"\n"+"本次完成任务数为:"+count+"\n"+"完成时间:"+DateUtils.getDate("yyyy-MM-dd HH:mm:ss");
                     sendNotifyByChannel(title, contents, Global.notify);
                 } catch (Exception e) {
                     logger.error("[异步通知] 发送失败: {}", e.getMessage());

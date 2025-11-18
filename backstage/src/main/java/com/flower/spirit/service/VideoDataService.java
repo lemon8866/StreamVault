@@ -89,6 +89,9 @@ public class VideoDataService {
 	            if (StringUtil.isString(res.getVideotag())) {
 	                predicates.add(cb.like(root.get("videotag"), "%" + res.getVideotag() + "%"));
 	            }
+	            if (StringUtil.isString(res.getVideoauthor())) {
+	                predicates.add(cb.like(root.get("videoauthor"), "%" + res.getVideoauthor() + "%"));
+	            }
 	        }
 
 	        query.orderBy(cb.desc(root.get("id")));

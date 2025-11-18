@@ -1,13 +1,15 @@
 ### 更新记录
-```
-2025/10/31  Tagged the version as 20251031 on Docker Hub. 
-推送latest新版本
-```
-```
-2025/10/30  Tagged the version as 20250106 on Docker Hub. 
-注释yt-dlp代理更新，修改video页面
-```
 
+```
+2025/11/18  Tagged the version as 251118 on Docker Hub. Merged the 251118 tag into the latest tag.
+升级内置的yt-dlp至最新版本 版本号为 2025.11.12
+对于app源码 优化登录 新增记住密码功能  新增新的播放模式 由于部分功能有缺陷 暂未打包
+创建一个基础的docker-compose
+优化检查更新时  支持选择是否使用代理或者直连更新
+可能优化了 抖音在收藏监控下 图文类型不计数 不发送webhook的问题
+新增yt-dlp 在webui中添加追加参数功能
+在新增视频时 新增保存作者名称  后台列表及api新增videoauthor字段
+```
 
 ```
 2025/10/29  Tagged the version as 251029 on Docker Hub. Merged the 251029 tag into the latest tag.

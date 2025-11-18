@@ -130,6 +130,7 @@ public class HongShuExecutor {
 					VideoDataEntity videoDataEntity = new VideoDataEntity(keyid, title, title, "小红书", coverunaddr,
 							videofile,
 							videounrealaddr, url);
+					videoDataEntity.setVideoauthor(nickname);
 					videoDataDao.save(videoDataEntity);
 					processHistoryService.saveProcess(saveProcess.getId(), url,  "小红书");
 					sendNotify.sendNotifyData(title+"(视频)", url,  "小红书");

@@ -226,6 +226,7 @@ public class AnalysisService {
 				VideoDataEntity videoDataEntity = new VideoDataEntity(videoId, title, title, platform, coverunaddr,
 						videofile,
 						videounrealaddr, url);
+				videoDataEntity.setVideoauthor(author);
 				videoDataDao.save(videoDataEntity);
 				processHistoryService.saveProcess(saveProcess.getId(), url, platform);
 				sendNotify.sendNotifyData(title, url, platform);
@@ -357,6 +358,7 @@ public class AnalysisService {
 
 				VideoDataEntity videoDataEntity = new VideoDataEntity(display_id, baseName, description,
 						Global.platform.twitter.name(), coverdb, filename, videodb, url);
+				videoDataEntity.setVideoauthor(uploader);
 				videoDataDao.save(videoDataEntity);
 				processHistoryService.saveProcess(saveProcess.getId(), url, platform);
 				if (Global.getGeneratenfo) {
@@ -460,6 +462,7 @@ public class AnalysisService {
 
 				VideoDataEntity videoDataEntity = new VideoDataEntity(display_id, baseName, description,
 						Global.platform.youtube.name(), coverdb, filename, videodb, youtube);
+				videoDataEntity.setVideoauthor(uploader);
 				videoDataDao.save(videoDataEntity);
 				processHistoryService.saveProcess(saveProcess.getId(), youtube, platform);
 				if (Global.getGeneratenfo) {
@@ -548,6 +551,7 @@ public class AnalysisService {
 				}
 				VideoDataEntity videoDataEntity = new VideoDataEntity(cid, title, desc, platform, coverunaddr,
 						videoPath, videounaddr, video);
+				videoDataEntity.setVideoauthor(upname);
 				if(Global.danmudown && Global.biliodddmm) {
 					BiliUtil.biliDanmaku("1", cid, aid, Integer.valueOf(duration), dir + File.separator+filename+".ass",title);
 				    JSONObject videoInfoJson = new JSONObject();
@@ -640,28 +644,29 @@ public class AnalysisService {
 		String coverdir = FileUtil.generateDir(true, Global.platform.douyin.name(), true, filename, null, null);
 		// HttpUtil.downloadFileWithOkHttp(cover, coverfile,coverdir);
 		HttpUtil.downloadFileWithOkHttp(cover, coverfile, coverdir, header);
-		// 生成元数据
-		if (Global.getGeneratenfo) {
-			//下载发布者头像
-			String nickname = map.get("nickname");
-			String uid = map.get("uid");
-			String publisher = nickname+"-"+uid+".png";
-			HttpUtil.downloadFileWithOkHttp(map.get("avatar_thumb"), publisher, coverdir, header);
-			
-			if(null!=Global.nfonetaddr && !"".equals(Global.nfonetaddr)) {
-				String publisherdir = FileUtil.generateDir(false, Global.platform.douyin.name(), true, filename, null, null);
-				//System.out.println(publisherdir);
-				publisher = Global.nfonetaddr+publisherdir+"/"+publisher+"?apptoken="+Global.readonlytoken;
-			}
-			
-			
-			EmbyMetadataGenerator.createDouNfo(nickname,uid,publisher, map.get("create_time"), awemeId,
-					desc, desc, coverfile, videofile);
-		}
-		// 推送完成后建立历史资料 此处注意 a2 地址需要与spring boot 一致否则 无法打开视频
-		videofile = videofile+filename + ".mp4";
 		VideoDataEntity videoDataEntity = new VideoDataEntity(awemeId, desc, desc, platform, coverunaddr, videofile,
 				videounrealaddr, originaladdress);
+		// 生成元数据
+		if (Global.getGeneratenfo) {
+			// 下载发布者头像
+			String nickname = map.get("nickname");
+			String uid = map.get("uid");
+			String publisher = nickname + "-" + uid + ".png";
+			HttpUtil.downloadFileWithOkHttp(map.get("avatar_thumb"), publisher, coverdir, header);
+			if (null != Global.nfonetaddr && !"".equals(Global.nfonetaddr)) {
+				String publisherdir = FileUtil.generateDir(false, Global.platform.douyin.name(), true, filename, null,
+						null);
+				// System.out.println(publisherdir);
+				publisher = Global.nfonetaddr + publisherdir + "/" + publisher + "?apptoken=" + Global.readonlytoken;
+			}
+			EmbyMetadataGenerator.createDouNfo(nickname, uid, publisher, map.get("create_time"), awemeId,
+					desc, desc, coverfile, videofile);
+			videoDataEntity.setVideoauthor(nickname);
+		}
+		// 推送完成后建立历史资料 此处注意 a2 地址需要与spring boot 一致否则 无法打开视频
+		videofile = videofile + filename + ".mp4";
+
+
 		videoDataDao.save(videoDataEntity);
 		logger.info("下载流程结束");
 	}

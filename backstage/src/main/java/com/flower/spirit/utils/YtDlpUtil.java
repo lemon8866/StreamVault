@@ -86,10 +86,10 @@ public class YtDlpUtil {
 			command.add("--user-agent");
 			command.add(Global.useragent);
 		}
-		if (Global.ytdlpargs != null && !Global.ytdlpargs.isEmpty()) {
-		    String[] args = Global.ytdlpargs.split(" ");
-		    command.addAll(Arrays.asList(args));
-		}
+//		if (Global.ytdlpargs != null && !Global.ytdlpargs.isEmpty()) {
+//		    String[] args = Global.ytdlpargs.split(" ");
+//		    command.addAll(Arrays.asList(args));
+//		}
 		ProcessBuilder processBuilder = new ProcessBuilder(command);
 	    Process process = processBuilder.start();
 	    

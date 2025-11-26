@@ -1,5 +1,9 @@
 ### 更新记录
-
+```
+2025/11/26
+后台配置中首页模式 新增「后台主页」选项
+移除了 yt-dlp 自定义参数追加功能
+```
 ```
 2025/11/18  Tagged the version as 251118 on Docker Hub. Merged the 251118 tag into the latest tag.
 升级内置的yt-dlp至最新版本 版本号为 2025.11.12

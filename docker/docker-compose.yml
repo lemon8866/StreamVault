@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   stream-vault:
-    image: qingfeng2336/stream-vault
+    image: haoqi7/stream
     container_name: stream-vault
     ports:
       # 端口默认为20803 如果需要 请自定义修改28083

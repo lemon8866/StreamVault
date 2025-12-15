@@ -528,4 +528,51 @@ public class AdminController {
 	public AjaxEntity directData(VideoDataEntity video,HttpServletRequest request) {
 		return analysisService.directData(video,request);
 	}
+	
+	
+	@GetMapping(value = "/isNeedRefreshAndUpdate")
+	public AjaxEntity isNeedRefreshAndUpdate() {
+		biliConfigService.isNeedRefreshAndUpdate();
+		cookiesConfigService.checkCookieStatus();
+		return new AjaxEntity(Global.ajax_success, "提交检查通知,请检查webhook通知", null);
+	}
+	
+	
+//	@ResponseBody
+//	@GetMapping("/playStream")
+//	public Map<String, Object> playStream(@RequestParam String videoid,@RequestParam(defaultValue = "720p") String quality) throws Exception {
+//	    VideoDataEntity byId = videoDataService.findById(videoid);
+//	    if (byId == null) {
+//	        return Map.of("error", "video not found");
+//	    }
+//	    int[] wh = ResolutionUtil.select(byId.getVideoaddr(), quality);
+//	    int width = wh[0];
+//	    int height = wh[1];
+//	    String sessionId = UUID.randomUUID().toString().replace("-", "");
+//	    String outDir = Global.apppath + "/hls/" + sessionId;
+//	    new File(outDir).mkdirs();
+//	    List<String> cmd = FfmpegCommandBuilder.build(byId.getVideoaddr(), width, height, outDir);
+//	    new ProcessBuilder(cmd).redirectErrorStream(true).start();
+//	    return Map.of("sessionId", sessionId,"m3u8", "/playStream/hls/" + sessionId + "/index.m3u8");
+//	}
+//	
+//	@GetMapping("/playStream/hls/{sessionId}/{file}")
+//	public void hlsFile(@PathVariable String sessionId,@PathVariable String file,HttpServletResponse response) throws Exception {
+//	    File f = new File(Global.apppath + "/hls/" + sessionId + "/" + file);
+//	    if (!f.exists()) {
+//	        response.setStatus(404);
+//	        return;
+//	    }
+//	    if (file.endsWith(".m3u8")) {
+//	        response.setContentType("application/x-mpegURL");
+//	    } else if (file.endsWith(".ts")) {
+//	        response.setContentType("video/mp2t");
+//	    }
+//	    try (InputStream in = new FileInputStream(f);
+//	         OutputStream out = response.getOutputStream()) {
+//	        in.transferTo(out);
+//	    }
+//	}
+
+
 }

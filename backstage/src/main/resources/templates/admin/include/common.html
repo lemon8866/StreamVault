@@ -25,6 +25,35 @@
 		        }
 		    });
 		});
+		
+		function isNeedRefreshAndUpdate(){
+			layer.confirm('检查非通过yt-dlp的cookie状态,支持微博 抖音 bibili(支持续期)', {
+				btn: ['确认检查', '取消'],
+				title: '更新选项'
+			}, function(index) {
+				layer.close(index);
+				isNeedRefreshAndUpdateApi();
+			}, function(index) {
+				layer.close(index);
+			});
+		}
+		
+		function isNeedRefreshAndUpdateApi() {
+            var loadIndex = layer.load(1, { shade: [0.3, '#000'] });
+            var url = "/admin/api/isNeedRefreshAndUpdate";
+            $.get(url, function (res) {
+                layer.close(loadIndex);
+                if (res.resCode == "000001") {
+                    layer.alert(res.message)
+                } else {
+                    layer.alert(res.message);
+                }
+            }).fail(function () {
+                layer.close(loadIndex);
+                layer.msg('网络错误，请重试');
+            })
+		}
+		
 		function checkAndUpdate(){
 			layer.confirm('请选择更新方式：<br><br><span style="color: #FF5722; font-size: 12px;">注意：使用代理更新需要先在系统配置中设置代理参数</span>', {
 				btn: ['使用代理更新', '直接更新'],
@@ -132,16 +161,18 @@
                         </a>
                         <ul class="dropdown-menu dropdown-menu-right">
                             <li> <a href="/admin/userList"><i class="mdi mdi-account"></i> 用户管理</a> </li>
+                           	<li onclick="checkAndUpdate()"><a href="javasvript:void(0)" > <i class="mdi mdi-update"></i>检查并更新</a> </li>
+                    		<li onclick="isNeedRefreshAndUpdate()"><a href="javasvript:void(0)" ><i class="mdi  mdi-cloud-check"></i>检查cookie</a></li>
+                    		<li><a href="javasvript:void(0)" ><i class="mdi  mdi-verified"></i> v251127</a></li>
                             <li> <a href="/admin/loginOut"><i class="mdi mdi-logout-variant"></i> 退出登录</a> </li>
                         </ul>
                     </li>
 
-					<li style="padding: 0 15px;line-height: 60px;border-left: 1px solid rgba(255,255,255,.1);" onclick="checkAndUpdate()">
-                      <small style="cursor: pointer;">检查并更新</small>
-                    </li>
-                    <li style="padding: 0 15px;line-height: 60px;border-left: 1px solid rgba(255,255,255,.1);">
-                      <small style="color: #999;">v251126</small>
-                    </li>
+			
+                    
+            
+                    
+
                     
                 </ul>
 

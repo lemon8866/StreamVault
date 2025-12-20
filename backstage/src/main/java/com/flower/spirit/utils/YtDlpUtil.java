@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -147,8 +148,6 @@ public class YtDlpUtil {
 		command.add("--print-json");
 		command.add("--skip-download");
 		command.add(url);
-		// System.setProperty("http.proxyHost", "192.168.12.13");
-		// System.setProperty("http.proxyPort", "58089");
 		ProcessBuilder processBuilder = new ProcessBuilder(command);
 		Process process = processBuilder.start();
 		InputStream inputStream = process.getInputStream();
@@ -166,68 +165,77 @@ public class YtDlpUtil {
 	}
 
 	public static String getPlatform(String url) {
-		// 参数验证
-		if (url == null || url.trim().isEmpty()) {
-			logger.warn("URL为空，无法获取平台信息");
-			return null;
-		}
+	    if (url == null || url.trim().isEmpty()) {
+	        logger.warn("URL为空，无法获取平台信息");
+	        return null;
+	    }
 
-		Process process = null;
-		try {
-			// 使用yt-dlp的--dump-json参数获取视频信息
-			List<String> command = new ArrayList<>();
-			command.add("yt-dlp");
-			command.add("--dump-json");
-			if (Global.proxyinfo != null) {
-				command.add("--proxy");
-				command.add(Global.proxyinfo);
-			}
-			if (null != Global.useragent && !"".equals(Global.useragent)) {
-				command.add("--user-agent");
-				command.add(Global.useragent);
-			}
-			command.add(url);
+	    Process process = null;
+	    try {
+	        List<String> command = new ArrayList<>();
+	        command.add("yt-dlp");
+	        command.add("--print");
+	        command.add("%(extractor)s");    
+	        command.add("--no-download");
+	        command.add("--skip-download");
+	        command.add("--ignore-config"); 
+	        if (Global.proxyinfo != null) {
+	            command.add("--proxy");
+	            command.add(Global.proxyinfo);
+	        }
+	        if (Global.useragent != null && !Global.useragent.isEmpty()) {
+	            command.add("--user-agent");
+	            command.add(Global.useragent);
+	        }
+	        command.add(url);
+	        ProcessBuilder processBuilder = new ProcessBuilder(command);
+	        processBuilder.redirectErrorStream(false);
+	        process = processBuilder.start();
+	        String stdout;
+	        try (BufferedReader reader = new BufferedReader(
+	                new InputStreamReader(process.getInputStream(), StandardCharsets.UTF_8))) {
+	            stdout = reader.readLine();
+	        }
+	        String stderr;
+	        try (BufferedReader reader = new BufferedReader(
+	                new InputStreamReader(process.getErrorStream(), StandardCharsets.UTF_8))) {
+	            StringBuilder sb = new StringBuilder();
+	            String line;
+	            while ((line = reader.readLine()) != null) {
+	                sb.append(line).append("\n");
+	            }
+	            stderr = sb.toString();
+	        }
 
-			ProcessBuilder processBuilder = new ProcessBuilder(command);
-			process = processBuilder.start();
+	        int exitCode = process.waitFor();
 
-			// 读取输出
-			String jsonStr;
-			try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream(), "UTF-8"))) {
-				jsonStr = reader.readLine();
-			}
+	        // 情况1: stdout 有 extractor（成功）
+	        if (stdout != null && !stdout.trim().isEmpty()) {
+	            String platform = stdout.trim();
+	            logger.debug("从 stdout 获取平台: {}", platform);
+	            return platform;
+	        }
 
-			int exitCode = process.waitFor();
-			if (exitCode != 0) {
-				logger.error("获取平台信息失败，yt-dlp退出码: {}", exitCode);
-				return null;
-			}
+	        if (stderr != null) {
+	            java.util.regex.Pattern pattern = java.util.regex.Pattern.compile("\\[(\\w+)\\]");
+	            java.util.regex.Matcher matcher = pattern.matcher(stderr);
+	            if (matcher.find()) {
+	                String platform = matcher.group(1);
+	                logger.debug("从 stderr 提取平台: {}", platform);
+	                return platform;
+	            }
+	        }
 
-			if (jsonStr != null && !jsonStr.trim().isEmpty()) {
-				JSONObject json = JSONObject.parseObject(jsonStr);
-				// 从json中获取extractor字段,这就是平台信息
-				String platform = json.getString("extractor");
-				if (platform != null && !platform.trim().isEmpty()) {
-					logger.debug("获取到平台信息: {}", platform);
-					return platform;
-				}
-			}
+	        logger.warn("无法识别平台，exitCode={}, stdout={}, stderr={}", exitCode, stdout, stderr);
+	        return null;
 
-			logger.warn("无法从yt-dlp输出中解析平台信息");
-			return null;
-
-		} catch (Exception e) {
-			logger.error("获取平台信息失败: {}", e.getMessage(), e);
-			return null;
-		} finally {
-			// 确保资源清理
-			if (process != null) {
-				process.destroy();
-			}
-		}
-	}
-	public static void main(String[] args) throws IOException, InterruptedException {
-		String a = YtDlpUtil.getPlatform("https://x.com/FRIEREN_PR/status/1914514504383078713");
-		System.out.println(a);
+	    } catch (Exception e) {
+	        logger.error("获取平台信息失败: {}", e.getMessage(), e);
+	        return null;
+	    } finally {
+	        if (process != null) {
+	            process.destroyForcibly();
+	        }
+	    }
 	}
 }

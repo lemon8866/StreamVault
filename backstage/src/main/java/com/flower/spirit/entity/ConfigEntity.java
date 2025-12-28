@@ -56,7 +56,7 @@ public class ConfigEntity implements Serializable {
 	
 	private String ytdlpmode;
 	
-	private String ytdlpargs;
+	// private String ytdlpargs;
 	
 	private String nfonetaddr;
 	
@@ -198,13 +198,13 @@ public class ConfigEntity implements Serializable {
 		this.danmudown = danmudown;
 	}
 
-	public String getYtdlpargs() {
-		return ytdlpargs;
-	}
+	// public String getYtdlpargs() {
+	// 	return ytdlpargs;
+	// }
 
-	public void setYtdlpargs(String ytdlpargs) {
-		this.ytdlpargs = ytdlpargs;
-	}
+	// public void setYtdlpargs(String ytdlpargs) {
+	// 	this.ytdlpargs = ytdlpargs;
+	// }
 
 	
 	

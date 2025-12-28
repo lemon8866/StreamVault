@@ -1,0 +1,28 @@
+{
+    "docker-project":
+    {
+        "projects":
+        [
+            {
+                "name": "stream-vault",
+                "path": "docker"
+            }
+        ]
+    },
+    "data-share":
+    {
+        "shares":
+        [
+            {
+                "name": "stream-vault",
+                "permission":
+                {
+                    "rw":
+                    [
+                        "docker-stream-vault"
+                    ]
+                }
+            }
+        ]
+    }
+}

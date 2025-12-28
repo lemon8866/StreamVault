@@ -138,12 +138,12 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
+                                        <!-- <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>YT-DLP 参数追加 <i class="mdi mdi-help" style="cursor: pointer; font-size: 12px;" onclick="layer.alert('需要熟悉了解yt-dlp,请不要追加已存在的参数.如不熟悉当前项目 请保持为空<br/>错误的参数追加可能会造成yt-dlp相关平台的下载错误<br/>追加格式为-xxxx vlaue -xxxx value -value') "></i></label>
                                                 <input class="form-control" type="text" id="ytdlpargs" name="ytdlpargs" placeholder="无特殊情况,保持为空" th:value="${config.ytdlpargs}">
                                             </div>
-                                        </div>
+                                        </div> -->
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>分片下载 <i class="mdi mdi-help" style="cursor: pointer; font-size: 12px;" onclick="layer.alert('无特殊情况建议默认为1,不分片') "></i></label>
@@ -550,7 +550,6 @@
               option['rangenum'] = $("#rangenum").val();
               option['frontend'] = $("#frontend").val();
               option['danmudown'] = $("#danmudown").val();
-              option['ytdlpargs'] = $("#ytdlpargs").val();
               $.post("/admin/api/saveConfig",option,function(data,status){
                   if(data.resCode =="000001"){
                       layer.closeAll();
@@ -709,7 +708,6 @@
             option['rangenum'] = $("#rangenum").val();
             option['frontend'] = $("#frontend").val();
             option['danmudown'] = $("#danmudown").val();
-            option['ytdlpargs'] = $("#ytdlpargs").val();
             $.post("/admin/api/saveConfig",option,function(data,status){
                 if(data.resCode =="000001"){
                     layer.closeAll();

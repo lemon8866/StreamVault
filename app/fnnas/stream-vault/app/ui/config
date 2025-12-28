@@ -1,0 +1,13 @@
+{
+    ".url": {
+        "stream-vault.Application": {
+            "title": "StreamVault",
+            "icon": "images/icon_256.png",
+            "type": "url",
+            "protocol": "",
+            "port": "28081",
+            "url": "/admin/admin",
+            "allUsers": false
+        }
+    }
+}

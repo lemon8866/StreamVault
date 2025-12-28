@@ -1,0 +1,8 @@
+{
+    "defaults":
+    {
+        "run-as": "package"
+    },
+    "username": "docker-stream-vault",
+    "groupname": "docker-stream-vault"
+}

@@ -381,7 +381,7 @@ public class AnalysisService {
 		ProcessHistoryEntity saveProcess = processHistoryService.saveProcess(null, url, platform);
 		try {
 			String dirtemp = FileUtil.generateDir(true, Global.platform.instagram.name(), true, null, null, null);
-			String exec = YtDlpUtil.exec(url, dirtemp, "instagram",true);
+			String exec = YtDlpUtil.exec(url, dirtemp, "Instagram",true);
 			System.out.println(exec);
 			// 已经下载完成了
 			JSONObject parseObject = JSONObject.parseObject(exec);

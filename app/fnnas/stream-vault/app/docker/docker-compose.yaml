@@ -1,0 +1,14 @@
+version: "3.8"
+
+services:
+  stream-vault:
+    image: qingfeng2336/stream-vault
+    container_name: stream-vault
+    ports:
+      - "28081:28081"
+    volumes:
+      - "/var/apps/stream-vault/shares/stream-vault/app:/app"
+      - "/var/apps/stream-vault/shares/stream-vault/tmp:/tmp"
+    restart: unless-stopped
+    environment:
+      - TZ=Asia/Shanghai

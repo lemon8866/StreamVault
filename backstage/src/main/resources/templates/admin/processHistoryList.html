@@ -198,8 +198,8 @@
         if(originaladdress != "" ){
             option['originaladdress']= originaladdress;
         }
-        var  status = $('.status').val();
-        if(videoplatform != "" ){
+        var  status = $('#status').val();
+        if(status != "" ){
             option['status']= status;
         }
         $.post("/admin/api/findProcessHistoryList",option,

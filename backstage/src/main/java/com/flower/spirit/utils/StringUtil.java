@@ -7,6 +7,9 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+
 /**
  * 
  * <p>
@@ -160,5 +163,28 @@ public class StringUtil {
         }
         return "无法获取版本信息";
     }
+    
+	public static String cookiesToString(JSONArray array) {
+		if (array == null || array.isEmpty()) {
+			return "";
+		}
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < array.size(); i++) {
+			JSONObject cookie = array.getJSONObject(i);
+			String name = cookie.getString("name");
+			String value = cookie.getString("value");
+
+			// 跳过 name 或 value 为 null 或空的情况
+			if (name == null || value == null || name.trim().isEmpty() || value.trim().isEmpty()) {
+				continue;
+			}
+
+			if (sb.length() > 0) {
+				sb.append("; ");
+			}
+			sb.append(name).append("=").append(value);
+		}
+		return sb.toString();
+	}
 
 }

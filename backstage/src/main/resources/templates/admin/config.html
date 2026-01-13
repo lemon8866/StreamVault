@@ -267,7 +267,7 @@
                                     <input type="hidden" class="tiktok" th:value="${tiktok.id}" />
                                     <div class="form-group">
                                         <label>抖音Cookie(使用抖音必填)</label>
-                                        <input type="type" name="tiktokcookies"  autocomplete="off" class="form-control tiktokcookies" th:value="${tiktok.cookies}">
+                                        <input type="text" name="tiktokcookies"  autocomplete="off" class="form-control tiktokcookies" th:value="${tiktok.cookies}">
                                     </div>
                                     <div class="form-group">
                                         <button class="btn btn-primary saveTikTokConfig" type="button">保存</button>
@@ -278,7 +278,7 @@
                                     <input type="hidden" class="cookiesid" th:value="${cookies.id}" />
                                     <div class="form-group">
                                         <label>快手Cookie(使用快手必填)</label>
-                                        <input type="type" name="kuaishouCookie"  autocomplete="off" class="form-control kuaishouCookie" th:value="${cookies.kuaishouCookie}">
+                                        <input type="text" name="kuaishouCookie"  autocomplete="off" class="form-control kuaishouCookie" th:value="${cookies.kuaishouCookie}">
                                     </div>
                                 </form>
                                 </div>
@@ -287,21 +287,32 @@
                                     <input type="hidden" class="cookiesid" th:value="${cookies.id}" />
                                     <div class="form-group">
                                         <label>红书cookie()</label>
-                                        <input type="type" name="rednotecookie"  autocomplete="off" class="form-control rednotecookie" th:value="${cookies.rednotecookie}">
+                                        <input type="text" name="rednotecookie"  autocomplete="off" class="form-control rednotecookie" th:value="${cookies.rednotecookie}">
                                     </div>
                                 </form>
-                                  </div>
+                                </div>
+                                <div class="col-md-6" style="padding-left: 0">
                                 <form action="#" method="post" onsubmit="return false;">
                                     <input type="hidden" class="cookiesid" th:value="${cookies.id}" />
                                     <div class="form-group">
                                         <label>微博Cookie(使用微博必填)</label>
-                                        <input type="type" name="weibocookie"  autocomplete="off" class="form-control weibocookie" th:value="${cookies.weibocookie}">
+                                        <input type="text" name="weibocookie"  autocomplete="off" class="form-control weibocookie" th:value="${cookies.weibocookie}">
                                     </div>
+                                   
+                                </form>
+                                </div>
+								<div class="col-md-6" style="padding-left: 0">
+                                <form action="#" method="post" onsubmit="return false;">
+                                    <input type="hidden" class="cookiesid" th:value="${cookies.id}" />
                                     <div class="form-group">
-                                        <button class="btn btn-primary saveCookieConfig" type="button">保存</button>
+                                        <label>CookieCloud 端对端加密密码 <i class="mdi mdi-help" style="cursor: pointer; font-size: 12px;" onclick="layer.open({type:1,title:'提示',area:['auto','auto'],content:'<div style=&quot;padding:30px;&quot;>cookiecloud 中选择上传到服务器<br/>地址填写:http://ip:port/api/cookieCloud<br/>请求Header 填写 application-source:xxxx <br>其中xxxx请使用加密密码和你的用户KEY · UUID拼接streamvalute <br/>如passuuidstreamvalute 然后使用md5加密 得到<br>本应用只接受处理域名如下<br>weibo.com/xiaohongshu.com/douyin.com/kuaishou.com<br/>bili推荐扫码</div>'})"></i></label>
+                                        <input type="text" name="cookiecloud"  autocomplete="off" class="form-control cookiecloud" th:value="${cookies.cookiecloud}">
                                     </div>
                                 </form>
-
+                                </div>
+                                <div class="form-group">
+                                        <button class="btn btn-primary saveCookieConfig" type="button">保存</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -573,6 +584,7 @@
             option['kuaishouCookie'] = $('.kuaishouCookie').val();
             option['weibocookie'] = $('.weibocookie').val();
             option['rednotecookie'] = $('.rednotecookie').val();
+            option['cookiecloud'] = $('.cookiecloud').val();
             $.post("/admin/api/updateCookie",option,function(data,status){
                 if(data.resCode =="000001"){
                     layer.closeAll();

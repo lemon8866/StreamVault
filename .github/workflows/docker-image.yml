@@ -45,6 +45,12 @@ jobs:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
+          
+      - name: Replace version in common.html with current date (YYMMDD)
+        run: |
+          DATE_TAG=$(date +%y%m%d)
+          sed -i "/mdi-verified/s/v[0-9]\{6\}/v${DATE_TAG}/" backstage/src/main/resources/templates/admin/include/common.html
+          echo "Updated version tag to v${DATE_TAG} in common.html"
 
       - name: Build JAR with Maven
         run: |

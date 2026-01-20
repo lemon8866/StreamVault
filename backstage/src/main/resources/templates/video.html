@@ -1766,7 +1766,9 @@
             }
             
             // 显示加载状态
-            const parseBtn = event.target;
+            const parseBtn = document.querySelector('button[onclick="parseVideoForLocal()"]');
+            if (!parseBtn) return;
+            
             const originalText = parseBtn.innerHTML;
             parseBtn.innerHTML = '解析中...';
             parseBtn.disabled = true;

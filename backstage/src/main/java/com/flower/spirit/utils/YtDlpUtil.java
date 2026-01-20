@@ -306,6 +306,7 @@ public class YtDlpUtil {
 				logger.error("yt-dlp 错误输出失败", e);
 			}
 		});
+		stderrThread.setName("yt-dlp-stderr-reader");
 		stderrThread.start();
 
 		StringBuilder stringBuilder = new StringBuilder();

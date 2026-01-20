@@ -3,6 +3,7 @@ package com.flower.spirit.web;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.io.InputStream;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flower.spirit.common.AjaxEntity;
@@ -24,6 +27,8 @@ import com.flower.spirit.entity.VideoDataEntity;
 import com.flower.spirit.service.AnalysisService;
 import com.flower.spirit.service.VideoDataService;
 import com.flower.spirit.service.ConfigService;
+import com.flower.spirit.utils.DouUtil;
+import com.flower.spirit.utils.YtDlpUtil;
 
 /**
  * api 调用控制器 此处控制器不拦截  仅通过token 校验
@@ -117,5 +122,110 @@ public class ApiController {
 	        e.printStackTrace();
 	        return ResponseEntity.status(500).body("Internal Server Error");
 	    }
+	}
+	
+	/**
+	 * 解析视频用于本地下载
+	 * @param token
+	 * @param video
+	 * @return
+	 */
+	@RequestMapping("/parseVideoForLocal")
+	@CrossOrigin
+	public AjaxEntity parseVideoForLocal(String token, String video) {
+		try {
+			// 1. 验证 token
+			if (!(Objects.equals(token, Global.apptoken) || Objects.equals(token, Global.readonlytoken))) {
+				return new AjaxEntity(Global.ajax_uri_error, "token 错误", null);
+			}
+			
+			// 2. 获取平台信息和真实URL
+			String platform = analysisService.getPlatform(video);
+			String url = analysisService.getUrl(video);
+			
+			if (platform == null || url == null || url.isEmpty()) {
+				return new AjaxEntity(Global.ajax_uri_error, "无法识别视频链接", null);
+			}
+			
+			Map<String, Object> result = new HashMap<>();
+			
+			// 3. 如果是抖音平台，使用 DouUtil
+			if (platform.equals("抖音")) {
+				Map<String, String> douData = DouUtil.downVideo(url);
+				if (douData == null) {
+					return new AjaxEntity(Global.ajax_uri_error, "解析失败", null);
+				}
+				
+				result.put("platform", "抖音");
+				result.put("videoUrl", douData.get("videoplay"));
+				result.put("coverUrl", douData.get("cover"));
+				result.put("title", douData.get("desc"));
+				result.put("author", douData.get("nickname"));
+				result.put("isDash", false);
+				result.put("needReferer", true);
+				result.put("referer", "https://www.douyin.com/");
+				
+			} else {
+				// 4. 其他平台使用 yt-dlp
+				String jsonStr = YtDlpUtil.execForJson(url, platform);
+				JSONObject jsonObject = JSONObject.parseObject(jsonStr);
+				
+				result.put("platform", platform);
+				result.put("title", jsonObject.getString("title"));
+				result.put("author", jsonObject.getString("uploader"));
+				result.put("coverUrl", jsonObject.getString("thumbnail"));
+				result.put("duration", jsonObject.getInteger("duration"));
+				
+				// 检查是否是 DASH 格式
+				JSONArray formats = jsonObject.getJSONArray("formats");
+				boolean isDash = false;
+				String videoUrl = jsonObject.getString("url");
+				
+				if (formats != null && formats.size() > 0) {
+					// 尝试找到最佳的合并格式
+					for (int i = 0; i < formats.size(); i++) {
+						JSONObject format = formats.getJSONObject(i);
+						String vcodec = format.getString("vcodec");
+						String acodec = format.getString("acodec");
+						
+						// 如果有同时包含视频和音频的格式，使用它
+						if (vcodec != null && !vcodec.equals("none") && 
+							acodec != null && !acodec.equals("none")) {
+							videoUrl = format.getString("url");
+							break;
+						}
+					}
+					
+					// 检查是否是音视频分离
+					boolean hasVideoOnly = false;
+					boolean hasAudioOnly = false;
+					for (int i = 0; i < formats.size(); i++) {
+						JSONObject format = formats.getJSONObject(i);
+						String vcodec = format.getString("vcodec");
+						String acodec = format.getString("acodec");
+						
+						if (vcodec != null && !vcodec.equals("none") && 
+							(acodec == null || acodec.equals("none"))) {
+							hasVideoOnly = true;
+						}
+						if (acodec != null && !acodec.equals("none") && 
+							(vcodec == null || vcodec.equals("none"))) {
+							hasAudioOnly = true;
+						}
+					}
+					isDash = hasVideoOnly && hasAudioOnly;
+				}
+				
+				result.put("videoUrl", videoUrl);
+				result.put("isDash", isDash);
+				result.put("needReferer", false);
+			}
+			
+			return new AjaxEntity(Global.ajax_success, "解析成功", result);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new AjaxEntity(Global.ajax_uri_error, "解析失败: " + e.getMessage(), null);
+		}
 	}
 }

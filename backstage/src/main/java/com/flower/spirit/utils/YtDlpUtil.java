@@ -238,4 +238,95 @@ public class YtDlpUtil {
 	        }
 	    }
 	}
+
+	/**
+	 * 执行 yt-dlp 获取视频 JSON 信息（用于本地下载）
+	 * @param url 视频URL
+	 * @param platform 平台名称
+	 * @return JSON 字符串
+	 * @throws IOException
+	 * @throws InterruptedException
+	 */
+	public static String execForJson(String url, String platform) throws IOException, InterruptedException {
+		List<String> command = new ArrayList<>();
+		command.add("yt-dlp");
+		command.add("--dump-json");
+		command.add("--no-download");
+		
+		String apppath = Global.apppath;
+		File cookieDir = new File(apppath + "/cookies");
+		
+		// 根据平台加载 cookie
+		if (null != platform && platform.equals("youtube")) {
+			File youtubeFile = new File(cookieDir, "youtube.txt");
+			if (youtubeFile.exists()) {
+				command.add("--cookies");
+				command.add(youtubeFile.getAbsolutePath());
+			}
+		}
+
+		if (null != platform && platform.equals("twitter")) {
+			File twitterFile = new File(cookieDir, "twitter.txt");
+			if (twitterFile.exists()) {
+				command.add("--cookies");
+				command.add(twitterFile.getAbsolutePath());
+			}
+		}
+		
+		if (null != platform && !platform.equals("twitter") && !platform.equals("youtube")) {
+			File all = new File(cookieDir, platform + ".txt");
+			if (all.exists()) {
+				command.add("--cookies");
+				command.add(all.getAbsolutePath());
+			}
+		}
+
+		if (Global.proxyinfo != null) {
+			command.add("--proxy");
+			command.add(Global.proxyinfo);
+		}
+
+		if (null != Global.useragent && !"".equals(Global.useragent)) {
+			command.add("--user-agent");
+			command.add(Global.useragent);
+		}
+
+		command.add(url);
+
+		ProcessBuilder processBuilder = new ProcessBuilder(command);
+		Process process = processBuilder.start();
+
+		Thread stderrThread = new Thread(() -> {
+			try (BufferedReader errReader = new BufferedReader(new InputStreamReader(process.getErrorStream()))) {
+				String errLine;
+				while ((errLine = errReader.readLine()) != null) {
+					logger.warn("yt-dlp stderr: " + errLine);
+				}
+			} catch (IOException e) {
+				logger.error("yt-dlp 错误输出失败", e);
+			}
+		});
+		stderrThread.start();
+
+		StringBuilder stringBuilder = new StringBuilder();
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+			String line;
+			while ((line = reader.readLine()) != null) {
+				stringBuilder.append(line).append("\n");
+			}
+		} finally {
+			process.waitFor();
+			stderrThread.join();
+			process.destroy();
+		}
+
+		String completeString = stringBuilder.toString();
+		if (process.exitValue() != 0) {
+			logger.error("yt-dlp 执行失败: " + completeString);
+			throw new IOException("yt-dlp 执行失败");
+		} else {
+			logger.info("yt-dlp executed with exit code: " + process.exitValue());
+		}
+		return completeString;
+	}
 }

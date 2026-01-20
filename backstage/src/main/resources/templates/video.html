@@ -367,6 +367,137 @@
         .twitter-filter-active .video-card:not([data-platform="twitter"]) {
             display: none;
         }
+
+        /* 本地下载页面样式 */
+        .local-download-page {
+            display: none;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 2rem 1rem;
+        }
+
+        .local-download-page.active {
+            display: block;
+        }
+
+        .local-download-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .local-download-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            margin-bottom: 2rem;
+        }
+
+        .parse-result-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-top: 2rem;
+        }
+
+        .parse-result-cover {
+            width: 100%;
+            aspect-ratio: 16/9;
+            object-fit: cover;
+        }
+
+        .parse-result-info {
+            padding: 1.5rem;
+        }
+
+        .parse-result-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #1f2937;
+        }
+
+        .parse-result-meta {
+            color: #6b7280;
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+
+        .parse-result-actions {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-download {
+            flex: 1;
+            min-width: 150px;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-download:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-copy {
+            flex: 1;
+            min-width: 150px;
+            padding: 0.75rem 1.5rem;
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-copy:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .warning-box {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            color: #92400e;
+        }
+
+        .info-box {
+            background: #dbeafe;
+            border-left: 4px solid #3b82f6;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            color: #1e40af;
+        }
+
+        @media (max-width: 640px) {
+            .local-download-card {
+                padding: 1.5rem;
+            }
+
+            .parse-result-actions {
+                flex-direction: column;
+            }
+
+            .btn-download,
+            .btn-copy {
+                min-width: 100%;
+            }
+        }
     </style>
 </head>
 <body class="bg-gray-100">
@@ -416,6 +547,13 @@
                                     class="p-1.5 sm:p-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-colors duration-200">
                                 <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                                </svg>
+                            </button>
+                            <button onclick="showLocalDownloadPage()" 
+                                    class="p-1.5 sm:p-2 bg-green-600 text-white rounded-full hover:bg-green-700 transition-colors duration-200"
+                                    title="本地下载">
+                                <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
                                 </svg>
                             </button>
                             <button onclick="openSettings()" 
@@ -586,6 +724,83 @@
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M19 12H5M12 19l-7-7 7-7"/>
                     </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 本地下载页面 -->
+    <div id="localDownloadPage" class="local-download-page">
+        <div class="local-download-container">
+            <!-- 返回按钮 -->
+            <div class="nav-back" onclick="showListPageFromLocal()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+            </div>
+
+            <!-- 主卡片 -->
+            <div class="local-download-card">
+                <h1 class="text-3xl font-bold text-gray-800 mb-2">本地下载</h1>
+                <p class="text-gray-600 mb-6">解析视频链接，直接下载到本地电脑</p>
+
+                <!-- 输入区域 -->
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">视频链接</label>
+                    <div class="flex gap-2">
+                        <input 
+                            type="text" 
+                            id="localVideoUrl" 
+                            class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                            placeholder="粘贴抖音、B站、YouTube等平台的视频链接..."
+                        />
+                        <button 
+                            onclick="parseVideoForLocal()" 
+                            class="px-6 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-semibold rounded-lg hover:from-purple-700 hover:to-indigo-700 transition-all duration-200 shadow-lg hover:shadow-xl"
+                        >
+                            解析
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 使用说明 -->
+                <div class="info-box">
+                    <h3 class="font-semibold mb-2">📌 使用说明</h3>
+                    <ul class="text-sm space-y-1 list-disc list-inside">
+                        <li>支持抖音、B站、YouTube、Twitter等主流视频平台</li>
+                        <li>解析后可直接下载视频到本地电脑</li>
+                        <li>部分平台可能需要配置Cookie才能解析</li>
+                        <li>DASH格式视频建议使用服务器下载</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 解析结果区域 -->
+            <div id="parseResult" style="display: none;">
+                <div class="parse-result-card">
+                    <img id="resultCover" src="" alt="视频封面" class="parse-result-cover" referrerpolicy="no-referrer" />
+                    <div class="parse-result-info">
+                        <div class="parse-result-title" id="resultTitle"></div>
+                        <div class="parse-result-meta">
+                            <span id="resultPlatform" class="platform-tag"></span>
+                            <span class="ml-3" id="resultAuthor"></span>
+                        </div>
+                        
+                        <!-- 警告信息 -->
+                        <div id="dashWarning" class="warning-box" style="display: none;">
+                            <strong>⚠️ 注意：</strong> 该视频为DASH格式（音视频分离），直接下载可能没有声音。建议使用"服务器下载"功能。
+                        </div>
+
+                        <!-- 操作按钮 -->
+                        <div class="parse-result-actions">
+                            <button onclick="downloadToLocal()" class="btn-download">
+                                <span>📥 下载到本地</span>
+                            </button>
+                            <button onclick="copyVideoUrl()" class="btn-copy">
+                                <span>📋 复制链接</span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1503,6 +1718,183 @@
             videoFrame.src = '';
             
             currentVideoId = null;
+        }
+        
+        // 显示本地下载页面
+        function showLocalDownloadPage() {
+            // 隐藏列表页面
+            document.getElementById('listPage').classList.add('hidden');
+            
+            // 显示本地下载页面
+            const localDownloadPage = document.getElementById('localDownloadPage');
+            localDownloadPage.classList.add('active');
+            
+            // 清空输入和结果
+            document.getElementById('localVideoUrl').value = '';
+            document.getElementById('parseResult').style.display = 'none';
+            
+            // 滚动到顶部
+            window.scrollTo(0, 0);
+        }
+        
+        // 从本地下载页面返回列表页面
+        function showListPageFromLocal() {
+            // 隐藏本地下载页面
+            const localDownloadPage = document.getElementById('localDownloadPage');
+            localDownloadPage.classList.remove('active');
+            
+            // 显示列表页面
+            document.getElementById('listPage').classList.remove('hidden');
+        }
+        
+        // 全局变量存储解析结果
+        let currentParseResult = null;
+        
+        // 解析视频用于本地下载
+        async function parseVideoForLocal() {
+            const urlInput = document.getElementById('localVideoUrl');
+            const videoUrl = urlInput.value.trim();
+            
+            if (!videoUrl) {
+                alert('请输入视频链接');
+                return;
+            }
+            
+            if (!serverToken) {
+                alert('Token未配置，请先在设置中配置Token');
+                return;
+            }
+            
+            // 显示加载状态
+            const parseBtn = event.target;
+            const originalText = parseBtn.innerHTML;
+            parseBtn.innerHTML = '解析中...';
+            parseBtn.disabled = true;
+            
+            try {
+                const response = await axios.get('/api/parseVideoForLocal', {
+                    params: {
+                        token: serverToken,
+                        video: videoUrl
+                    }
+                });
+                
+                if (response.data.resCode === '000001') {
+                    // 解析成功
+                    currentParseResult = response.data.record;
+                    displayParseResult(currentParseResult);
+                } else {
+                    alert('解析失败: ' + response.data.message);
+                }
+            } catch (error) {
+                console.error('解析失败', error);
+                alert('解析失败，请检查链接是否正确');
+            } finally {
+                parseBtn.innerHTML = originalText;
+                parseBtn.disabled = false;
+            }
+        }
+        
+        // 显示解析结果
+        function displayParseResult(result) {
+            const resultDiv = document.getElementById('parseResult');
+            const coverImg = document.getElementById('resultCover');
+            const titleEl = document.getElementById('resultTitle');
+            const platformEl = document.getElementById('resultPlatform');
+            const authorEl = document.getElementById('resultAuthor');
+            const dashWarning = document.getElementById('dashWarning');
+            
+            // 设置封面
+            coverImg.src = result.coverUrl || '';
+            
+            // 设置标题
+            titleEl.textContent = result.title || '未知标题';
+            
+            // 设置平台标签
+            platformEl.textContent = result.platform || '';
+            platformEl.className = 'platform-tag';
+            if (result.platform === '抖音') {
+                platformEl.classList.add('platform-douyin');
+            } else if (result.platform === 'bilibili' || result.platform === 'BiliBili') {
+                platformEl.classList.add('platform-bilibili');
+            } else if (result.platform === 'youtube') {
+                platformEl.classList.add('platform-youtube');
+            } else if (result.platform === 'twitter') {
+                platformEl.classList.add('platform-twitter');
+            }
+            
+            // 设置作者
+            authorEl.textContent = result.author ? '作者: ' + result.author : '';
+            
+            // 显示DASH警告
+            if (result.isDash) {
+                dashWarning.style.display = 'block';
+            } else {
+                dashWarning.style.display = 'none';
+            }
+            
+            // 显示结果
+            resultDiv.style.display = 'block';
+            
+            // 滚动到结果区域
+            resultDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+        
+        // 下载到本地
+        function downloadToLocal() {
+            if (!currentParseResult || !currentParseResult.videoUrl) {
+                alert('没有可下载的视频');
+                return;
+            }
+            
+            const videoUrl = currentParseResult.videoUrl;
+            const title = currentParseResult.title || 'video';
+            
+            // 创建一个隐藏的 a 标签
+            const a = document.createElement('a');
+            a.href = videoUrl;
+            a.download = title + '.mp4';
+            
+            // 如果需要 referer，在新标签页打开
+            if (currentParseResult.needReferer) {
+                window.open(videoUrl, '_blank');
+                alert('已在新标签页打开下载链接，请右键保存视频');
+            } else {
+                // 触发下载
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            }
+        }
+        
+        // 复制视频链接
+        function copyVideoUrl() {
+            if (!currentParseResult || !currentParseResult.videoUrl) {
+                alert('没有可复制的链接');
+                return;
+            }
+            
+            const videoUrl = currentParseResult.videoUrl;
+            
+            // 复制到剪贴板
+            navigator.clipboard.writeText(videoUrl).then(() => {
+                alert('链接已复制到剪贴板');
+            }).catch(err => {
+                // 兼容旧浏览器
+                const textarea = document.createElement('textarea');
+                textarea.value = videoUrl;
+                textarea.style.position = 'fixed';
+                textarea.style.opacity = '0';
+                document.body.appendChild(textarea);
+                textarea.select();
+                try {
+                    document.execCommand('copy');
+                    alert('链接已复制到剪贴板');
+                } catch (err) {
+                    alert('复制失败，请手动复制: ' + videoUrl);
+                }
+                document.body.removeChild(textarea);
+            });
         }
         
         // 调整视频容器

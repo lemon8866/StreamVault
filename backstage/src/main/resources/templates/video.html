@@ -1804,14 +1804,18 @@
             const authorEl = document.getElementById('resultAuthor');
             const dashWarning = document.getElementById('dashWarning');
             
-            // 设置封面
-            coverImg.src = result.coverUrl || '';
+            // 验证和清理封面URL
+            if (result.coverUrl && isValidUrl(result.coverUrl)) {
+                coverImg.src = result.coverUrl;
+            } else {
+                coverImg.src = '';
+            }
             
-            // 设置标题
-            titleEl.textContent = result.title || '未知标题';
+            // 设置标题（转义特殊字符以防止XSS）
+            titleEl.textContent = sanitizeText(result.title || '未知标题');
             
             // 设置平台标签
-            platformEl.textContent = result.platform || '';
+            platformEl.textContent = sanitizeText(result.platform || '');
             platformEl.className = 'platform-tag';
             if (result.platform === '抖音') {
                 platformEl.classList.add('platform-douyin');
@@ -1824,7 +1828,7 @@
             }
             
             // 设置作者
-            authorEl.textContent = result.author ? '作者: ' + result.author : '';
+            authorEl.textContent = result.author ? '作者: ' + sanitizeText(result.author) : '';
             
             // 显示DASH警告
             if (result.isDash) {
@@ -1840,6 +1844,24 @@
             resultDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
         
+        // URL验证函数
+        function isValidUrl(urlString) {
+            try {
+                const url = new URL(urlString);
+                // 只允许 http 和 https 协议
+                return url.protocol === 'http:' || url.protocol === 'https:';
+            } catch (e) {
+                return false;
+            }
+        }
+        
+        // 文本清理函数
+        function sanitizeText(text) {
+            if (!text) return '';
+            // 移除特殊字符，防止路径遍历
+            return text.replace(/[<>:"\/\\|?*\x00-\x1f]/g, '_');
+        }
+        
         // 下载到本地
         function downloadToLocal() {
             if (!currentParseResult || !currentParseResult.videoUrl) {
@@ -1848,18 +1870,26 @@
             }
             
             const videoUrl = currentParseResult.videoUrl;
-            const title = currentParseResult.title || 'video';
             
-            // 创建一个隐藏的 a 标签
-            const a = document.createElement('a');
-            a.href = videoUrl;
-            a.download = title + '.mp4';
+            // 验证URL
+            if (!isValidUrl(videoUrl)) {
+                alert('视频链接不合法');
+                return;
+            }
+            
+            const title = sanitizeText(currentParseResult.title || 'video');
             
             // 如果需要 referer，在新标签页打开
             if (currentParseResult.needReferer) {
-                window.open(videoUrl, '_blank');
+                window.open(videoUrl, '_blank', 'noopener,noreferrer');
                 alert('已在新标签页打开下载链接，请右键保存视频');
             } else {
+                // 创建一个隐藏的 a 标签
+                const a = document.createElement('a');
+                a.href = videoUrl;
+                a.download = title + '.mp4';
+                a.rel = 'noopener noreferrer';
+                
                 // 触发下载
                 document.body.appendChild(a);
                 a.click();
@@ -1875,6 +1905,12 @@
             }
             
             const videoUrl = currentParseResult.videoUrl;
+            
+            // 验证URL
+            if (!isValidUrl(videoUrl)) {
+                alert('视频链接不合法');
+                return;
+            }
             
             // 复制到剪贴板
             navigator.clipboard.writeText(videoUrl).then(() => {

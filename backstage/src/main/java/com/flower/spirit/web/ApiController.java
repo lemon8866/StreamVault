@@ -168,7 +168,17 @@ public class ApiController {
 			} else {
 				// 4. 其他平台使用 yt-dlp
 				String jsonStr = YtDlpUtil.execForJson(url, platform);
-				JSONObject jsonObject = JSONObject.parseObject(jsonStr);
+				
+				// 添加JSON解析的错误处理
+				JSONObject jsonObject;
+				try {
+					jsonObject = JSONObject.parseObject(jsonStr);
+					if (jsonObject == null) {
+						return new AjaxEntity(Global.ajax_uri_error, "解析失败: JSON数据为空", null);
+					}
+				} catch (Exception e) {
+					return new AjaxEntity(Global.ajax_uri_error, "解析失败: JSON解析错误 - " + e.getMessage(), null);
+				}
 				
 				result.put("platform", platform);
 				result.put("title", jsonObject.getString("title"));

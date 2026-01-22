@@ -252,6 +252,8 @@ public class YtDlpUtil {
 		command.add("yt-dlp");
 		command.add("--dump-json");
 		command.add("--no-download");
+		// 添加 --flat-playlist 支持播放列表
+		command.add("--flat-playlist");
 		
 		String apppath = Global.apppath;
 		File cookieDir = new File(apppath + "/cookies");
@@ -262,28 +264,34 @@ public class YtDlpUtil {
 			if (youtubeFile.exists()) {
 				command.add("--cookies");
 				command.add(youtubeFile.getAbsolutePath());
+				logger.info("已加载 YouTube cookie 文件");
 			}
 		}
 
-		if (null != platform && platform.equals("twitter")) {
+		if (null != platform && (platform.equals("twitter") || platform.toLowerCase().contains("twitter"))) {
 			File twitterFile = new File(cookieDir, "twitter.txt");
 			if (twitterFile.exists()) {
 				command.add("--cookies");
 				command.add(twitterFile.getAbsolutePath());
+				logger.info("已加载 Twitter cookie 文件");
 			}
 		}
 		
-		if (null != platform && !platform.equals("twitter") && !platform.equals("youtube")) {
+		if (null != platform && !platform.equals("twitter") && !platform.equals("youtube") && !platform.toLowerCase().contains("twitter")) {
 			File all = new File(cookieDir, platform + ".txt");
 			if (all.exists()) {
 				command.add("--cookies");
 				command.add(all.getAbsolutePath());
+				logger.info("已加载 {} cookie 文件", platform);
 			}
 		}
 
-		if (Global.proxyinfo != null) {
+		if (Global.proxyinfo != null && !Global.proxyinfo.isEmpty()) {
 			command.add("--proxy");
 			command.add(Global.proxyinfo);
+			logger.info("使用代理: {}", Global.proxyinfo);
+		} else {
+			logger.warn("未配置代理，某些平台可能无法访问");
 		}
 
 		if (null != Global.useragent && !"".equals(Global.useragent)) {
@@ -292,6 +300,8 @@ public class YtDlpUtil {
 		}
 
 		command.add(url);
+		
+		logger.info("执行 yt-dlp 命令: {}", String.join(" ", command));
 
 		ProcessBuilder processBuilder = new ProcessBuilder(command);
 		Process process = processBuilder.start();
@@ -326,7 +336,7 @@ public class YtDlpUtil {
 			logger.error("yt-dlp 执行失败 (exitCode: {}): {}", process.exitValue(), completeString);
 			throw new IOException("yt-dlp 执行失败 (exitCode: " + process.exitValue() + "): " + completeString);
 		} else {
-			logger.info("yt-dlp executed with exit code: " + process.exitValue());
+			logger.info("yt-dlp executed with exit code: {}, 输出长度: {}", process.exitValue(), completeString.length());
 		}
 		return completeString;
 	}

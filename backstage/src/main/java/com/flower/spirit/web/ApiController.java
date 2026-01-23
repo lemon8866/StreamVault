@@ -180,15 +180,16 @@ public class ApiController {
 				}
 				
 				KuaishouParser.VideoInfo videoInfo = KuaishouParser.parseVideo(url, kuaishouCookie);
-				if (videoInfo == null) {
-					return new AjaxEntity(Global.ajax_uri_error, "解析失败", null);
-				}
 				
 				result.put("platform", "快手");
 				// 优先使用H265链接，如果没有则使用普通视频链接
 				String videoUrl = videoInfo.getH265Url();
 				if (videoUrl == null || videoUrl.isEmpty()) {
 					videoUrl = videoInfo.getVideoUrl();
+				}
+				// 校验视频地址是否可用
+				if (videoUrl == null || videoUrl.isEmpty()) {
+					return new AjaxEntity(Global.ajax_uri_error, "视频地址不可用", null);
 				}
 				result.put("videoUrl", videoUrl);
 				result.put("coverUrl", videoInfo.getCoverUrl());
@@ -229,7 +230,11 @@ public class ApiController {
 						// 选择最后一个（通常是最高质量的）
 						JSONObject lastThumb = thumbnails.getJSONObject(thumbnails.size() - 1);
 						coverUrl = lastThumb.getString("url");
-						logger.info("从 thumbnails 数组获取封面: {}", coverUrl);
+						if (coverUrl == null || coverUrl.isEmpty()) {
+							logger.warn("thumbnails数组中的url为空");
+						} else {
+							logger.info("从 thumbnails 数组获取封面: {}", coverUrl);
+						}
 					}
 				}
 				result.put("coverUrl", coverUrl);

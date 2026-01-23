@@ -744,7 +744,7 @@
                 <!-- 标题区域 -->
                 <div class="text-center mb-6">
                     <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-full mb-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="下载图标">
                             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                             <polyline points="7 10 12 15 17 10"></polyline>
                             <line x1="12" y1="15" x2="12" y2="3"></line>
@@ -758,7 +758,7 @@
                 <div class="mb-6">
                     <label class="block text-sm font-medium text-gray-700 mb-2">
                         <span class="flex items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" role="img" aria-label="链接图标">
                                 <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
                                 <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
                             </svg>
@@ -776,7 +776,7 @@
                             onclick="parseVideoForLocal()" 
                             class="px-6 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-semibold rounded-lg hover:from-purple-700 hover:to-indigo-700 transition-all duration-200 shadow-lg hover:shadow-xl flex items-center gap-2"
                         >
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" role="img" aria-label="搜索图标">
                                 <circle cx="11" cy="11" r="8"></circle>
                                 <path d="m21 21-4.35-4.35"></path>
                             </svg>
@@ -788,7 +788,7 @@
                 <!-- 支持平台展示 -->
                 <div class="mb-6">
                     <h3 class="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" role="img" aria-label="支持图标">
                             <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path>
                             <path d="m9 12 2 2 4-4"></path>
                         </svg>
@@ -834,7 +834,7 @@
                 <!-- 使用说明 -->
                 <div class="info-box">
                     <h3 class="font-semibold mb-3 flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" role="img" aria-label="说明图标">
                             <circle cx="12" cy="12" r="10"></circle>
                             <path d="M12 16v-4"></path>
                             <path d="M12 8h.01"></path>
@@ -848,7 +848,7 @@
                         </li>
                         <li class="flex items-start gap-2">
                             <span class="text-blue-500 mt-0.5">•</span>
-                            <span><strong>音乐平台：</strong>支持QQ音乐、网易云音乐下载（通过yt-dlp）</span>
+                            <span><strong>音乐平台：</strong>部分音乐平台（如QQ音乐、网易云音乐）尝试通过yt-dlp下载，成功率视平台限制而定</span>
                         </li>
                         <li class="flex items-start gap-2">
                             <span class="text-blue-500 mt-0.5">•</span>
@@ -867,7 +867,7 @@
                         <span class="text-2xl">💡</span>
                         <div>
                             <h4 class="font-semibold text-amber-800 mb-1">小贴士</h4>
-                            <p class="text-sm text-amber-700">如果本地下载失败或遇到DASH格式视频，可以尝试使用"服务器下载"功能，服务器会自动合并音视频流。</p>
+                            <p class="text-sm text-amber-700">本地下载模式暂不支持获取图片资源（如封面图）。如果本地下载失败或遇到DASH格式视频，可以尝试使用"服务器下载"功能，服务器会自动合并音视频流并处理相关资源。</p>
                         </div>
                     </div>
                 </div>

@@ -90,13 +90,23 @@ public class XiaohongshuParser {
             }
             
             JSONObject noteDetailMap = noteObj.getJSONObject("noteDetailMap");
-            if (noteDetailMap == null) {
-                logger.error("未找到noteDetailMap对象");
+            if (noteDetailMap == null || noteDetailMap.isEmpty()) {
+                logger.error("未找到noteDetailMap对象或为空");
                 return null;
             }
             
             String keyid = noteDetailMap.keySet().iterator().next();
-            JSONObject note = noteDetailMap.getJSONObject(keyid).getJSONObject("note");
+            JSONObject noteDetail = noteDetailMap.getJSONObject(keyid);
+            if (noteDetail == null) {
+                logger.error("未找到noteDetail对象");
+                return null;
+            }
+            
+            JSONObject note = noteDetail.getJSONObject("note");
+            if (note == null) {
+                logger.error("未找到note对象");
+                return null;
+            }
             
             VideoInfo info = new VideoInfo();
             info.setNoteId(keyid);

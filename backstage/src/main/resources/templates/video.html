@@ -2017,10 +2017,17 @@
                 fileExt = '.jpg';
             }
             
+            // 媒体类型名称映射
+            const mediaNameMap = {
+                'audio': '音频',
+                'image': '图片',
+                'video': '视频'
+            };
+            const mediaName = mediaNameMap[mediaType] || '视频';
+            
             // 如果需要 referer，在新标签页打开
             if (currentParseResult.needReferer) {
                 window.open(videoUrl, '_blank', 'noopener,noreferrer');
-                const mediaName = mediaType === 'audio' ? '音频' : (mediaType === 'image' ? '图片' : '视频');
                 alert('已在新标签页打开下载链接，请右键保存' + mediaName);
             } else {
                 // 创建一个隐藏的 a 标签

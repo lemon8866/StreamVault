@@ -257,13 +257,27 @@ public class ApiController {
 					result.put("duration", jsonObject.getInteger("duration"));
 					result.put("mediaType", "audio");
 					
-					// 获取封面图
+					// 获取封面图 - 优先选择最高分辨率的缩略图
 					String coverUrl = jsonObject.getString("thumbnail");
 					if (coverUrl == null || coverUrl.isEmpty()) {
 						JSONArray thumbnails = jsonObject.getJSONArray("thumbnails");
 						if (thumbnails != null && thumbnails.size() > 0) {
-							JSONObject lastThumb = thumbnails.getJSONObject(thumbnails.size() - 1);
-							coverUrl = lastThumb.getString("url");
+							// 选择分辨率最高的缩略图
+							JSONObject bestThumb = null;
+							int maxResolution = 0;
+							for (int i = 0; i < thumbnails.size(); i++) {
+								JSONObject thumb = thumbnails.getJSONObject(i);
+								Integer width = thumb.getInteger("width");
+								Integer height = thumb.getInteger("height");
+								int resolution = (width != null ? width : 0) * (height != null ? height : 0);
+								if (resolution > maxResolution || bestThumb == null) {
+									maxResolution = resolution;
+									bestThumb = thumb;
+								}
+							}
+							if (bestThumb != null) {
+								coverUrl = bestThumb.getString("url");
+							}
 						}
 					}
 					result.put("coverUrl", coverUrl);
@@ -271,12 +285,29 @@ public class ApiController {
 					// 获取音频URL
 					String audioUrl = jsonObject.getString("url");
 					if (audioUrl == null || audioUrl.isEmpty()) {
-						// 尝试从formats中获取
+						// 尝试从formats中获取 - 选择比特率最高的音频格式
 						JSONArray formats = jsonObject.getJSONArray("formats");
 						if (formats != null && formats.size() > 0) {
-							// 选择最后一个（通常是最高质量）
-							JSONObject lastFormat = formats.getJSONObject(formats.size() - 1);
-							audioUrl = lastFormat.getString("url");
+							JSONObject bestFormat = null;
+							int maxBitrate = 0;
+							for (int i = 0; i < formats.size(); i++) {
+								JSONObject format = formats.getJSONObject(i);
+								String formatUrl = format.getString("url");
+								if (formatUrl == null || formatUrl.isEmpty()) continue;
+								
+								// 获取比特率或文件大小作为质量指标
+								Integer abr = format.getInteger("abr"); // audio bitrate
+								Integer tbr = format.getInteger("tbr"); // total bitrate
+								int bitrate = (abr != null ? abr : 0) + (tbr != null ? tbr : 0);
+								
+								if (bitrate > maxBitrate || bestFormat == null) {
+									maxBitrate = bitrate;
+									bestFormat = format;
+								}
+							}
+							if (bestFormat != null) {
+								audioUrl = bestFormat.getString("url");
+							}
 						}
 					}
 					

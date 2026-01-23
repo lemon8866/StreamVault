@@ -108,16 +108,20 @@ public class VideoDataService {
 	 * @return
 	 */
 	public AjaxEntity deleteVideoData(VideoDataEntity data) {
-		//删除也要删除资源
+		// 删除也要删除资源
 		Optional<VideoDataEntity> findById = videoDataDao.findById(data.getId());
-		if(findById.isPresent()) {
+		if (findById.isPresent()) {
 			VideoDataEntity videoDataEntity = findById.get();
-			//新版 优化 此处可以修改为直接删除文件夹
-//			FileUtils.deleteFile(videoDataEntity.getVideoaddr()); 
-//			FileUtils.deleteParentDirectorie(videoDataEntity.getVideoaddr());  //直接删除上级文件夹
-			CommandUtil.deleteDirectory(new File(videoDataEntity.getVideoaddr()).getParentFile().getPath());//更换系统级原生删除方法
-//			FileUtils.deleteFile(videoDataEntity.getVideocover().replace(savefile, uploadRealPath));
+			File file = new File(videoDataEntity.getVideoaddr());
+			if(file.isFile()) {
+				CommandUtil.deleteDirectory(file.getParentFile().getPath());
+			}
+			//这里保留 因为有可能用户可能时以前旧版的数据 如果不写这个就会导致无法删除
+			if(file.isDirectory()) {
+				CommandUtil.deleteDirectory(file.getPath());
+			}
 			videoDataDao.deleteById(data.getId());
+			
 		}
 		return new AjaxEntity(Global.ajax_success, "操作成功", null);
 	}

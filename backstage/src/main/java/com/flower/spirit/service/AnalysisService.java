@@ -644,7 +644,7 @@ public class AnalysisService {
 		String coverdir = FileUtil.generateDir(true, Global.platform.douyin.name(), true, filename, null, null);
 		// HttpUtil.downloadFileWithOkHttp(cover, coverfile,coverdir);
 		HttpUtil.downloadFileWithOkHttp(cover, coverfile, coverdir, header);
-		VideoDataEntity videoDataEntity = new VideoDataEntity(awemeId, desc, desc, platform, coverunaddr, videofile,
+		VideoDataEntity videoDataEntity = new VideoDataEntity(awemeId, desc, desc, platform, coverunaddr, videofile+filename + ".mp4",
 				videounrealaddr, originaladdress);
 		// 生成元数据
 		if (Global.getGeneratenfo) {

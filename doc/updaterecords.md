@@ -5,6 +5,20 @@
 移除了 yt-dlp 自定义参数追加功能
 ```
 ```
+2026/01/22  
+累积性更新内容
+移除yt-dlp 追加参数功能设置 在webui界面等彻底移除相关配置
+修复instagram传递cookie与保存cookie时的文件名不一致问题
+新增手动触发检查cookie 版本号位置变动 检查更新位置变动
+增强 yt-dlp getPlatform 函数获取信息的稳定性
+修复提交记录中 查询条件的状态筛选错误的问题
+新增fnnas docker app 和fpk包
+sqlite开启WAL模式
+Add CookieCloud support for auto uploading and updating cookies
+resolve videoaddr error and accidental deletion in Douyin odd mode
+```
+
+```
 2025/11/18  Tagged the version as 251118 on Docker Hub. Merged the 251118 tag into the latest tag.
 升级内置的yt-dlp至最新版本 版本号为 2025.11.12
 对于app源码 优化登录 新增记住密码功能  新增新的播放模式 由于部分功能有缺陷 暂未打包

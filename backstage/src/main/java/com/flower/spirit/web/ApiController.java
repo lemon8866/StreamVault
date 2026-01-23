@@ -31,6 +31,7 @@ import com.flower.spirit.service.VideoDataService;
 import com.flower.spirit.service.ConfigService;
 import com.flower.spirit.utils.DouUtil;
 import com.flower.spirit.utils.KuaishouParser;
+import com.flower.spirit.utils.XiaohongshuParser;
 import com.flower.spirit.utils.YtDlpUtil;
 
 /**
@@ -199,6 +200,98 @@ public class ApiController {
 				result.put("isDash", false);
 				result.put("needReferer", true);
 				result.put("referer", "https://www.kuaishou.com/");
+				
+			} else if (platform.equals("小红书")) {
+				// 5. 小红书平台使用 XiaohongshuParser
+				XiaohongshuParser.VideoInfo videoInfo = XiaohongshuParser.parseVideo(url);
+				if (videoInfo == null) {
+					return new AjaxEntity(Global.ajax_uri_error, "小红书解析失败，请检查链接是否正确", null);
+				}
+				
+				result.put("platform", "小红书");
+				result.put("title", videoInfo.getTitle());
+				result.put("author", videoInfo.getAuthor());
+				result.put("coverUrl", videoInfo.getCoverUrl());
+				
+				// 判断是视频还是图文
+				if ("video".equals(videoInfo.getType()) && videoInfo.getVideoUrl() != null && !videoInfo.getVideoUrl().isEmpty()) {
+					result.put("videoUrl", videoInfo.getVideoUrl());
+					result.put("duration", videoInfo.getDuration());
+					result.put("isDash", false);
+					result.put("needReferer", true);
+					result.put("referer", "https://www.xiaohongshu.com/");
+					result.put("mediaType", "video");
+				} else {
+					// 图文类型，返回图片列表供用户选择
+					if (videoInfo.getImageUrls() != null && !videoInfo.getImageUrls().isEmpty()) {
+						result.put("videoUrl", videoInfo.getImageUrls().get(0)); // 使用第一张图片作为默认
+						result.put("imageUrls", videoInfo.getImageUrls());
+						result.put("mediaType", "image");
+						result.put("isDash", false);
+						result.put("needReferer", true);
+						result.put("referer", "https://www.xiaohongshu.com/");
+					} else {
+						return new AjaxEntity(Global.ajax_uri_error, "未找到可下载的内容", null);
+					}
+				}
+				
+			} else if (platform.equals("网易云音乐") || platform.equals("QQ音乐")) {
+				// 6. 音乐平台使用 yt-dlp 音频模式
+				try {
+					String jsonStr = YtDlpUtil.execForAudioJson(url, platform);
+					
+					JSONObject jsonObject;
+					try {
+						jsonObject = JSONObject.parseObject(jsonStr.trim());
+						if (jsonObject == null) {
+							return new AjaxEntity(Global.ajax_uri_error, "音乐解析失败: JSON数据为空", null);
+						}
+					} catch (Exception e) {
+						logger.error("音乐JSON解析失败，原始数据: {}", jsonStr);
+						return new AjaxEntity(Global.ajax_uri_error, "音乐解析失败: " + e.getMessage(), null);
+					}
+					
+					result.put("platform", platform);
+					result.put("title", jsonObject.getString("title"));
+					result.put("author", jsonObject.getString("uploader"));
+					result.put("duration", jsonObject.getInteger("duration"));
+					result.put("mediaType", "audio");
+					
+					// 获取封面图
+					String coverUrl = jsonObject.getString("thumbnail");
+					if (coverUrl == null || coverUrl.isEmpty()) {
+						JSONArray thumbnails = jsonObject.getJSONArray("thumbnails");
+						if (thumbnails != null && thumbnails.size() > 0) {
+							JSONObject lastThumb = thumbnails.getJSONObject(thumbnails.size() - 1);
+							coverUrl = lastThumb.getString("url");
+						}
+					}
+					result.put("coverUrl", coverUrl);
+					
+					// 获取音频URL
+					String audioUrl = jsonObject.getString("url");
+					if (audioUrl == null || audioUrl.isEmpty()) {
+						// 尝试从formats中获取
+						JSONArray formats = jsonObject.getJSONArray("formats");
+						if (formats != null && formats.size() > 0) {
+							// 选择最后一个（通常是最高质量）
+							JSONObject lastFormat = formats.getJSONObject(formats.size() - 1);
+							audioUrl = lastFormat.getString("url");
+						}
+					}
+					
+					if (audioUrl == null || audioUrl.isEmpty()) {
+						return new AjaxEntity(Global.ajax_uri_error, "无法获取音频下载地址", null);
+					}
+					
+					result.put("videoUrl", audioUrl); // 使用videoUrl字段保持前端兼容
+					result.put("isDash", false);
+					result.put("needReferer", false);
+					
+				} catch (Exception e) {
+					logger.error("音乐平台解析失败", e);
+					return new AjaxEntity(Global.ajax_uri_error, "音乐解析失败: " + e.getMessage(), null);
+				}
 				
 			} else {
 				// 5. 其他平台使用 yt-dlp

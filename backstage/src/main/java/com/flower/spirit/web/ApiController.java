@@ -30,6 +30,7 @@ import com.flower.spirit.service.AnalysisService;
 import com.flower.spirit.service.VideoDataService;
 import com.flower.spirit.service.ConfigService;
 import com.flower.spirit.utils.DouUtil;
+import com.flower.spirit.utils.KuaishouParser;
 import com.flower.spirit.utils.YtDlpUtil;
 
 /**
@@ -171,8 +172,35 @@ public class ApiController {
 				result.put("needReferer", true);
 				result.put("referer", "https://www.douyin.com/");
 				
+			} else if (platform.equals("快手")) {
+				// 4. 快手平台使用 KuaishouParser
+				String kuaishouCookie = null;
+				if (Global.cookie_manage != null) {
+					kuaishouCookie = Global.cookie_manage.getKuaishouCookie();
+				}
+				
+				KuaishouParser.VideoInfo videoInfo = KuaishouParser.parseVideo(url, kuaishouCookie);
+				if (videoInfo == null) {
+					return new AjaxEntity(Global.ajax_uri_error, "解析失败", null);
+				}
+				
+				result.put("platform", "快手");
+				// 优先使用H265链接，如果没有则使用普通视频链接
+				String videoUrl = videoInfo.getH265Url();
+				if (videoUrl == null || videoUrl.isEmpty()) {
+					videoUrl = videoInfo.getVideoUrl();
+				}
+				result.put("videoUrl", videoUrl);
+				result.put("coverUrl", videoInfo.getCoverUrl());
+				result.put("title", videoInfo.getTitle());
+				result.put("author", videoInfo.getAuthor());
+				result.put("duration", videoInfo.getDuration());
+				result.put("isDash", false);
+				result.put("needReferer", true);
+				result.put("referer", "https://www.kuaishou.com/");
+				
 			} else {
-				// 4. 其他平台使用 yt-dlp
+				// 5. 其他平台使用 yt-dlp
 				String jsonStr = YtDlpUtil.execForJson(url, platform);
 				
 				// 添加JSON解析的错误处理

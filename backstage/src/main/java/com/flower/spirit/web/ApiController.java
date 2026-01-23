@@ -190,8 +190,21 @@ public class ApiController {
 				result.put("platform", platform);
 				result.put("title", jsonObject.getString("title"));
 				result.put("author", jsonObject.getString("uploader"));
-				result.put("coverUrl", jsonObject.getString("thumbnail"));
 				result.put("duration", jsonObject.getInteger("duration"));
+				
+				// 获取封面图URL - 改进逻辑以支持Twitter等平台的thumbnails数组
+				String coverUrl = jsonObject.getString("thumbnail");
+				if (coverUrl == null || coverUrl.isEmpty()) {
+					// 尝试从 thumbnails 数组获取（Twitter等平台使用此格式）
+					JSONArray thumbnails = jsonObject.getJSONArray("thumbnails");
+					if (thumbnails != null && thumbnails.size() > 0) {
+						// 选择最后一个（通常是最高质量的）
+						JSONObject lastThumb = thumbnails.getJSONObject(thumbnails.size() - 1);
+						coverUrl = lastThumb.getString("url");
+						logger.info("从 thumbnails 数组获取封面: {}", coverUrl);
+					}
+				}
+				result.put("coverUrl", coverUrl);
 				
 				// 检查是否是 playlist
 				String entryType = jsonObject.getString("_type");

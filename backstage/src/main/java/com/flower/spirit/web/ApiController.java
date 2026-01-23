@@ -30,6 +30,7 @@ import com.flower.spirit.service.AnalysisService;
 import com.flower.spirit.service.VideoDataService;
 import com.flower.spirit.service.ConfigService;
 import com.flower.spirit.utils.DouUtil;
+import com.flower.spirit.utils.KuaishouParser;
 import com.flower.spirit.utils.YtDlpUtil;
 
 /**
@@ -171,8 +172,36 @@ public class ApiController {
 				result.put("needReferer", true);
 				result.put("referer", "https://www.douyin.com/");
 				
+			} else if (platform.equals("快手")) {
+				// 4. 快手平台使用 KuaishouParser
+				String kuaishouCookie = null;
+				if (Global.cookie_manage != null) {
+					kuaishouCookie = Global.cookie_manage.getKuaishouCookie();
+				}
+				
+				KuaishouParser.VideoInfo videoInfo = KuaishouParser.parseVideo(url, kuaishouCookie);
+				
+				result.put("platform", "快手");
+				// 优先使用H265链接，如果没有则使用普通视频链接
+				String videoUrl = videoInfo.getH265Url();
+				if (videoUrl == null || videoUrl.isEmpty()) {
+					videoUrl = videoInfo.getVideoUrl();
+				}
+				// 校验视频地址是否可用
+				if (videoUrl == null || videoUrl.isEmpty()) {
+					return new AjaxEntity(Global.ajax_uri_error, "视频地址不可用", null);
+				}
+				result.put("videoUrl", videoUrl);
+				result.put("coverUrl", videoInfo.getCoverUrl());
+				result.put("title", videoInfo.getTitle());
+				result.put("author", videoInfo.getAuthor());
+				result.put("duration", videoInfo.getDuration());
+				result.put("isDash", false);
+				result.put("needReferer", true);
+				result.put("referer", "https://www.kuaishou.com/");
+				
 			} else {
-				// 4. 其他平台使用 yt-dlp
+				// 5. 其他平台使用 yt-dlp
 				String jsonStr = YtDlpUtil.execForJson(url, platform);
 				
 				// 添加JSON解析的错误处理
@@ -190,8 +219,25 @@ public class ApiController {
 				result.put("platform", platform);
 				result.put("title", jsonObject.getString("title"));
 				result.put("author", jsonObject.getString("uploader"));
-				result.put("coverUrl", jsonObject.getString("thumbnail"));
 				result.put("duration", jsonObject.getInteger("duration"));
+				
+				// 获取封面图URL - 改进逻辑以支持Twitter等平台的thumbnails数组
+				String coverUrl = jsonObject.getString("thumbnail");
+				if (coverUrl == null || coverUrl.isEmpty()) {
+					// 尝试从 thumbnails 数组获取（Twitter等平台使用此格式）
+					JSONArray thumbnails = jsonObject.getJSONArray("thumbnails");
+					if (thumbnails != null && thumbnails.size() > 0) {
+						// 选择最后一个（通常是最高质量的）
+						JSONObject lastThumb = thumbnails.getJSONObject(thumbnails.size() - 1);
+						coverUrl = lastThumb.getString("url");
+						if (coverUrl == null || coverUrl.isEmpty()) {
+							logger.warn("thumbnails数组中的url为空");
+						} else {
+							logger.info("从 thumbnails 数组获取封面: {}", coverUrl);
+						}
+					}
+				}
+				result.put("coverUrl", coverUrl);
 				
 				// 检查是否是 playlist
 				String entryType = jsonObject.getString("_type");

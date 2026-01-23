@@ -741,38 +741,135 @@
 
             <!-- 主卡片 -->
             <div class="local-download-card">
-                <h1 class="text-3xl font-bold text-gray-800 mb-2">本地下载</h1>
-                <p class="text-gray-600 mb-6">解析视频链接，直接下载到本地电脑</p>
+                <!-- 标题区域 -->
+                <div class="text-center mb-6">
+                    <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-full mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="下载图标">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                    </div>
+                    <h1 class="text-3xl font-bold text-gray-800 mb-2">本地下载</h1>
+                    <p class="text-gray-500">解析视频/音频链接，直接下载到本地电脑</p>
+                </div>
 
                 <!-- 输入区域 -->
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">视频链接</label>
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        <span class="flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" role="img" aria-label="链接图标">
+                                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                            </svg>
+                            视频/音频链接
+                        </span>
+                    </label>
                     <div class="flex gap-2">
                         <input 
                             type="text" 
                             id="localVideoUrl" 
-                            class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                            placeholder="粘贴抖音、B站、YouTube等平台的视频链接..."
+                            class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                            placeholder="粘贴视频或音频链接..."
                         />
                         <button 
                             onclick="parseVideoForLocal()" 
-                            class="px-6 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-semibold rounded-lg hover:from-purple-700 hover:to-indigo-700 transition-all duration-200 shadow-lg hover:shadow-xl"
+                            class="px-6 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-semibold rounded-lg hover:from-purple-700 hover:to-indigo-700 transition-all duration-200 shadow-lg hover:shadow-xl flex items-center gap-2"
                         >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" role="img" aria-label="搜索图标">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <path d="m21 21-4.35-4.35"></path>
+                            </svg>
                             解析
                         </button>
                     </div>
                 </div>
 
+                <!-- 支持平台展示 -->
+                <div class="mb-6">
+                    <h3 class="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" role="img" aria-label="支持图标">
+                            <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path>
+                            <path d="m9 12 2 2 4-4"></path>
+                        </svg>
+                        支持的平台
+                    </h3>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                        <div class="flex items-center gap-2 px-3 py-2 bg-pink-50 rounded-lg border border-pink-200">
+                            <span class="text-lg">🎵</span>
+                            <span class="text-sm font-medium text-pink-700">抖音</span>
+                        </div>
+                        <div class="flex items-center gap-2 px-3 py-2 bg-orange-50 rounded-lg border border-orange-200">
+                            <span class="text-lg">🎬</span>
+                            <span class="text-sm font-medium text-orange-700">快手</span>
+                        </div>
+                        <div class="flex items-center gap-2 px-3 py-2 bg-blue-50 rounded-lg border border-blue-200">
+                            <span class="text-lg">📺</span>
+                            <span class="text-sm font-medium text-blue-700">哔哩哔哩</span>
+                        </div>
+                        <div class="flex items-center gap-2 px-3 py-2 bg-red-50 rounded-lg border border-red-200">
+                            <span class="text-lg">▶️</span>
+                            <span class="text-sm font-medium text-red-700">YouTube</span>
+                        </div>
+                        <div class="flex items-center gap-2 px-3 py-2 bg-sky-50 rounded-lg border border-sky-200">
+                            <span class="text-lg">🐦</span>
+                            <span class="text-sm font-medium text-sky-700">Twitter/X</span>
+                        </div>
+                        <div class="flex items-center gap-2 px-3 py-2 bg-purple-50 rounded-lg border border-purple-200">
+                            <span class="text-lg">📷</span>
+                            <span class="text-sm font-medium text-purple-700">Instagram</span>
+                        </div>
+                        <div class="flex items-center gap-2 px-3 py-2 bg-green-50 rounded-lg border border-green-200">
+                            <span class="text-lg">🎶</span>
+                            <span class="text-sm font-medium text-green-700">QQ音乐</span>
+                        </div>
+                        <div class="flex items-center gap-2 px-3 py-2 bg-red-50 rounded-lg border border-red-200">
+                            <span class="text-lg">🎧</span>
+                            <span class="text-sm font-medium text-red-700">网易云音乐</span>
+                        </div>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-2 text-center">以及更多yt-dlp支持的平台...</p>
+                </div>
+
                 <!-- 使用说明 -->
                 <div class="info-box">
-                    <h3 class="font-semibold mb-2">📌 使用说明</h3>
-                    <ul class="text-sm space-y-1 list-disc list-inside">
-                        <li>支持抖音、B站、YouTube、Twitter等主流视频平台</li>
-                        <li>解析后可直接下载视频到本地电脑</li>
-                        <li>部分平台可能需要配置Cookie才能解析</li>
-                        <li>DASH格式视频建议使用服务器下载</li>
-						<li>服务测试中，本地无法获取下载图片</li>
+                    <h3 class="font-semibold mb-3 flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" role="img" aria-label="说明图标">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M12 16v-4"></path>
+                            <path d="M12 8h.01"></path>
+                        </svg>
+                        使用说明
+                    </h3>
+                    <ul class="text-sm space-y-2">
+                        <li class="flex items-start gap-2">
+                            <span class="text-blue-500 mt-0.5">•</span>
+                            <span><strong>视频平台：</strong>支持抖音、快手、B站、YouTube、Twitter等主流平台</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-blue-500 mt-0.5">•</span>
+                            <span><strong>音乐平台：</strong>部分音乐平台（如QQ音乐、网易云音乐）尝试通过yt-dlp下载，成功率视平台限制而定</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-blue-500 mt-0.5">•</span>
+                            <span><strong>下载方式：</strong>解析后可直接下载视频/音频到本地电脑</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-blue-500 mt-0.5">•</span>
+                            <span><strong>注意事项：</strong>部分平台需要配置Cookie，DASH格式建议使用服务器下载</span>
+                        </li>
                     </ul>
+                </div>
+
+                <!-- 提示卡片 -->
+                <div class="mt-4 p-4 bg-gradient-to-r from-amber-50 to-yellow-50 border border-amber-200 rounded-lg">
+                    <div class="flex items-start gap-3">
+                        <span class="text-2xl">💡</span>
+                        <div>
+                            <h4 class="font-semibold text-amber-800 mb-1">小贴士</h4>
+                            <p class="text-sm text-amber-700">本地下载模式暂不支持获取图片资源（如封面图）。如果本地下载失败或遇到DASH格式视频，可以尝试使用"服务器下载"功能，服务器会自动合并音视频流并处理相关资源。</p>
+                        </div>
+                    </div>
                 </div>
             </div>
 

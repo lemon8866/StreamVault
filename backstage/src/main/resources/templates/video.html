@@ -564,7 +564,7 @@
 </head>
 <body class="bg-gray-100">
     <!-- 隐藏平台配置 -->
-    <input type="hidden" id="hiddenPlatformsConfig" th:value="${hiddenplatforms}" value="" />
+    <input type="hidden" id="hiddenPlatformsConfig" th:value="${hiddenplatforms != null ? hiddenplatforms : ''}" />
     <!-- 视频列表页面 -->
     <div id="listPage" class="list-page">
         <!-- 导航栏 -->

@@ -90,8 +90,9 @@ public class VideoDataService {
 	            if (StringUtil.isString(res.getExcludePlatform())) {
 	                String[] excludePlatforms = res.getExcludePlatform().split(",");
 	                for (String platform : excludePlatforms) {
-	                    if (platform != null && !platform.trim().isEmpty()) {
-	                        predicates.add(cb.notLike(cb.lower(root.get("videoplatform")), "%" + platform.trim().toLowerCase() + "%"));
+	                    String trimmedPlatform = platform != null ? platform.trim() : "";
+	                    if (!trimmedPlatform.isEmpty()) {
+	                        predicates.add(cb.notLike(cb.lower(root.get("videoplatform")), "%" + trimmedPlatform.toLowerCase() + "%"));
 	                    }
 	                }
 	            }

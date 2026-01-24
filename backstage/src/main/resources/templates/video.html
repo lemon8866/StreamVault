@@ -381,6 +381,14 @@
             background: linear-gradient(45deg, #ff4906, #ff6b32);
         }
 
+        .platform-tiktok {
+            background: linear-gradient(45deg, #000000, #ff0050, #00f2ea);
+        }
+
+        .platform-weibo {
+            background: linear-gradient(45deg, #e6162d, #ff8200);
+        }
+
         /* 响应式调整 */
         @media (max-width: 768px) {
             .video-container {
@@ -406,6 +414,19 @@
 
         /* 隐藏列表页面 */
         .list-page.hidden {
+            display: none;
+        }
+
+        /* Twitter视频控制样式 */
+        .video-card[data-platform="twitter"] {
+            display: none;
+        }
+        
+        .twitter-filter-active .video-card[data-platform="twitter"] {
+            display: block;
+        }
+        
+        .twitter-filter-active .video-card:not([data-platform="twitter"]) {
             display: none;
         }
 
@@ -562,15 +583,15 @@
                                 <select id="platformSelect" 
                                         class="pl-2 sm:pl-4 pr-6 sm:pr-8 py-2 text-sm bg-transparent border-none focus:outline-none focus:ring-0 appearance-none cursor-pointer">
                                     <option value="">全部</option>
-                                    <option value="哔哩">哔哩</option>
                                     <option value="抖音">抖音</option>
-                                    <option value="instagram">instagram</option>
+                                    <option value="哔哩">哔哩哔哩</option>
+                                    <option value="instagram">Instagram</option>
                                     <option value="快手">快手</option>
-                                    <option value="QQ音乐">QQ音乐</option>
-                                    <option value="twitter">twitter</option>
-                                    <option value="网易云音乐">网易云音乐</option>
+                                    <option value="tiktok">TikTok</option>
+                                    <option value="twitter">Twitter</option>
+                                    <option value="微博">微博</option>
                                     <option value="小红书">小红书</option>
-                                    <option value="youtube">youtube</option>
+                                    <option value="youtube">YouTube</option>
                                 </select>
                                 <div class="absolute right-1 sm:right-2 top-1/2 -translate-y-1/2 pointer-events-none">
                                     <svg class="w-3 h-3 sm:w-4 sm:h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1136,6 +1157,14 @@
                 // 清除URL参数
                 clearUrlParams();
             }
+            
+            // 处理Twitter筛选的特殊情况
+            const listPage = document.getElementById('listPage');
+            if (currentPlatform === 'twitter') {
+                listPage.classList.add('twitter-filter-active');
+            } else {
+                listPage.classList.remove('twitter-filter-active');
+            }
         }
         
         // 更新URL参数
@@ -1418,12 +1447,6 @@
                 params.append('videoplatform', currentPlatform);
             }
             
-            // Twitter延迟加载：只有选择twitter分类时才加载twitter视频
-            // 如果未选择任何平台（全部），则排除twitter
-            if (!currentPlatform) {
-                params.append('excludePlatform', 'twitter');
-            }
-            
             const url = addTokenToUrl(`/api/findVideos?${params.toString()}`);
 
             console.log('请求URL:', url);
@@ -1473,6 +1496,12 @@
             card.setAttribute('data-video-desc', btoa(encodeURIComponent(video.videodesc || video.description || '')));
             card.setAttribute('data-video-platform', btoa(encodeURIComponent(platform)));
             card.setAttribute('data-create-time', createTime || '');
+            
+            // 添加平台标识用于筛选（Twitter视频默认隐藏）
+            const platformLower = platform.toLowerCase();
+            if (platformLower.includes('twitter')) {
+                card.setAttribute('data-platform', 'twitter');
+            }
             
             // 点击事件使用data属性中的信息
             card.onclick = () => playVideoFromCard(card);
@@ -1541,6 +1570,10 @@
                 return 'platform-instagram';
             } else if (platformLower.includes('快手') || platformLower.includes('kuaishou')) {
                 return 'platform-kuaishou';
+            } else if (platformLower.includes('tiktok')) {
+                return 'platform-tiktok';
+            } else if (platformLower.includes('微博') || platformLower.includes('weibo')) {
+                return 'platform-weibo';
             }
             return 'bg-gray-500';
         }

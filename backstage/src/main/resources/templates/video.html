@@ -1445,6 +1445,9 @@
             
             if (currentPlatform) {
                 params.append('videoplatform', currentPlatform);
+            } else {
+                // 如果没有选择特定平台，排除Twitter视频
+                params.append('excludePlatform', 'twitter');
             }
             
             const url = addTokenToUrl(`/api/findVideos?${params.toString()}`);

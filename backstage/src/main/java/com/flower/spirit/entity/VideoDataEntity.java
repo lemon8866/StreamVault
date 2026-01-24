@@ -9,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.TableGenerator;
+import jakarta.persistence.Transient;
 
 import com.flower.spirit.common.DataEntity;
 
@@ -197,7 +198,19 @@ public class VideoDataEntity  extends DataEntity<VideoDataEntity> implements Ser
 		this.videoauthor = videoauthor;
 	}
 	
+	/**
+	 * 排除的平台（用于查询时排除特定平台的视频，不持久化到数据库）
+	 */
+	@Transient
+	private String excludePlatform;
 	
+	public String getExcludePlatform() {
+		return excludePlatform;
+	}
+	
+	public void setExcludePlatform(String excludePlatform) {
+		this.excludePlatform = excludePlatform;
+	}
 	
 
 }

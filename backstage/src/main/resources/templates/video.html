@@ -218,20 +218,54 @@
             background-size: 1000px 100%;
         }
 
-        /* 加载更多提示优化 */
-        .load-more-trigger {
+        /* 分页控件样式 */
+        .pagination-container {
             text-align: center;
-            padding: 1rem;
-            margin-top: 1rem;
+            padding: 1.5rem 1rem;
+            margin-top: 1.5rem;
             margin-bottom: 2rem;
-            color: #666;
-            font-size: 0.875rem;
             background-color: #f9f9f9;
             border-radius: 8px;
-            height: 60px;
-            display: flex;
+        }
+        
+        .pagination-container .page-btn {
+            min-width: 40px;
+            height: 40px;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            background: white;
+            color: #374151;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .pagination-container .page-btn:hover:not(.active):not(:disabled) {
+            background: #f3f4f6;
+            border-color: #d1d5db;
+        }
+        
+        .pagination-container .page-btn.active {
+            background: #3b82f6;
+            border-color: #3b82f6;
+            color: white;
+        }
+        
+        .pagination-container .page-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .pagination-container .page-ellipsis {
+            min-width: 40px;
+            height: 40px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #6b7280;
         }
 
 
@@ -337,6 +371,22 @@
 
         .platform-qqmusic {
             background: linear-gradient(45deg, #31c27c, #5bd67a);
+        }
+
+        .platform-instagram {
+            background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+        }
+
+        .platform-kuaishou {
+            background: linear-gradient(45deg, #ff4906, #ff6b32);
+        }
+
+        .platform-tiktok {
+            background: linear-gradient(45deg, #000000, #ff0050, #00f2ea);
+        }
+
+        .platform-weibo {
+            background: linear-gradient(45deg, #e6162d, #ff8200);
         }
 
         /* 响应式调整 */
@@ -533,11 +583,15 @@
                                 <select id="platformSelect" 
                                         class="pl-2 sm:pl-4 pr-6 sm:pr-8 py-2 text-sm bg-transparent border-none focus:outline-none focus:ring-0 appearance-none cursor-pointer">
                                     <option value="">全部</option>
-                                    <option value="哔哩">哔哩</option>
                                     <option value="抖音">抖音</option>
-                                    <option value="youtube">youtube</option>
-                                    <option value="twitter">twitter</option>
-                                    <option value="instagram">instagram</option>
+                                    <option value="哔哩">哔哩哔哩</option>
+                                    <option value="Instagram">Instagram</option>
+                                    <option value="快手">快手</option>
+                                    <option value="TikTok">TikTok</option>
+                                    <option value="twitter">Twitter</option>
+                                    <option value="微博">微博</option>
+                                    <option value="小红书">小红书</option>
+                                    <option value="youtube">YouTube</option>
                                 </select>
                                 <div class="absolute right-1 sm:right-2 top-1/2 -translate-y-1/2 pointer-events-none">
                                     <svg class="w-3 h-3 sm:w-4 sm:h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -679,14 +733,33 @@
                 <p class="mt-2 text-sm text-gray-600">加载中...</p>
             </div>
 
-            <!-- 加载更多提示 -->
-            <div id="loadMoreTrigger" class="load-more-trigger">
-                <div class="flex items-center justify-center">
-                    <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    <p>滚动加载更多内容</p>
+            <!-- 分页控件 -->
+            <div id="paginationContainer" class="pagination-container hidden">
+                <div class="flex items-center justify-center gap-2 flex-wrap">
+                    <button id="prevPageBtn" onclick="goToPrevPage()" 
+                            class="px-4 py-2 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                        <span class="flex items-center gap-1">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                            </svg>
+                            上一页
+                        </span>
+                    </button>
+                    <div class="flex items-center gap-1" id="pageNumbers">
+                        <!-- 页码按钮将通过JavaScript动态生成 -->
+                    </div>
+                    <button id="nextPageBtn" onclick="goToNextPage()" 
+                            class="px-4 py-2 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                        <span class="flex items-center gap-1">
+                            下一页
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                            </svg>
+                        </span>
+                    </button>
+                </div>
+                <div class="text-center mt-3 text-sm text-gray-500">
+                    <span>第 <span id="currentPageNum">1</span> 页，共 <span id="totalPagesNum">1</span> 页（共 <span id="totalItemsNum">0</span> 条）</span>
                 </div>
             </div>
         </div>
@@ -919,13 +992,14 @@
     <script>
         // 全局变量
         let currentPage = 1;
+        let totalPages = 1;
+        let totalItems = 0;
         let isLoading = false;
-        let hasMore = true;
         let currentSearch = '';
         let currentPlatform = '';
         let currentVideoId = null;
         let serverToken = null;
-        let observer = null;
+        const PAGE_SIZE = 18; // 每页显示18个视频
 
         
         // 防抖函数
@@ -945,7 +1019,6 @@
         document.addEventListener('DOMContentLoaded', function() {
             loadSettings();
             setupEventListeners(); // 这里会初始化重置按钮状态
-            setupInfiniteScroll();
             loadVideoList();
             
             // 监听剪贴板变化
@@ -1026,7 +1099,8 @@
             
             // 重新加载视频列表
             currentPage = 1;
-            hasMore = true;
+            totalPages = 1;
+            totalItems = 0;
             loadVideoList();
         }
         
@@ -1163,42 +1237,115 @@
         // 重置并加载
         function resetAndLoad() {
             currentPage = 1;
-            hasMore = true;
+            totalPages = 1;
+            totalItems = 0;
             document.getElementById('videoList').innerHTML = '';
             loadVideoList();
             // 滚动到顶部
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
         
-        // 无限滚动设置
-        function setupInfiniteScroll() {
-            if ('IntersectionObserver' in window) {
-                observer = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting && hasMore && !isLoading) {
-                            loadMoreVideos();
-                        }
-                    });
-                }, {
-                    rootMargin: '100px'
-                });
-                
-                const trigger = document.getElementById('loadMoreTrigger');
-                if (trigger) {
-                    observer.observe(trigger);
-                    console.log('已设置滚动监听');
-                }
-            } else {
-                // 降级到滚动事件
-                window.addEventListener('scroll', debounce(() => {
-                    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 200) {
-                        if (hasMore && !isLoading) {
-                            console.log('触发滚动加载');
-                            loadMoreVideos();
-                        }
-                    }
-                }, 250));
+        // 分页功能函数
+        function goToPage(page) {
+            if (page < 1 || page > totalPages || page === currentPage || isLoading) {
+                return;
             }
+            currentPage = page;
+            document.getElementById('videoList').innerHTML = '';
+            loadVideoList();
+            // 滚动到顶部
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        function goToPrevPage() {
+            goToPage(currentPage - 1);
+        }
+        
+        function goToNextPage() {
+            goToPage(currentPage + 1);
+        }
+        
+        // 更新分页控件
+        function updatePagination() {
+            // 更新页码信息
+            document.getElementById('currentPageNum').textContent = currentPage;
+            document.getElementById('totalPagesNum').textContent = totalPages;
+            document.getElementById('totalItemsNum').textContent = totalItems;
+            
+            // 更新上一页/下一页按钮状态
+            const prevBtn = document.getElementById('prevPageBtn');
+            const nextBtn = document.getElementById('nextPageBtn');
+            
+            prevBtn.disabled = currentPage <= 1;
+            nextBtn.disabled = currentPage >= totalPages;
+            
+            // 生成页码按钮
+            renderPageNumbers();
+        }
+        
+        // 渲染页码按钮
+        function renderPageNumbers() {
+            const container = document.getElementById('pageNumbers');
+            container.innerHTML = '';
+            
+            // 计算要显示的页码范围
+            const maxVisiblePages = 5;
+            let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+            let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+            
+            // 调整起始页
+            if (endPage - startPage + 1 < maxVisiblePages) {
+                startPage = Math.max(1, endPage - maxVisiblePages + 1);
+            }
+            
+            // 显示第一页
+            if (startPage > 1) {
+                container.appendChild(createPageButton(1));
+                if (startPage > 2) {
+                    container.appendChild(createEllipsis());
+                }
+            }
+            
+            // 显示中间页码
+            for (let i = startPage; i <= endPage; i++) {
+                container.appendChild(createPageButton(i));
+            }
+            
+            // 显示最后一页
+            if (endPage < totalPages) {
+                if (endPage < totalPages - 1) {
+                    container.appendChild(createEllipsis());
+                }
+                container.appendChild(createPageButton(totalPages));
+            }
+        }
+        
+        // 创建页码按钮
+        function createPageButton(page) {
+            const btn = document.createElement('button');
+            btn.className = `page-btn ${page === currentPage ? 'active' : ''}`;
+            btn.textContent = page;
+            btn.onclick = () => goToPage(page);
+            return btn;
+        }
+        
+        // 创建省略号
+        function createEllipsis() {
+            const span = document.createElement('span');
+            span.className = 'page-ellipsis';
+            span.textContent = '...';
+            return span;
+        }
+        
+        // 显示/隐藏分页控件
+        function showPagination() {
+            const container = document.getElementById('paginationContainer');
+            container.classList.remove('hidden');
+        }
+        
+        function hidePagination() {
+            const container = document.getElementById('paginationContainer');
+            container.classList.add('hidden');
         }
         
         // 显示/隐藏加载动画
@@ -1235,12 +1382,14 @@
                 hideSkeleton();
                 hideEmptyState();
                 hideVideoList();
+                hidePagination();
                 showConfigError();
                 return;
             }
             
             hideConfigError();
             showSkeleton();
+            hidePagination();
             isLoading = true;
             
             try {
@@ -1259,21 +1408,21 @@
                         videoListEl.appendChild(videoCard);
                     });
                     
-                    hasMore = response.hasMore;
-                    
-                    if (hasMore) {
-                        showLoadMoreTrigger();
-                    } else {
-                        hideLoadMoreTrigger();
-                    }
+                    // 更新分页信息
+                    totalPages = response.totalPages || 1;
+                    totalItems = response.totalElements || 0;
+                    updatePagination();
+                    showPagination();
                 } else {
                     hideSkeleton();
                     hideVideoList();
+                    hidePagination();
                     showEmptyState();
                 }
             } catch (error) {
                 console.error('加载视频列表失败:', error);
                 hideSkeleton();
+                hidePagination();
                 showMessage('加载失败，请检查网络连接', 'error');
             } finally {
                 isLoading = false;
@@ -1281,58 +1430,12 @@
             }
         }
         
-        // 加载更多视频
-        async function loadMoreVideos() {
-            if (isLoading || !hasMore) {
-                console.log('跳过加载更多：', isLoading ? '正在加载中' : '没有更多数据');
-                return;
-            }
-            
-            console.log('开始加载更多视频，当前页码：', currentPage);
-            currentPage++;
-            isLoading = true;
-            showLoading();
-            
-            try {
-                const response = await fetchVideos();
-                console.log('加载更多响应：', response);
-                
-                if (response && response.data && response.data.length > 0) {
-                    const videoListEl = document.getElementById('videoList');
-                    
-                    response.data.forEach(video => {
-                        const videoCard = createVideoCard(video);
-                        videoListEl.appendChild(videoCard);
-                    });
-                    
-                    hasMore = response.hasMore;
-                    console.log('是否有更多数据：', hasMore);
-                    
-                    if (hasMore) {
-                        showLoadMoreTrigger();
-                    } else {
-                        hideLoadMoreTrigger();
-                    }
-                } else {
-                    hasMore = false;
-                    hideLoadMoreTrigger();
-                    console.log('没有更多数据');
-                }
-            } catch (error) {
-                console.error('加载更多视频失败:', error);
-                showMessage('加载失败，请检查网络连接', 'error');
-                currentPage--; // 回退页码
-            } finally {
-                isLoading = false;
-                hideLoading();
-            }
-        }
         
         // 获取视频数据
         async function fetchVideos() {
             const params = new URLSearchParams({
                 pageNo: currentPage,
-                pageSize: 20
+                pageSize: PAGE_SIZE
             });
             
             if (currentSearch) {
@@ -1342,6 +1445,9 @@
             
             if (currentPlatform) {
                 params.append('videoplatform', currentPlatform);
+            } else {
+                // 如果没有选择特定平台，排除Twitter视频
+                params.append('excludePlatform', 'twitter');
             }
             
             const url = addTokenToUrl(`/api/findVideos?${params.toString()}`);
@@ -1356,18 +1462,16 @@
             
             // 根据实际响应结构返回数据
             if (response.data && response.data.record && response.data.record.content) {
-                const hasMore = !response.data.record.last;
-                console.log('当前页:', currentPage, '总页数:', response.data.record.totalPages, '是否有更多:', hasMore);
+                console.log('当前页:', currentPage, '总页数:', response.data.record.totalPages);
                 
                 return {
                     data: response.data.record.content,
-                    totalPages: response.data.record.page.totalPages,
-                    totalElements: response.data.record.page.totalElements,
-                    hasMore: hasMore
+                    totalPages: response.data.record.totalPages || response.data.record.page?.totalPages || 1,
+                    totalElements: response.data.record.totalElements || response.data.record.page?.totalElements || 0
                 };
             }
             
-            return { data: [], totalPages: 0, totalElements: 0, hasMore: false };
+            return { data: [], totalPages: 1, totalElements: 0 };
         }
         
         // 生成视频卡片HTML
@@ -1396,7 +1500,7 @@
             card.setAttribute('data-video-platform', btoa(encodeURIComponent(platform)));
             card.setAttribute('data-create-time', createTime || '');
             
-            // 添加平台标识用于筛选
+            // 添加平台标识用于筛选（Twitter视频默认隐藏）
             const platformLower = platform.toLowerCase();
             if (platformLower.includes('twitter')) {
                 card.setAttribute('data-platform', 'twitter');
@@ -1459,6 +1563,20 @@
                 return 'platform-youtube';
             } else if (platformLower.includes('twitter')) {
                 return 'platform-twitter';
+            } else if (platformLower.includes('小红书') || platformLower.includes('xiaohongshu')) {
+                return 'platform-xiaohongshu';
+            } else if (platformLower.includes('网易') || platformLower.includes('netease')) {
+                return 'platform-netease';
+            } else if (platformLower.includes('qq音乐') || platformLower.includes('qqmusic')) {
+                return 'platform-qqmusic';
+            } else if (platformLower.includes('instagram')) {
+                return 'platform-instagram';
+            } else if (platformLower.includes('快手') || platformLower.includes('kuaishou')) {
+                return 'platform-kuaishou';
+            } else if (platformLower.includes('tiktok')) {
+                return 'platform-tiktok';
+            } else if (platformLower.includes('微博') || platformLower.includes('weibo')) {
+                return 'platform-weibo';
             }
             return 'bg-gray-500';
         }
@@ -1563,20 +1681,6 @@
         
         function hideVideoList() {
             document.getElementById('videoList').classList.add('hidden');
-        }
-        
-        function showLoadMoreTrigger() {
-            const trigger = document.getElementById('loadMoreTrigger');
-            trigger.classList.remove('hidden');
-            trigger.style.display = 'block';
-            console.log('显示加载更多触发器');
-        }
-        
-        function hideLoadMoreTrigger() {
-            const trigger = document.getElementById('loadMoreTrigger');
-            trigger.classList.add('hidden');
-            trigger.style.display = 'none';
-            console.log('隐藏加载更多触发器');
         }
         
         // 获取服务器配置（已废弃，保留兼容性）

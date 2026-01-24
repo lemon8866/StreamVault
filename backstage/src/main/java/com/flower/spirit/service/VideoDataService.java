@@ -86,6 +86,11 @@ public class VideoDataService {
 	                predicates.add(cb.like(root.get("videoplatform"), "%" + res.getVideoplatform() + "%"));
 	            }
 	            
+	            // 排除指定平台的视频
+	            if (StringUtil.isString(res.getExcludePlatform())) {
+	                predicates.add(cb.notLike(cb.lower(root.get("videoplatform")), "%" + res.getExcludePlatform().toLowerCase() + "%"));
+	            }
+	            
 	            if (StringUtil.isString(res.getVideotag())) {
 	                predicates.add(cb.like(root.get("videotag"), "%" + res.getVideotag() + "%"));
 	            }

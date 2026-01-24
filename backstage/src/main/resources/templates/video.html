@@ -327,6 +327,18 @@
             background: linear-gradient(45deg, #1da1f2, #1a91da);
         }
 
+        .platform-xiaohongshu {
+            background: linear-gradient(45deg, #ff2442, #ff6b7a);
+        }
+
+        .platform-netease {
+            background: linear-gradient(45deg, #c20c0c, #e63d3d);
+        }
+
+        .platform-qqmusic {
+            background: linear-gradient(45deg, #31c27c, #5bd67a);
+        }
+
         /* 响应式调整 */
         @media (max-width: 768px) {
             .video-container {
@@ -818,6 +830,10 @@
                         <div class="flex items-center gap-2 px-3 py-2 bg-purple-50 rounded-lg border border-purple-200">
                             <span class="text-lg">📷</span>
                             <span class="text-sm font-medium text-purple-700">Instagram</span>
+                        </div>
+                        <div class="flex items-center gap-2 px-3 py-2 bg-rose-50 rounded-lg border border-rose-200">
+                            <span class="text-lg">📕</span>
+                            <span class="text-sm font-medium text-rose-700">小红书</span>
                         </div>
                         <div class="flex items-center gap-2 px-3 py-2 bg-green-50 rounded-lg border border-green-200">
                             <span class="text-lg">🎶</span>
@@ -1912,7 +1928,14 @@
             }
             
             // 设置标题（转义特殊字符以防止XSS）
-            titleEl.textContent = sanitizeText(result.title || '未知标题');
+            let titleText = sanitizeText(result.title || '未知标题');
+            // 如果是音频类型，添加标识
+            if (result.mediaType === 'audio') {
+                titleText = '🎵 ' + titleText;
+            } else if (result.mediaType === 'image') {
+                titleText = '🖼️ ' + titleText;
+            }
+            titleEl.textContent = titleText;
             
             // 设置平台标签
             platformEl.textContent = sanitizeText(result.platform || '');
@@ -1925,6 +1948,12 @@
                 platformEl.classList.add('platform-youtube');
             } else if (result.platform === 'twitter') {
                 platformEl.classList.add('platform-twitter');
+            } else if (result.platform === '小红书') {
+                platformEl.classList.add('platform-xiaohongshu');
+            } else if (result.platform === '网易云音乐') {
+                platformEl.classList.add('platform-netease');
+            } else if (result.platform === 'QQ音乐') {
+                platformEl.classList.add('platform-qqmusic');
             }
             
             // 设置作者
@@ -1965,7 +1994,7 @@
         // 下载到本地
         function downloadToLocal() {
             if (!currentParseResult || !currentParseResult.videoUrl) {
-                alert('没有可下载的视频');
+                alert('没有可下载的内容');
                 return;
             }
             
@@ -1973,21 +2002,38 @@
             
             // 验证URL
             if (!isValidUrl(videoUrl)) {
-                alert('视频链接不合法');
+                alert('下载链接不合法');
                 return;
             }
             
-            const title = sanitizeText(currentParseResult.title || 'video');
+            const title = sanitizeText(currentParseResult.title || 'media');
+            const mediaType = currentParseResult.mediaType || 'video';
+            
+            // 根据媒体类型确定文件扩展名
+            let fileExt = '.mp4';
+            if (mediaType === 'audio') {
+                fileExt = '.mp3';
+            } else if (mediaType === 'image') {
+                fileExt = '.jpg';
+            }
+            
+            // 媒体类型名称映射
+            const mediaNameMap = {
+                'audio': '音频',
+                'image': '图片',
+                'video': '视频'
+            };
+            const mediaName = mediaNameMap[mediaType] || '视频';
             
             // 如果需要 referer，在新标签页打开
             if (currentParseResult.needReferer) {
                 window.open(videoUrl, '_blank', 'noopener,noreferrer');
-                alert('已在新标签页打开下载链接，请右键保存视频');
+                alert('已在新标签页打开下载链接，请右键保存' + mediaName);
             } else {
                 // 创建一个隐藏的 a 标签
                 const a = document.createElement('a');
                 a.href = videoUrl;
-                a.download = title + '.mp4';
+                a.download = title + fileExt;
                 a.rel = 'noopener noreferrer';
                 
                 // 触发下载

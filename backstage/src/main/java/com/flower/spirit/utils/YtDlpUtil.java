@@ -238,4 +238,213 @@ public class YtDlpUtil {
 	        }
 	    }
 	}
+
+	/**
+	 * 执行 yt-dlp 获取视频 JSON 信息（用于本地下载）
+	 * @param url 视频URL
+	 * @param platform 平台名称
+	 * @return JSON 字符串
+	 * @throws IOException
+	 * @throws InterruptedException
+	 */
+	public static String execForJson(String url, String platform) throws IOException, InterruptedException {
+		List<String> command = new ArrayList<>();
+		command.add("yt-dlp");
+		command.add("--dump-json");
+		command.add("--no-download");
+		// 添加 --flat-playlist 支持播放列表
+		command.add("--flat-playlist");
+		
+		String apppath = Global.apppath;
+		File cookieDir = new File(apppath + "/cookies");
+		
+		// 根据平台加载 cookie
+		if (null != platform && platform.equals("youtube")) {
+			File youtubeFile = new File(cookieDir, "youtube.txt");
+			if (youtubeFile.exists()) {
+				command.add("--cookies");
+				command.add(youtubeFile.getAbsolutePath());
+				logger.info("已加载 YouTube cookie 文件");
+			}
+		}
+
+		if (null != platform && (platform.equals("twitter") || platform.toLowerCase().contains("twitter"))) {
+			File twitterFile = new File(cookieDir, "twitter.txt");
+			if (twitterFile.exists()) {
+				command.add("--cookies");
+				command.add(twitterFile.getAbsolutePath());
+				logger.info("已加载 Twitter cookie 文件");
+			}
+		}
+		
+		if (null != platform && !platform.equals("twitter") && !platform.equals("youtube") && !platform.toLowerCase().contains("twitter")) {
+			File all = new File(cookieDir, platform + ".txt");
+			if (all.exists()) {
+				command.add("--cookies");
+				command.add(all.getAbsolutePath());
+				logger.info("已加载 {} cookie 文件", platform);
+			}
+		}
+
+		if (Global.proxyinfo != null && !Global.proxyinfo.isEmpty()) {
+			command.add("--proxy");
+			command.add(Global.proxyinfo);
+			logger.info("使用代理: {}", Global.proxyinfo);
+		} else {
+			logger.warn("未配置代理，某些平台可能无法访问");
+		}
+
+		if (null != Global.useragent && !"".equals(Global.useragent)) {
+			command.add("--user-agent");
+			command.add(Global.useragent);
+		}
+
+		command.add(url);
+		
+		logger.info("执行 yt-dlp 命令: {}", String.join(" ", command));
+
+		ProcessBuilder processBuilder = new ProcessBuilder(command);
+		Process process = processBuilder.start();
+
+		Thread stderrThread = new Thread(() -> {
+			try (BufferedReader errReader = new BufferedReader(new InputStreamReader(process.getErrorStream()))) {
+				String errLine;
+				while ((errLine = errReader.readLine()) != null) {
+					logger.warn("yt-dlp stderr: " + errLine);
+				}
+			} catch (IOException e) {
+				logger.error("yt-dlp 错误输出失败", e);
+			}
+		});
+		stderrThread.setName("yt-dlp-stderr-reader");
+		stderrThread.start();
+
+		StringBuilder stringBuilder = new StringBuilder();
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+			String line;
+			while ((line = reader.readLine()) != null) {
+				stringBuilder.append(line).append("\n");
+			}
+		} finally {
+			process.waitFor();
+			stderrThread.join();
+			process.destroy();
+		}
+
+		String completeString = stringBuilder.toString();
+		if (process.exitValue() != 0) {
+			logger.error("yt-dlp 执行失败 (exitCode: {}): {}", process.exitValue(), completeString);
+			throw new IOException("yt-dlp 执行失败 (exitCode: " + process.exitValue() + "): " + completeString);
+		} else {
+			logger.info("yt-dlp executed with exit code: {}, 输出长度: {}", process.exitValue(), completeString.length());
+		}
+		return completeString;
+	}
+
+	/**
+	 * 执行 yt-dlp 获取音频 JSON 信息（用于音乐平台本地下载）
+	 * 针对音乐平台进行优化，优先获取音频流
+	 * @param url 音乐URL
+	 * @param platform 平台名称
+	 * @return JSON 字符串
+	 * @throws IOException
+	 * @throws InterruptedException
+	 */
+	public static String execForAudioJson(String url, String platform) throws IOException, InterruptedException {
+		List<String> command = new ArrayList<>();
+		command.add("yt-dlp");
+		command.add("--dump-json");
+		command.add("--no-download");
+		// 只获取音频格式
+		command.add("-f");
+		command.add("bestaudio/best");
+		// 不下载播放列表
+		command.add("--no-playlist");
+		
+		String apppath = Global.apppath;
+		File cookieDir = new File(apppath + "/cookies");
+		
+		// 根据平台加载 cookie
+		if (null != platform) {
+			// 网易云音乐 cookie
+			if (platform.equals("网易云音乐") || platform.toLowerCase().contains("netease")) {
+				File neteaseFile = new File(cookieDir, "netease.txt");
+				if (neteaseFile.exists()) {
+					command.add("--cookies");
+					command.add(neteaseFile.getAbsolutePath());
+					logger.info("已加载网易云音乐 cookie 文件");
+				}
+			}
+			// QQ音乐 cookie
+			else if (platform.equals("QQ音乐") || platform.toLowerCase().contains("qq")) {
+				File qqFile = new File(cookieDir, "qqmusic.txt");
+				if (qqFile.exists()) {
+					command.add("--cookies");
+					command.add(qqFile.getAbsolutePath());
+					logger.info("已加载QQ音乐 cookie 文件");
+				}
+			}
+			// 其他平台
+			else {
+				File all = new File(cookieDir, platform + ".txt");
+				if (all.exists()) {
+					command.add("--cookies");
+					command.add(all.getAbsolutePath());
+					logger.info("已加载 {} cookie 文件", platform);
+				}
+			}
+		}
+
+		if (Global.proxyinfo != null && !Global.proxyinfo.isEmpty()) {
+			command.add("--proxy");
+			command.add(Global.proxyinfo);
+			logger.info("使用代理: {}", Global.proxyinfo);
+		}
+
+		if (null != Global.useragent && !"".equals(Global.useragent)) {
+			command.add("--user-agent");
+			command.add(Global.useragent);
+		}
+
+		command.add(url);
+		
+		logger.info("执行 yt-dlp 音频命令: {}", String.join(" ", command));
+
+		ProcessBuilder processBuilder = new ProcessBuilder(command);
+		Process process = processBuilder.start();
+
+		Thread stderrThread = new Thread(() -> {
+			try (BufferedReader errReader = new BufferedReader(new InputStreamReader(process.getErrorStream()))) {
+				String errLine;
+				while ((errLine = errReader.readLine()) != null) {
+					logger.warn("yt-dlp stderr: " + errLine);
+				}
+			} catch (IOException e) {
+				logger.error("yt-dlp 错误输出失败", e);
+			}
+		});
+		stderrThread.setName("yt-dlp-audio-stderr-reader");
+		stderrThread.start();
+
+		StringBuilder stringBuilder = new StringBuilder();
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+			String line;
+			while ((line = reader.readLine()) != null) {
+				stringBuilder.append(line).append("\n");
+			}
+		} finally {
+			process.waitFor();
+			stderrThread.join();
+			process.destroy();
+		}
+
+		String completeString = stringBuilder.toString();
+		if (process.exitValue() != 0) {
+			logger.error("yt-dlp 音频执行失败 (exitCode: {}): {}", process.exitValue(), completeString);
+			throw new IOException("yt-dlp 音频执行失败 (exitCode: " + process.exitValue() + "): " + completeString);
+		} else {
+			logger.info("yt-dlp 音频执行成功, 输出长度: {}", completeString.length());
+		}
+		return completeString;
+	}
 }

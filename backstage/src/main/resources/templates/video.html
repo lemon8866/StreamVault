@@ -327,6 +327,18 @@
             background: linear-gradient(45deg, #1da1f2, #1a91da);
         }
 
+        .platform-xiaohongshu {
+            background: linear-gradient(45deg, #ff2442, #ff6b7a);
+        }
+
+        .platform-netease {
+            background: linear-gradient(45deg, #c20c0c, #e63d3d);
+        }
+
+        .platform-qqmusic {
+            background: linear-gradient(45deg, #31c27c, #5bd67a);
+        }
+
         /* 响应式调整 */
         @media (max-width: 768px) {
             .video-container {
@@ -366,6 +378,137 @@
         
         .twitter-filter-active .video-card:not([data-platform="twitter"]) {
             display: none;
+        }
+
+        /* 本地下载页面样式 */
+        .local-download-page {
+            display: none;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 2rem 1rem;
+        }
+
+        .local-download-page.active {
+            display: block;
+        }
+
+        .local-download-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .local-download-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            margin-bottom: 2rem;
+        }
+
+        .parse-result-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-top: 2rem;
+        }
+
+        .parse-result-cover {
+            width: 100%;
+            aspect-ratio: 16/9;
+            object-fit: cover;
+        }
+
+        .parse-result-info {
+            padding: 1.5rem;
+        }
+
+        .parse-result-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #1f2937;
+        }
+
+        .parse-result-meta {
+            color: #6b7280;
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+
+        .parse-result-actions {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-download {
+            flex: 1;
+            min-width: 150px;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-download:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-copy {
+            flex: 1;
+            min-width: 150px;
+            padding: 0.75rem 1.5rem;
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-copy:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .warning-box {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            color: #92400e;
+        }
+
+        .info-box {
+            background: #dbeafe;
+            border-left: 4px solid #3b82f6;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            color: #1e40af;
+        }
+
+        @media (max-width: 640px) {
+            .local-download-card {
+                padding: 1.5rem;
+            }
+
+            .parse-result-actions {
+                flex-direction: column;
+            }
+
+            .btn-download,
+            .btn-copy {
+                min-width: 100%;
+            }
         }
     </style>
 </head>
@@ -416,6 +559,13 @@
                                     class="p-1.5 sm:p-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-colors duration-200">
                                 <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                                </svg>
+                            </button>
+                            <button onclick="showLocalDownloadPage()" 
+                                    class="p-1.5 sm:p-2 bg-green-600 text-white rounded-full hover:bg-green-700 transition-colors duration-200"
+                                    title="本地下载">
+                                <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
                                 </svg>
                             </button>
                             <button onclick="openSettings()" 
@@ -586,6 +736,185 @@
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M19 12H5M12 19l-7-7 7-7"/>
                     </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 本地下载页面 -->
+    <div id="localDownloadPage" class="local-download-page">
+        <div class="local-download-container">
+            <!-- 返回按钮 -->
+            <div class="nav-back" onclick="showListPageFromLocal()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+            </div>
+
+            <!-- 主卡片 -->
+            <div class="local-download-card">
+                <!-- 标题区域 -->
+                <div class="text-center mb-6">
+                    <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-full mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="下载图标">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                    </div>
+                    <h1 class="text-3xl font-bold text-gray-800 mb-2">本地下载</h1>
+                    <p class="text-gray-500">解析视频/音频链接，直接下载到本地电脑</p>
+                </div>
+
+                <!-- 输入区域 -->
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        <span class="flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" role="img" aria-label="链接图标">
+                                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                            </svg>
+                            视频/音频链接
+                        </span>
+                    </label>
+                    <div class="flex gap-2">
+                        <input 
+                            type="text" 
+                            id="localVideoUrl" 
+                            class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                            placeholder="粘贴视频或音频链接..."
+                        />
+                        <button 
+                            onclick="parseVideoForLocal()" 
+                            class="px-6 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-semibold rounded-lg hover:from-purple-700 hover:to-indigo-700 transition-all duration-200 shadow-lg hover:shadow-xl flex items-center gap-2"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" role="img" aria-label="搜索图标">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <path d="m21 21-4.35-4.35"></path>
+                            </svg>
+                            解析
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 支持平台展示 -->
+                <div class="mb-6">
+                    <h3 class="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" role="img" aria-label="支持图标">
+                            <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path>
+                            <path d="m9 12 2 2 4-4"></path>
+                        </svg>
+                        支持的平台
+                    </h3>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                        <div class="flex items-center gap-2 px-3 py-2 bg-pink-50 rounded-lg border border-pink-200">
+                            <span class="text-lg">🎵</span>
+                            <span class="text-sm font-medium text-pink-700">抖音</span>
+                        </div>
+                        <div class="flex items-center gap-2 px-3 py-2 bg-orange-50 rounded-lg border border-orange-200">
+                            <span class="text-lg">🎬</span>
+                            <span class="text-sm font-medium text-orange-700">快手</span>
+                        </div>
+                        <div class="flex items-center gap-2 px-3 py-2 bg-blue-50 rounded-lg border border-blue-200">
+                            <span class="text-lg">📺</span>
+                            <span class="text-sm font-medium text-blue-700">哔哩哔哩</span>
+                        </div>
+                        <div class="flex items-center gap-2 px-3 py-2 bg-red-50 rounded-lg border border-red-200">
+                            <span class="text-lg">▶️</span>
+                            <span class="text-sm font-medium text-red-700">YouTube</span>
+                        </div>
+                        <div class="flex items-center gap-2 px-3 py-2 bg-sky-50 rounded-lg border border-sky-200">
+                            <span class="text-lg">🐦</span>
+                            <span class="text-sm font-medium text-sky-700">Twitter/X</span>
+                        </div>
+                        <div class="flex items-center gap-2 px-3 py-2 bg-purple-50 rounded-lg border border-purple-200">
+                            <span class="text-lg">📷</span>
+                            <span class="text-sm font-medium text-purple-700">Instagram</span>
+                        </div>
+                        <div class="flex items-center gap-2 px-3 py-2 bg-rose-50 rounded-lg border border-rose-200">
+                            <span class="text-lg">📕</span>
+                            <span class="text-sm font-medium text-rose-700">小红书</span>
+                        </div>
+                        <div class="flex items-center gap-2 px-3 py-2 bg-green-50 rounded-lg border border-green-200">
+                            <span class="text-lg">🎶</span>
+                            <span class="text-sm font-medium text-green-700">QQ音乐</span>
+                        </div>
+                        <div class="flex items-center gap-2 px-3 py-2 bg-red-50 rounded-lg border border-red-200">
+                            <span class="text-lg">🎧</span>
+                            <span class="text-sm font-medium text-red-700">网易云音乐</span>
+                        </div>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-2 text-center">以及更多yt-dlp支持的平台...</p>
+                </div>
+
+                <!-- 使用说明 -->
+                <div class="info-box">
+                    <h3 class="font-semibold mb-3 flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" role="img" aria-label="说明图标">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M12 16v-4"></path>
+                            <path d="M12 8h.01"></path>
+                        </svg>
+                        使用说明
+                    </h3>
+                    <ul class="text-sm space-y-2">
+                        <li class="flex items-start gap-2">
+                            <span class="text-blue-500 mt-0.5">•</span>
+                            <span><strong>视频平台：</strong>支持抖音、快手、B站、YouTube、Twitter等主流平台</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-blue-500 mt-0.5">•</span>
+                            <span><strong>音乐平台：</strong>部分音乐平台（如QQ音乐、网易云音乐）尝试通过yt-dlp下载，成功率视平台限制而定</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-blue-500 mt-0.5">•</span>
+                            <span><strong>下载方式：</strong>解析后可直接下载视频/音频到本地电脑</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-blue-500 mt-0.5">•</span>
+                            <span><strong>注意事项：</strong>部分平台需要配置Cookie，DASH格式建议使用服务器下载</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- 提示卡片 -->
+                <div class="mt-4 p-4 bg-gradient-to-r from-amber-50 to-yellow-50 border border-amber-200 rounded-lg">
+                    <div class="flex items-start gap-3">
+                        <span class="text-2xl">💡</span>
+                        <div>
+                            <h4 class="font-semibold text-amber-800 mb-1">小贴士</h4>
+                            <p class="text-sm text-amber-700">本地下载模式暂不支持获取图片资源（如封面图）。如果本地下载失败或遇到DASH格式视频，可以尝试使用"服务器下载"功能，服务器会自动合并音视频流并处理相关资源。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 解析结果区域 -->
+            <div id="parseResult" style="display: none;">
+                <div class="parse-result-card">
+                    <img id="resultCover" src="" alt="视频封面" class="parse-result-cover" referrerpolicy="no-referrer" />
+                    <div class="parse-result-info">
+                        <div class="parse-result-title" id="resultTitle"></div>
+                        <div class="parse-result-meta">
+                            <span id="resultPlatform" class="platform-tag"></span>
+                            <span class="ml-3" id="resultAuthor"></span>
+                        </div>
+                        
+                        <!-- 警告信息 -->
+                        <div id="dashWarning" class="warning-box" style="display: none;">
+                            <strong>⚠️ 注意：</strong> 该视频为DASH格式（音视频分离），直接下载可能没有声音。建议使用"服务器下载"功能。
+                        </div>
+
+                        <!-- 操作按钮 -->
+                        <div class="parse-result-actions">
+                            <button onclick="downloadToLocal()" class="btn-download">
+                                <span>📥 下载到本地</span>
+                            </button>
+                            <button onclick="copyVideoUrl()" class="btn-copy">
+                                <span>📋 复制链接</span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1503,6 +1832,251 @@
             videoFrame.src = '';
             
             currentVideoId = null;
+        }
+        
+        // 显示本地下载页面
+        function showLocalDownloadPage() {
+            // 隐藏列表页面
+            document.getElementById('listPage').classList.add('hidden');
+            
+            // 显示本地下载页面
+            const localDownloadPage = document.getElementById('localDownloadPage');
+            localDownloadPage.classList.add('active');
+            
+            // 清空输入和结果
+            document.getElementById('localVideoUrl').value = '';
+            document.getElementById('parseResult').style.display = 'none';
+            
+            // 滚动到顶部
+            window.scrollTo(0, 0);
+        }
+        
+        // 从本地下载页面返回列表页面
+        function showListPageFromLocal() {
+            // 隐藏本地下载页面
+            const localDownloadPage = document.getElementById('localDownloadPage');
+            localDownloadPage.classList.remove('active');
+            
+            // 显示列表页面
+            document.getElementById('listPage').classList.remove('hidden');
+        }
+        
+        // 全局变量存储解析结果
+        let currentParseResult = null;
+        
+        // 解析视频用于本地下载
+        async function parseVideoForLocal() {
+            const urlInput = document.getElementById('localVideoUrl');
+            const videoUrl = urlInput.value.trim();
+            
+            if (!videoUrl) {
+                alert('请输入视频链接');
+                return;
+            }
+            
+            if (!serverToken) {
+                alert('Token未配置，请先在设置中配置Token');
+                return;
+            }
+            
+            // 显示加载状态
+            const parseBtn = document.querySelector('button[onclick="parseVideoForLocal()"]');
+            if (!parseBtn) return;
+            
+            const originalText = parseBtn.innerHTML;
+            parseBtn.innerHTML = '解析中...';
+            parseBtn.disabled = true;
+            
+            try {
+                const response = await axios.get('/api/parseVideoForLocal', {
+                    params: {
+                        token: serverToken,
+                        video: videoUrl
+                    }
+                });
+                
+                if (response.data.resCode === '000001') {
+                    // 解析成功
+                    currentParseResult = response.data.record;
+                    displayParseResult(currentParseResult);
+                } else {
+                    alert('解析失败: ' + response.data.message);
+                }
+            } catch (error) {
+                console.error('解析失败', error);
+                alert('解析失败，请检查链接是否正确');
+            } finally {
+                parseBtn.innerHTML = originalText;
+                parseBtn.disabled = false;
+            }
+        }
+        
+        // 显示解析结果
+        function displayParseResult(result) {
+            const resultDiv = document.getElementById('parseResult');
+            const coverImg = document.getElementById('resultCover');
+            const titleEl = document.getElementById('resultTitle');
+            const platformEl = document.getElementById('resultPlatform');
+            const authorEl = document.getElementById('resultAuthor');
+            const dashWarning = document.getElementById('dashWarning');
+            
+            // 验证和清理封面URL
+            if (result.coverUrl && isValidUrl(result.coverUrl)) {
+                coverImg.src = result.coverUrl;
+            } else {
+                coverImg.src = '';
+            }
+            
+            // 设置标题（转义特殊字符以防止XSS）
+            let titleText = sanitizeText(result.title || '未知标题');
+            // 如果是音频类型，添加标识
+            if (result.mediaType === 'audio') {
+                titleText = '🎵 ' + titleText;
+            } else if (result.mediaType === 'image') {
+                titleText = '🖼️ ' + titleText;
+            }
+            titleEl.textContent = titleText;
+            
+            // 设置平台标签
+            platformEl.textContent = sanitizeText(result.platform || '');
+            platformEl.className = 'platform-tag';
+            if (result.platform === '抖音') {
+                platformEl.classList.add('platform-douyin');
+            } else if (result.platform === 'bilibili' || result.platform === 'BiliBili') {
+                platformEl.classList.add('platform-bilibili');
+            } else if (result.platform === 'youtube') {
+                platformEl.classList.add('platform-youtube');
+            } else if (result.platform === 'twitter') {
+                platformEl.classList.add('platform-twitter');
+            } else if (result.platform === '小红书') {
+                platformEl.classList.add('platform-xiaohongshu');
+            } else if (result.platform === '网易云音乐') {
+                platformEl.classList.add('platform-netease');
+            } else if (result.platform === 'QQ音乐') {
+                platformEl.classList.add('platform-qqmusic');
+            }
+            
+            // 设置作者
+            authorEl.textContent = result.author ? '作者: ' + sanitizeText(result.author) : '';
+            
+            // 显示DASH警告
+            if (result.isDash) {
+                dashWarning.style.display = 'block';
+            } else {
+                dashWarning.style.display = 'none';
+            }
+            
+            // 显示结果
+            resultDiv.style.display = 'block';
+            
+            // 滚动到结果区域
+            resultDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+        
+        // URL验证函数
+        function isValidUrl(urlString) {
+            try {
+                const url = new URL(urlString);
+                // 只允许 http 和 https 协议
+                return url.protocol === 'http:' || url.protocol === 'https:';
+            } catch (e) {
+                return false;
+            }
+        }
+        
+        // 文本清理函数
+        function sanitizeText(text) {
+            if (!text) return '';
+            // 移除特殊字符，防止路径遍历
+            return text.replace(/[<>:"\/\\|?*\x00-\x1f]/g, '_');
+        }
+        
+        // 下载到本地
+        function downloadToLocal() {
+            if (!currentParseResult || !currentParseResult.videoUrl) {
+                alert('没有可下载的内容');
+                return;
+            }
+            
+            const videoUrl = currentParseResult.videoUrl;
+            
+            // 验证URL
+            if (!isValidUrl(videoUrl)) {
+                alert('下载链接不合法');
+                return;
+            }
+            
+            const title = sanitizeText(currentParseResult.title || 'media');
+            const mediaType = currentParseResult.mediaType || 'video';
+            
+            // 根据媒体类型确定文件扩展名
+            let fileExt = '.mp4';
+            if (mediaType === 'audio') {
+                fileExt = '.mp3';
+            } else if (mediaType === 'image') {
+                fileExt = '.jpg';
+            }
+            
+            // 媒体类型名称映射
+            const mediaNameMap = {
+                'audio': '音频',
+                'image': '图片',
+                'video': '视频'
+            };
+            const mediaName = mediaNameMap[mediaType] || '视频';
+            
+            // 如果需要 referer，在新标签页打开
+            if (currentParseResult.needReferer) {
+                window.open(videoUrl, '_blank', 'noopener,noreferrer');
+                alert('已在新标签页打开下载链接，请右键保存' + mediaName);
+            } else {
+                // 创建一个隐藏的 a 标签
+                const a = document.createElement('a');
+                a.href = videoUrl;
+                a.download = title + fileExt;
+                a.rel = 'noopener noreferrer';
+                
+                // 触发下载
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            }
+        }
+        
+        // 复制视频链接
+        function copyVideoUrl() {
+            if (!currentParseResult || !currentParseResult.videoUrl) {
+                alert('没有可复制的链接');
+                return;
+            }
+            
+            const videoUrl = currentParseResult.videoUrl;
+            
+            // 验证URL
+            if (!isValidUrl(videoUrl)) {
+                alert('视频链接不合法');
+                return;
+            }
+            
+            // 复制到剪贴板
+            navigator.clipboard.writeText(videoUrl).then(() => {
+                alert('链接已复制到剪贴板');
+            }).catch(err => {
+                // 兼容旧浏览器
+                const textarea = document.createElement('textarea');
+                textarea.value = videoUrl;
+                textarea.style.position = 'fixed';
+                textarea.style.opacity = '0';
+                document.body.appendChild(textarea);
+                textarea.select();
+                try {
+                    document.execCommand('copy');
+                    alert('链接已复制到剪贴板');
+                } catch (err) {
+                    alert('复制失败，请手动复制: ' + videoUrl);
+                }
+                document.body.removeChild(textarea);
+            });
         }
         
         // 调整视频容器

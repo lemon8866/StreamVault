@@ -41,6 +41,13 @@ public class URLUtil {
 		xiaohongshu.add("www.xiaohongshu.com");
 		xiaohongshu.add("xhslink.com");
 		
+		List<String> qqmusic = new ArrayList<String>();
+		qqmusic.add("y.qq.com");
+		
+		List<String> netease = new ArrayList<String>();
+		netease.add("163.cn");
+		netease.add("music.163.com");
+		
 		put("tiktok", tiktok);
 		put("哔哩", bili);
 		put("抖音", dy);
@@ -49,6 +56,8 @@ public class URLUtil {
 		put("twitter", twitter);
 		put("微博", weibo);
 		put("小红书", xiaohongshu);
+		put("QQ音乐", qqmusic);
+		put("网易云音乐", netease);
 	}};;
 
 	/**

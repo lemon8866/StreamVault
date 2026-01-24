@@ -61,6 +61,8 @@ public class ConfigEntity implements Serializable {
 	private String nfonetaddr;
 	
 	private String rangenum;
+	
+	private String hiddenplatforms;  // 在视频首页隐藏的平台（逗号分隔）
 
 	public Integer getId() {
 		return id;
@@ -196,6 +198,14 @@ public class ConfigEntity implements Serializable {
 
 	public void setDanmudown(String danmudown) {
 		this.danmudown = danmudown;
+	}
+
+	public String getHiddenplatforms() {
+		return hiddenplatforms;
+	}
+
+	public void setHiddenplatforms(String hiddenplatforms) {
+		this.hiddenplatforms = hiddenplatforms;
 	}
 
 	// public String getYtdlpargs() {

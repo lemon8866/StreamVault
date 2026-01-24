@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -563,6 +563,8 @@
     </style>
 </head>
 <body class="bg-gray-100">
+    <!-- 隐藏平台配置 -->
+    <input type="hidden" id="hiddenPlatformsConfig" th:value="${hiddenplatforms}" value="" />
     <!-- 视频列表页面 -->
     <div id="listPage" class="list-page">
         <!-- 导航栏 -->
@@ -1446,8 +1448,12 @@
             if (currentPlatform) {
                 params.append('videoplatform', currentPlatform);
             } else {
-                // 如果没有选择特定平台，排除Twitter视频
-                params.append('excludePlatform', 'twitter');
+                // 如果没有选择特定平台，根据配置排除隐藏的平台
+                const hiddenPlatformsConfig = document.getElementById('hiddenPlatformsConfig');
+                const hiddenPlatforms = hiddenPlatformsConfig ? hiddenPlatformsConfig.value : '';
+                if (hiddenPlatforms && hiddenPlatforms.trim() !== '') {
+                    params.append('excludePlatform', hiddenPlatforms);
+                }
             }
             
             const url = addTokenToUrl(`/api/findVideos?${params.toString()}`);

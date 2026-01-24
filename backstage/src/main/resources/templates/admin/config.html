@@ -129,6 +129,41 @@
                                                 </select>
                                             </div>
                                         </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>隐藏视频平台 <i class="mdi mdi-help" style="cursor: pointer; font-size: 12px;" onclick="layer.alert('在播放主页中隐藏选中的平台视频，不勾选任何平台则显示全部视频')"></i></label>
+                                                <div id="hiddenPlatformsContainer" style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 5px;">
+                                                    <label style="display: inline-flex; align-items: center; margin-right: 15px;">
+                                                        <input type="checkbox" class="hiddenPlatformCheckbox" value="twitter" style="margin-right: 5px;"> Twitter
+                                                    </label>
+                                                    <label style="display: inline-flex; align-items: center; margin-right: 15px;">
+                                                        <input type="checkbox" class="hiddenPlatformCheckbox" value="抖音" style="margin-right: 5px;"> 抖音
+                                                    </label>
+                                                    <label style="display: inline-flex; align-items: center; margin-right: 15px;">
+                                                        <input type="checkbox" class="hiddenPlatformCheckbox" value="哔哩" style="margin-right: 5px;"> 哔哩哔哩
+                                                    </label>
+                                                    <label style="display: inline-flex; align-items: center; margin-right: 15px;">
+                                                        <input type="checkbox" class="hiddenPlatformCheckbox" value="youtube" style="margin-right: 5px;"> YouTube
+                                                    </label>
+                                                    <label style="display: inline-flex; align-items: center; margin-right: 15px;">
+                                                        <input type="checkbox" class="hiddenPlatformCheckbox" value="小红书" style="margin-right: 5px;"> 小红书
+                                                    </label>
+                                                    <label style="display: inline-flex; align-items: center; margin-right: 15px;">
+                                                        <input type="checkbox" class="hiddenPlatformCheckbox" value="Instagram" style="margin-right: 5px;"> Instagram
+                                                    </label>
+                                                    <label style="display: inline-flex; align-items: center; margin-right: 15px;">
+                                                        <input type="checkbox" class="hiddenPlatformCheckbox" value="快手" style="margin-right: 5px;"> 快手
+                                                    </label>
+                                                    <label style="display: inline-flex; align-items: center; margin-right: 15px;">
+                                                        <input type="checkbox" class="hiddenPlatformCheckbox" value="TikTok" style="margin-right: 5px;"> TikTok
+                                                    </label>
+                                                    <label style="display: inline-flex; align-items: center; margin-right: 15px;">
+                                                        <input type="checkbox" class="hiddenPlatformCheckbox" value="微博" style="margin-right: 5px;"> 微博
+                                                    </label>
+                                                </div>
+                                                <input type="hidden" id="hiddenplatforms" name="hiddenplatforms" th:value="${config.hiddenplatforms}">
+                                            </div>
+                                        </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>YT-DLP模式<i class="mdi mdi-help" style="cursor: pointer; font-size: 12px;" onclick="layer.alert('非内置 未适配 且不支持NFO 暂不接受非内置issues') "></i></label>
@@ -422,7 +457,36 @@
         saveAgentConfig();
         checkCookies();
         getNotifyConfig();
+        initHiddenPlatforms();
     })
+
+    // 初始化隐藏平台复选框
+    function initHiddenPlatforms() {
+        var hiddenPlatformsValue = $('#hiddenplatforms').val() || '';
+        var hiddenPlatformsArray = hiddenPlatformsValue ? hiddenPlatformsValue.split(',') : [];
+        
+        // 根据保存的值设置复选框状态
+        $('.hiddenPlatformCheckbox').each(function() {
+            var checkboxValue = $(this).val();
+            if (hiddenPlatformsArray.indexOf(checkboxValue) !== -1) {
+                $(this).prop('checked', true);
+            }
+        });
+        
+        // 监听复选框变化，更新隐藏字段
+        $('.hiddenPlatformCheckbox').change(function() {
+            updateHiddenPlatformsValue();
+        });
+    }
+    
+    // 更新隐藏平台值
+    function updateHiddenPlatformsValue() {
+        var selectedPlatforms = [];
+        $('.hiddenPlatformCheckbox:checked').each(function() {
+            selectedPlatforms.push($(this).val());
+        });
+        $('#hiddenplatforms').val(selectedPlatforms.join(','));
+    }
 
     var qrcode_key;
     function getNotifyConfig(){
@@ -720,6 +784,7 @@
             option['rangenum'] = $("#rangenum").val();
             option['frontend'] = $("#frontend").val();
             option['danmudown'] = $("#danmudown").val();
+            option['hiddenplatforms'] = $("#hiddenplatforms").val();
             $.post("/admin/api/saveConfig",option,function(data,status){
                 if(data.resCode =="000001"){
                     layer.closeAll();

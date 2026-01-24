@@ -92,6 +92,12 @@ public class ConfigService {
 		if(null!=configEntity.getRangenum() && !"".equals(configEntity.getRangenum())) {
 			Global.RangeNumber = Integer.valueOf(configEntity.getRangenum());
 		}
+		// 保存隐藏平台配置
+		if(configEntity.getHiddenplatforms() != null) {
+			Global.hiddenplatforms = configEntity.getHiddenplatforms();
+		} else {
+			Global.hiddenplatforms = "";
+		}
 		return new AjaxEntity(Global.ajax_option_success, "操作成功", configEntity);
 	}
 

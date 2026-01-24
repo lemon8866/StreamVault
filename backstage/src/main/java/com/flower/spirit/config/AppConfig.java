@@ -113,6 +113,12 @@ public class AppConfig {
 		if(data.getDanmudown()!= null && data.getDanmudown().equals("1")) {
 			Global.danmudown =  true;
 		}
+		// 加载隐藏平台配置
+		if(data.getHiddenplatforms() != null) {
+			Global.hiddenplatforms = data.getHiddenplatforms();
+		} else {
+			Global.hiddenplatforms = "";
+		}
 		//清空 ffmpeg 队列
 		ffmpegQueueService.clearTask();
 		logger.info("ffmpeg队列已清空");

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -417,15 +417,7 @@
             display: none;
         }
 
-        /* Twitter视频控制样式 */
-        .video-card[data-platform="twitter"] {
-            display: none;
-        }
-        
-        .twitter-filter-active .video-card[data-platform="twitter"] {
-            display: block;
-        }
-        
+        /* Twitter视频筛选样式 - 仅在筛选Twitter时使用 */
         .twitter-filter-active .video-card:not([data-platform="twitter"]) {
             display: none;
         }
@@ -563,6 +555,8 @@
     </style>
 </head>
 <body class="bg-gray-100">
+    <!-- 隐藏平台配置 -->
+    <input type="hidden" id="hiddenPlatformsConfig" th:value="${hiddenplatforms != null ? hiddenplatforms : ''}" />
     <!-- 视频列表页面 -->
     <div id="listPage" class="list-page">
         <!-- 导航栏 -->
@@ -1446,8 +1440,12 @@
             if (currentPlatform) {
                 params.append('videoplatform', currentPlatform);
             } else {
-                // 如果没有选择特定平台，排除Twitter视频
-                params.append('excludePlatform', 'twitter');
+                // 如果没有选择特定平台，根据配置排除隐藏的平台
+                const hiddenPlatformsConfig = document.getElementById('hiddenPlatformsConfig');
+                const hiddenPlatforms = hiddenPlatformsConfig ? hiddenPlatformsConfig.value : '';
+                if (hiddenPlatforms && hiddenPlatforms.trim() !== '') {
+                    params.append('excludePlatform', hiddenPlatforms);
+                }
             }
             
             const url = addTokenToUrl(`/api/findVideos?${params.toString()}`);
@@ -1500,7 +1498,7 @@
             card.setAttribute('data-video-platform', btoa(encodeURIComponent(platform)));
             card.setAttribute('data-create-time', createTime || '');
             
-            // 添加平台标识用于筛选（Twitter视频默认隐藏）
+            // 添加平台标识用于筛选（用于前端平台筛选功能）
             const platformLower = platform.toLowerCase();
             if (platformLower.includes('twitter')) {
                 card.setAttribute('data-platform', 'twitter');

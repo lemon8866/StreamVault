@@ -417,15 +417,7 @@
             display: none;
         }
 
-        /* Twitter视频控制样式 */
-        .video-card[data-platform="twitter"] {
-            display: none;
-        }
-        
-        .twitter-filter-active .video-card[data-platform="twitter"] {
-            display: block;
-        }
-        
+        /* Twitter视频筛选样式 - 仅在筛选Twitter时使用 */
         .twitter-filter-active .video-card:not([data-platform="twitter"]) {
             display: none;
         }
@@ -1506,7 +1498,7 @@
             card.setAttribute('data-video-platform', btoa(encodeURIComponent(platform)));
             card.setAttribute('data-create-time', createTime || '');
             
-            // 添加平台标识用于筛选（Twitter视频默认隐藏）
+            // 添加平台标识用于筛选（用于前端平台筛选功能）
             const platformLower = platform.toLowerCase();
             if (platformLower.includes('twitter')) {
                 card.setAttribute('data-platform', 'twitter');

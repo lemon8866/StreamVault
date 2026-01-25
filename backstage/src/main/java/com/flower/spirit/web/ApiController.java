@@ -332,7 +332,8 @@ public class ApiController {
 				JSONObject jsonObject = null;
 				
 				// 按行分割 JSON 输出，处理可能存在多个视频的情况
-				String[] jsonLines = jsonStr.trim().split("\n");
+				// 使用正则表达式处理不同操作系统的换行符
+				String[] jsonLines = jsonStr.trim().split("\\r?\\n");
 				
 				// 解析第一个有效的 JSON 对象
 				for (String line : jsonLines) {
@@ -344,7 +345,7 @@ public class ApiController {
 								break; // 只处理第一个视频
 							}
 						} catch (Exception e) {
-							logger.warn("跳过无效的 JSON 行: {}", line);
+							logger.warn("跳过无效的 JSON 行: {}, 错误: {}", line, e.getMessage());
 						}
 					}
 				}

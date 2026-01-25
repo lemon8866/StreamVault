@@ -1141,6 +1141,7 @@
         // 多视频支持
         let currentMultiVideos = []; // 存储多视频列表
         let selectedVideoIndices = new Set(); // 存储选中的视频索引
+        const MULTI_DOWNLOAD_DELAY_MS = 500; // 批量下载时每个视频之间的延迟（毫秒）
 
         
         // 防抖函数
@@ -2376,7 +2377,7 @@
                         link.click();
                         document.body.removeChild(link);
                     }
-                }, index * 500); // 每个下载延迟500ms
+                }, index * MULTI_DOWNLOAD_DELAY_MS);
             });
             
             alert(`开始下载 ${selectedVideos.length} 个视频`);
@@ -2391,7 +2392,11 @@
             
             const selectedVideos = Array.from(selectedVideoIndices).map(i => currentMultiVideos[i]);
             const urls = selectedVideos
-                .map((v, i) => `${i + 1}. ${v.title}\n${v.videoUrl}`)
+                .map((v, i) => {
+                    // 清理标题，移除换行符和控制字符
+                    const cleanTitle = sanitizeText(v.title || '未命名').replace(/[\r\n\t]/g, ' ');
+                    return `${i + 1}. ${cleanTitle}\n${v.videoUrl}`;
+                })
                 .join('\n\n');
             
             navigator.clipboard.writeText(urls).then(() => {

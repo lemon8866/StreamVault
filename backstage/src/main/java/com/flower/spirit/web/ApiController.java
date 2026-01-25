@@ -344,7 +344,7 @@ public class ApiController {
 								allVideos.add(obj);
 							}
 						} catch (Exception e) {
-							logger.warn("跳过无效的 JSON 行: {}", line);
+							logger.warn("跳过无效的 JSON 行: {}, 错误: {}", line.substring(0, Math.min(line.length(), 100)), e.getMessage());
 						}
 					}
 				}

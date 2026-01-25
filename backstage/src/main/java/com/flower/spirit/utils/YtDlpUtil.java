@@ -48,7 +48,7 @@ public class YtDlpUtil {
 			}
 		}
 
-		if (Global.proxyinfo != null) {
+		if (Global.proxyinfo != null && !Global.proxyinfo.trim().isEmpty()) {
 			command.add("--proxy");
 			command.add(Global.proxyinfo);
 		}
@@ -179,7 +179,7 @@ public class YtDlpUtil {
 	        command.add("--no-download");
 	        command.add("--skip-download");
 	        command.add("--ignore-config"); 
-	        if (Global.proxyinfo != null) {
+	        if (Global.proxyinfo != null && !Global.proxyinfo.trim().isEmpty()) {
 	            command.add("--proxy");
 	            command.add(Global.proxyinfo);
 	        }
@@ -286,7 +286,7 @@ public class YtDlpUtil {
 			}
 		}
 
-		if (Global.proxyinfo != null && !Global.proxyinfo.isEmpty()) {
+		if (Global.proxyinfo != null && !Global.proxyinfo.trim().isEmpty()) {
 			command.add("--proxy");
 			command.add(Global.proxyinfo);
 			logger.info("使用代理: {}", Global.proxyinfo);
@@ -395,7 +395,7 @@ public class YtDlpUtil {
 			}
 		}
 
-		if (Global.proxyinfo != null && !Global.proxyinfo.isEmpty()) {
+		if (Global.proxyinfo != null && !Global.proxyinfo.trim().isEmpty()) {
 			command.add("--proxy");
 			command.add(Global.proxyinfo);
 			logger.info("使用代理: {}", Global.proxyinfo);

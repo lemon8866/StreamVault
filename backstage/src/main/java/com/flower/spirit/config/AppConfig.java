@@ -136,13 +136,13 @@ public class AppConfig {
         }
 
         StringBuilder proxyUrl = new StringBuilder();
-        proxyUrl.append(data.getAgenttype()).append("://");
+        proxyUrl.append(data.getAgenttype().trim()).append("://");
 
         if (!isBlank(data.getAgentaccpass())) {
-            proxyUrl.append(data.getAgentaccpass()).append("@");
+            proxyUrl.append(data.getAgentaccpass().trim()).append("@");
         }
 
-        proxyUrl.append(data.getAgentaddress()).append(":").append(data.getAgentport()).append("/");
+        proxyUrl.append(data.getAgentaddress().trim()).append(":").append(data.getAgentport().trim()).append("/");
 
         return proxyUrl.toString();
     }

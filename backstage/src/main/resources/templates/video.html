@@ -552,6 +552,107 @@
                 min-width: 100%;
             }
         }
+
+        /* 多视频列表样式 */
+        .multi-video-list {
+            display: grid;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .video-item-card {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 1rem;
+            border: 2px solid transparent;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .video-item-card:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .video-item-card.selected {
+            border-color: #667eea;
+            background: #e6efff;
+        }
+
+        .video-item-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .video-item-index {
+            flex-shrink: 0;
+            width: 32px;
+            height: 32px;
+            background: #667eea;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        .video-item-title {
+            flex: 1;
+            font-weight: 500;
+            font-size: 0.875rem;
+            color: #1f2937;
+            line-height: 1.4;
+        }
+
+        .video-item-meta {
+            font-size: 0.75rem;
+            color: #6b7280;
+            margin-top: 0.25rem;
+        }
+
+        .batch-download-section {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .batch-actions {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .select-all-btn {
+            padding: 0.5rem 1rem;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .select-all-btn:hover {
+            background: #5568d3;
+        }
+
+        .selected-count {
+            padding: 0.5rem 1rem;
+            background: #e6efff;
+            color: #667eea;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
     </style>
 </head>
 <body class="bg-gray-100">
@@ -954,7 +1055,8 @@
 
             <!-- 解析结果区域 -->
             <div id="parseResult" style="display: none;">
-                <div class="parse-result-card">
+                <!-- 单视频显示 -->
+                <div id="singleVideoResult" class="parse-result-card">
                     <img id="resultCover" src="" alt="视频封面" class="parse-result-cover" referrerpolicy="no-referrer" />
                     <div class="parse-result-info">
                         <div class="parse-result-title" id="resultTitle"></div>
@@ -979,6 +1081,47 @@
                         </div>
                     </div>
                 </div>
+                
+                <!-- 多视频显示 -->
+                <div id="multiVideoResult" class="parse-result-card" style="display: none;">
+                    <div class="parse-result-info">
+                        <div class="parse-result-title">
+                            检测到多个视频 (共 <span id="totalVideoCount">0</span> 个)
+                        </div>
+                        <div class="parse-result-meta" style="margin-bottom: 1rem;">
+                            <span id="multiPlatform" class="platform-tag"></span>
+                            <span class="ml-3">请选择要下载的视频</span>
+                        </div>
+                        
+                        <!-- 视频列表 -->
+                        <div id="videoListContainer" class="multi-video-list">
+                            <!-- 动态生成视频项 -->
+                        </div>
+                        
+                        <!-- 批量操作 -->
+                        <div class="batch-download-section">
+                            <div class="batch-actions">
+                                <button onclick="toggleSelectAll()" class="select-all-btn" id="selectAllBtn">
+                                    全选
+                                </button>
+                                <div class="selected-count">
+                                    <span>已选择:</span>
+                                    <strong id="selectedCount">0</strong>
+                                    <span>/ <span id="totalCount">0</span></span>
+                                </div>
+                            </div>
+                            
+                            <div class="parse-result-actions" style="margin-top: 1rem;">
+                                <button onclick="downloadSelectedVideos()" class="btn-download">
+                                    <span>📥 下载选中视频</span>
+                                </button>
+                                <button onclick="copySelectedUrls()" class="btn-copy">
+                                    <span>📋 复制选中链接</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -994,6 +1137,11 @@
         let currentVideoId = null;
         let serverToken = null;
         const PAGE_SIZE = 18; // 每页显示18个视频
+        
+        // 多视频支持
+        let currentMultiVideos = []; // 存储多视频列表
+        let selectedVideoIndices = new Set(); // 存储选中的视频索引
+        const MULTI_DOWNLOAD_DELAY_MS = 500; // 批量下载时每个视频之间的延迟（毫秒）
 
         
         // 防抖函数
@@ -2012,6 +2160,30 @@
         // 显示解析结果
         function displayParseResult(result) {
             const resultDiv = document.getElementById('parseResult');
+            const singleResult = document.getElementById('singleVideoResult');
+            const multiResult = document.getElementById('multiVideoResult');
+            
+            // 检查是否为多视频结果
+            if (result.type === 'multiple' && result.videos && result.videos.length > 1) {
+                // 显示多视频界面
+                singleResult.style.display = 'none';
+                multiResult.style.display = 'block';
+                
+                displayMultiVideoResult(result);
+            } else {
+                // 显示单视频界面 (原有逻辑)
+                singleResult.style.display = 'block';
+                multiResult.style.display = 'none';
+                
+                displaySingleVideoResult(result);
+            }
+            
+            resultDiv.style.display = 'block';
+            resultDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+        
+        // 显示单视频结果 (原有逻辑)
+        function displaySingleVideoResult(result) {
             const coverImg = document.getElementById('resultCover');
             const titleEl = document.getElementById('resultTitle');
             const platformEl = document.getElementById('resultPlatform');
@@ -2063,12 +2235,187 @@
             } else {
                 dashWarning.style.display = 'none';
             }
+        }
+        
+        // 显示多视频结果 (新增)
+        function displayMultiVideoResult(result) {
+            currentMultiVideos = result.videos || [];
+            selectedVideoIndices.clear();
             
-            // 显示结果
-            resultDiv.style.display = 'block';
+            // 更新标题和平台
+            document.getElementById('totalVideoCount').textContent = result.totalCount || 0;
+            document.getElementById('totalCount').textContent = result.totalCount || 0;
             
-            // 滚动到结果区域
-            resultDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            const platformEl = document.getElementById('multiPlatform');
+            platformEl.textContent = result.platform || '';
+            platformEl.className = 'platform-tag';
+            if (result.platform === 'twitter') {
+                platformEl.classList.add('platform-twitter');
+            }
+            
+            // 渲染视频列表
+            const container = document.getElementById('videoListContainer');
+            container.innerHTML = '';
+            
+            currentMultiVideos.forEach((video, index) => {
+                const videoCard = createVideoItemCard(video, index);
+                container.appendChild(videoCard);
+            });
+            
+            updateSelectedCount();
+        }
+        
+        // 创建视频项卡片 (新增)
+        function createVideoItemCard(video, index) {
+            const card = document.createElement('div');
+            card.className = 'video-item-card';
+            card.setAttribute('data-index', index);
+            
+            const header = document.createElement('div');
+            header.className = 'video-item-header';
+            
+            const indexEl = document.createElement('div');
+            indexEl.className = 'video-item-index';
+            indexEl.textContent = video.index || (index + 1);
+            
+            const titleEl = document.createElement('div');
+            titleEl.className = 'video-item-title';
+            titleEl.textContent = sanitizeText(video.title || `视频 ${index + 1}`);
+            
+            header.appendChild(indexEl);
+            header.appendChild(titleEl);
+            
+            const meta = document.createElement('div');
+            meta.className = 'video-item-meta';
+            
+            const duration = video.duration ? `时长: ${formatDuration(video.duration)}` : '';
+            const dash = video.isDash ? ' | DASH格式' : '';
+            meta.textContent = duration + dash;
+            
+            card.appendChild(header);
+            card.appendChild(meta);
+            
+            // 点击选中/取消
+            card.addEventListener('click', () => {
+                toggleVideoSelection(index);
+            });
+            
+            return card;
+        }
+        
+        // 切换视频选中状态 (新增)
+        function toggleVideoSelection(index) {
+            const card = document.querySelector(`.video-item-card[data-index="${index}"]`);
+            
+            if (selectedVideoIndices.has(index)) {
+                selectedVideoIndices.delete(index);
+                card.classList.remove('selected');
+            } else {
+                selectedVideoIndices.add(index);
+                card.classList.add('selected');
+            }
+            
+            updateSelectedCount();
+        }
+        
+        // 全选/取消全选 (新增)
+        function toggleSelectAll() {
+            const btn = document.getElementById('selectAllBtn');
+            
+            if (selectedVideoIndices.size === currentMultiVideos.length) {
+                // 取消全选
+                selectedVideoIndices.clear();
+                document.querySelectorAll('.video-item-card').forEach(card => {
+                    card.classList.remove('selected');
+                });
+                btn.textContent = '全选';
+            } else {
+                // 全选
+                selectedVideoIndices.clear();
+                currentMultiVideos.forEach((_, index) => {
+                    selectedVideoIndices.add(index);
+                });
+                document.querySelectorAll('.video-item-card').forEach(card => {
+                    card.classList.add('selected');
+                });
+                btn.textContent = '取消全选';
+            }
+            
+            updateSelectedCount();
+        }
+        
+        // 更新选中数量 (新增)
+        function updateSelectedCount() {
+            document.getElementById('selectedCount').textContent = selectedVideoIndices.size;
+            
+            const btn = document.getElementById('selectAllBtn');
+            if (selectedVideoIndices.size === currentMultiVideos.length && currentMultiVideos.length > 0) {
+                btn.textContent = '取消全选';
+            } else {
+                btn.textContent = '全选';
+            }
+        }
+        
+        // 下载选中的视频 (新增)
+        function downloadSelectedVideos() {
+            if (selectedVideoIndices.size === 0) {
+                alert('请先选择要下载的视频');
+                return;
+            }
+            
+            const selectedVideos = Array.from(selectedVideoIndices).map(i => currentMultiVideos[i]);
+            
+            selectedVideos.forEach((video, index) => {
+                setTimeout(() => {
+                    if (video.videoUrl && isValidUrl(video.videoUrl)) {
+                        const title = sanitizeText(video.title || `video_${video.index}`);
+                        const link = document.createElement('a');
+                        link.href = video.videoUrl;
+                        link.download = title;
+                        link.target = '_blank';
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    }
+                }, index * MULTI_DOWNLOAD_DELAY_MS);
+            });
+            
+            alert(`开始下载 ${selectedVideos.length} 个视频`);
+        }
+        
+        // 复制选中的链接 (新增)
+        function copySelectedUrls() {
+            if (selectedVideoIndices.size === 0) {
+                alert('请先选择要复制的视频');
+                return;
+            }
+            
+            const selectedVideos = Array.from(selectedVideoIndices).map(i => currentMultiVideos[i]);
+            const urls = selectedVideos
+                .map((v, i) => {
+                    // 清理标题，移除换行符和控制字符
+                    const cleanTitle = sanitizeText(v.title || '未命名').replace(/[\r\n\t]/g, ' ');
+                    return `${i + 1}. ${cleanTitle}\n${v.videoUrl}`;
+                })
+                .join('\n\n');
+            
+            navigator.clipboard.writeText(urls).then(() => {
+                alert(`已复制 ${selectedVideos.length} 个视频链接`);
+            }).catch(() => {
+                alert('复制失败，请手动复制');
+            });
+        }
+        
+        // 辅助函数: 格式化时长 (新增)
+        function formatDuration(seconds) {
+            if (!seconds) return '';
+            const h = Math.floor(seconds / 3600);
+            const m = Math.floor((seconds % 3600) / 60);
+            const s = seconds % 60;
+            if (h > 0) {
+                return `${h}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+            }
+            return `${m}:${s.toString().padStart(2, '0')}`;
         }
         
         // URL验证函数

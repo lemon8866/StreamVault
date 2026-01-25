@@ -3,7 +3,9 @@ package com.flower.spirit.web;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -328,17 +330,157 @@ public class ApiController {
 				// 5. 其他平台使用 yt-dlp
 				String jsonStr = YtDlpUtil.execForJson(url, platform);
 				
-				// 添加JSON解析的错误处理
-				JSONObject jsonObject;
-				try {
-					jsonObject = JSONObject.parseObject(jsonStr.trim());
-					if (jsonObject == null) {
-						return new AjaxEntity(Global.ajax_uri_error, "解析失败: JSON数据为空", null);
+				// 按行分割 JSON 输出
+				String[] jsonLines = jsonStr.trim().split("\n");
+				List<JSONObject> allVideos = new ArrayList<>();
+				
+				// 解析所有有效的 JSON 对象
+				for (String line : jsonLines) {
+					line = line.trim();
+					if (!line.isEmpty()) {
+						try {
+							JSONObject obj = JSONObject.parseObject(line);
+							if (obj != null) {
+								allVideos.add(obj);
+							}
+						} catch (Exception e) {
+							logger.warn("跳过无效的 JSON 行: {}", line);
+						}
 					}
-				} catch (Exception e) {
-					logger.error("JSON解析失败，原始数据: {}", jsonStr);
-					return new AjaxEntity(Global.ajax_uri_error, "解析失败: JSON解析错误 - " + e.getMessage(), null);
 				}
+				
+				if (allVideos.isEmpty()) {
+					return new AjaxEntity(Global.ajax_uri_error, "视频解析失败: 未找到有效的视频数据", null);
+				}
+				
+				// 如果有多个视频，返回视频列表
+				if (allVideos.size() > 1) {
+					logger.info("检测到 {} 个视频，全部返回", allVideos.size());
+					
+					// 构建视频列表返回
+					List<Map<String, Object>> videoList = new ArrayList<>();
+					
+					for (int i = 0; i < allVideos.size(); i++) {
+						JSONObject jsonObject = allVideos.get(i);
+						Map<String, Object> videoItem = new HashMap<>();
+						
+						videoItem.put("index", i + 1);
+						videoItem.put("title", jsonObject.getString("title"));
+						videoItem.put("platform", platform);
+						videoItem.put("author", jsonObject.getString("uploader"));
+						videoItem.put("duration", jsonObject.getInteger("duration"));
+						
+						// 获取封面
+						String coverUrl = jsonObject.getString("thumbnail");
+						if (coverUrl == null || coverUrl.isEmpty()) {
+							JSONArray thumbnails = jsonObject.getJSONArray("thumbnails");
+							if (thumbnails != null && thumbnails.size() > 0) {
+								coverUrl = thumbnails.getJSONObject(thumbnails.size() - 1).getString("url");
+							}
+						}
+						videoItem.put("coverUrl", coverUrl);
+						
+						// 获取视频URL
+						String videoUrl = null;
+						boolean isDash = false;
+						
+						JSONArray formats = jsonObject.getJSONArray("formats");
+						
+						// 优先查找同时包含音视频的格式
+						if (formats != null && formats.size() > 0) {
+							// 第一遍：查找最佳的合并格式（同时包含音视频）
+							JSONObject bestMergedFormat = null;
+							int bestHeight = 0;
+							
+							for (int j = 0; j < formats.size(); j++) {
+								JSONObject format = formats.getJSONObject(j);
+								String vcodec = format.getString("vcodec");
+								String acodec = format.getString("acodec");
+								String formatUrl = format.getString("url");
+								
+								// 同时包含视频和音频
+								if (vcodec != null && !vcodec.equals("none") && 
+									acodec != null && !acodec.equals("none") &&
+									formatUrl != null && !formatUrl.isEmpty()) {
+									
+									Integer height = format.getInteger("height");
+									if (height != null && height > bestHeight) {
+										bestHeight = height;
+										bestMergedFormat = format;
+									}
+								}
+							}
+							
+							// 如果找到合并格式，使用它
+							if (bestMergedFormat != null) {
+								videoUrl = bestMergedFormat.getString("url");
+							}
+							
+							// 第二遍：如果没有合并格式，检查是否是DASH
+							if (videoUrl == null) {
+								boolean hasVideoOnly = false;
+								boolean hasAudioOnly = false;
+								JSONObject bestVideoFormat = null;
+								int bestVideoHeight = 0;
+								
+								for (int j = 0; j < formats.size(); j++) {
+									JSONObject format = formats.getJSONObject(j);
+									String vcodec = format.getString("vcodec");
+									String acodec = format.getString("acodec");
+									String formatUrl = format.getString("url");
+									
+									if (formatUrl == null || formatUrl.isEmpty()) continue;
+									
+									// 只有视频
+									if (vcodec != null && !vcodec.equals("none") && 
+										(acodec == null || acodec.equals("none"))) {
+										hasVideoOnly = true;
+										Integer height = format.getInteger("height");
+										if (height != null && height > bestVideoHeight) {
+											bestVideoHeight = height;
+											bestVideoFormat = format;
+										}
+									}
+									
+									// 只有音频
+									if (acodec != null && !acodec.equals("none") && 
+										(vcodec == null || vcodec.equals("none"))) {
+										hasAudioOnly = true;
+									}
+								}
+								
+								isDash = hasVideoOnly && hasAudioOnly;
+								
+								// 使用最佳视频流（即使没有音频）
+								if (bestVideoFormat != null) {
+									videoUrl = bestVideoFormat.getString("url");
+								}
+							}
+						}
+						
+						// 如果formats中没有找到，尝试使用顶层的url字段
+						if (videoUrl == null) {
+							videoUrl = jsonObject.getString("url");
+						}
+						
+						videoItem.put("videoUrl", videoUrl);
+						videoItem.put("isDash", isDash);
+						
+						videoList.add(videoItem);
+					}
+					
+					// 返回多视频结果
+					Map<String, Object> multiResult = new HashMap<>();
+					multiResult.put("type", "multiple");
+					multiResult.put("platform", platform);
+					multiResult.put("totalCount", allVideos.size());
+					multiResult.put("videos", videoList);
+					
+					return new AjaxEntity(Global.ajax_success, "成功解析 " + allVideos.size() + " 个视频", multiResult);
+				}
+				
+				// 单个视频的处理保持原样
+				JSONObject jsonObject = allVideos.get(0);
 				
 				result.put("platform", platform);
 				result.put("title", jsonObject.getString("title"));

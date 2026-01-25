@@ -327,22 +327,14 @@ public class ApiController {
 				}
 				
 			} else {
-				// 5. 其他平台使用 yt-dlp
+				// 7. 其他平台使用 yt-dlp
 				String jsonStr = YtDlpUtil.execForJson(url, platform);
 				
-				// 按行分割 JSON 输出
-				String[] jsonLines = jsonStr.trim().split("\n");
+				// 使用正则表达式处理不同操作系统的换行符
+				String[] jsonLines = jsonStr.trim().split("\\r?\\n");
 				List<JSONObject> allVideos = new ArrayList<>();
 				
 				// 解析所有有效的 JSON 对象
-				// 添加JSON解析的错误处理，支持多视频情况（如Twitter多视频推文）
-				JSONObject jsonObject = null;
-				
-				// 按行分割 JSON 输出，处理可能存在多个视频的情况
-				// 使用正则表达式处理不同操作系统的换行符
-				String[] jsonLines = jsonStr.trim().split("\\r?\\n");
-				
-				// 解析第一个有效的 JSON 对象
 				for (String line : jsonLines) {
 					line = line.trim();
 					if (!line.isEmpty()) {
@@ -355,27 +347,10 @@ public class ApiController {
 							logger.warn("跳过无效的 JSON 行: {}, 错误: {}", line.substring(0, Math.min(line.length(), 100)), e.getMessage());
 						}
 					}
-							jsonObject = JSONObject.parseObject(line);
-							if (jsonObject != null) {
-								break; // 只处理第一个视频
-							}
-						} catch (Exception e) {
-							logger.warn("跳过无效的 JSON 行: {}, 错误: {}", line, e.getMessage());
-						}
-					}
-				}
-				
-				if (jsonObject == null) {
-					logger.error("JSON解析失败，原始数据: {}", jsonStr);
-					return new AjaxEntity(Global.ajax_uri_error, "解析失败: 未找到有效的视频数据", null);
-				}
-				
-				// 如果有多个视频，添加提示
-				if (jsonLines.length > 1) {
-					logger.info("检测到多个视频，已返回第一个视频");
 				}
 				
 				if (allVideos.isEmpty()) {
+					logger.error("JSON解析失败，原始数据: {}", jsonStr);
 					return new AjaxEntity(Global.ajax_uri_error, "视频解析失败: 未找到有效的视频数据", null);
 				}
 				
@@ -505,7 +480,7 @@ public class ApiController {
 					return new AjaxEntity(Global.ajax_success, "成功解析 " + allVideos.size() + " 个视频", multiResult);
 				}
 				
-				// 单个视频的处理保持原样
+				// 单个视频的处理
 				JSONObject jsonObject = allVideos.get(0);
 				
 				result.put("platform", platform);

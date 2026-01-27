@@ -365,7 +365,7 @@ public class AnalysisService {
 				processHistoryService.saveProcess(saveProcess.getId(), url, platform);
 				if (Global.getGeneratenfo) {
 					EmbyMetadataGenerator.generateMetadata(namefix, upload_date.substring(0, 4), description, "twitter",
-							null, uploader, filedoc, null, uploader_url, dir + baseNameNo + ".webp");
+							null, uploader, filedoc, dir + baseNameNo + ".webp", uploader_url, dir + baseNameNo + ".webp");
 				}
 				sendNotify.sendNotifyData(namefix, url, platform);
 			}
@@ -415,7 +415,7 @@ public class AnalysisService {
 			processHistoryService.saveProcess(saveProcess.getId(), url, platform);
 			if (Global.getGeneratenfo) {
 				EmbyMetadataGenerator.generateMetadata(namefix, upload_date.substring(0, 4), description, "instagram",
-						null, uploader, filedoc, null, uploader_url, dir + baseNameNo + ".webp");
+						null, uploader, filedoc, dir + baseNameNo + ".webp", uploader_url, dir + baseNameNo + ".webp");
 			}
 			sendNotify.sendNotifyData(namefix, url, platform);
 		} catch (Exception e) {
@@ -471,7 +471,7 @@ public class AnalysisService {
 				processHistoryService.saveProcess(saveProcess.getId(), youtube, platform);
 				if (Global.getGeneratenfo) {
 					EmbyMetadataGenerator.generateMetadata(namefix, upload_date.substring(0, 4), description, "youtube",
-							null, uploader, filedoc, null, uploader_url, dir + baseNameNo + ".webp");
+							null, uploader, filedoc, dir + baseNameNo + ".webp", uploader_url, dir + baseNameNo + ".webp");
 				}
 				sendNotify.sendNotifyData(namefix, youtube, platform);
 			}

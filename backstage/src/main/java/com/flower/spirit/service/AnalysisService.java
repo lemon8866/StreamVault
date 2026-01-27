@@ -157,14 +157,15 @@ public class AnalysisService {
 					JSONObject parseObject = jsonObjects.get(i);
 					String filename = parseObject.getString("filename");
 					String baseName = FilenameUtils.getBaseName(filename);
+					String baseNameClean = StringUtil.getFileName(baseName, parseObject.getString("display_id"));
 					String namefix = new File(new File(filename).getParent()).getName(); 
 					String dircos = FileUtil.generateDir(false, detectedPlatform, true,new File(new File(filename).getParent()).getName(), null, null);
 					String description = parseObject.getString("description");
 					String display_id = parseObject.getString("display_id");
 					String name = new File(filename).getName();
-					String coverdb = dircos + baseName + ".webp";
+					String coverdb = dircos + baseNameClean + ".webp";
 					String videodb = dircos + name;
-					VideoDataEntity videoDataEntity = new VideoDataEntity(display_id, StringUtil.getFileName(baseName, display_id), StringUtil.cleanText(description), detectedPlatform, coverdb, filename, videodb, url);
+					VideoDataEntity videoDataEntity = new VideoDataEntity(display_id, baseNameClean, StringUtil.cleanText(description), detectedPlatform, coverdb, filename, videodb, url);
 					videoDataDao.save(videoDataEntity);
 					processHistoryService.saveProcess(saveProcess.getId(), url, detectedPlatform);
 					sendNotify.sendNotifyData(namefix, url, detectedPlatform);
@@ -337,26 +338,27 @@ public class AnalysisService {
 				JSONObject parseObject = jsonObjects.get(i);
 				String filename = parseObject.getString("filename");
 				String baseName = FilenameUtils.getBaseName(filename);
-				String baseNameNo = baseName.replaceAll("_", " ");
+				String display_id = parseObject.getString("display_id");
+				String baseNameClean = StringUtil.getFileName(baseName, display_id);
+				String baseNameNo = baseNameClean.replaceAll("_", " ");
 				String filedoc = new File(filename).getParent();
 				String namefix = new File(new File(filename).getParent()).getName(); // 先这个搞
-				String dir = FileUtil.generateDir(true, Global.platform.twitter.name(), true, baseName, null, null);
+				String dir = FileUtil.generateDir(true, Global.platform.twitter.name(), true, baseNameClean, null, null);
 				String dircos = FileUtil.generateDir(false, Global.platform.twitter.name(), true,
 						new File(new File(filename).getParent()).getName(), null, null);
 				// System.out.println(exec);
 				// String title = parseObject.getString("title");
 				String description = parseObject.getString("description");
-				String display_id = parseObject.getString("display_id");
 				String uploader = parseObject.getString("uploader");
 				String uploader_url = parseObject.getString("uploader_url");
 				String upload_date = parseObject.getString("upload_date");
 				String name = new File(filename).getName();
 
-				String coverdb = dircos + baseName + ".webp";
+				String coverdb = dircos + baseNameClean + ".webp";
 
 				String videodb = dircos + name;
 
-				VideoDataEntity videoDataEntity = new VideoDataEntity(display_id, StringUtil.getFileName(baseName, display_id), StringUtil.cleanText(description),
+				VideoDataEntity videoDataEntity = new VideoDataEntity(display_id, baseNameClean, StringUtil.cleanText(description),
 						Global.platform.twitter.name(), coverdb, filename, videodb, url);
 				videoDataEntity.setVideoauthor(uploader);
 				videoDataDao.save(videoDataEntity);
@@ -389,24 +391,25 @@ public class AnalysisService {
 			// 先处理文件名
 			// System.out.println(filename);
 			String baseName = FilenameUtils.getBaseName(filename);
-			String baseNameNo = baseName.replaceAll("_", " ");
+			String display_id = parseObject.getString("display_id");
+			String baseNameClean = StringUtil.getFileName(baseName, display_id);
+			String baseNameNo = baseNameClean.replaceAll("_", " ");
 			String filedoc = new File(filename).getParent();
 			String namefix = new File(new File(filename).getParent()).getName(); // 先这个搞
-			String dir = FileUtil.generateDir(true, Global.platform.instagram.name(), true, baseName, null, null);
+			String dir = FileUtil.generateDir(true, Global.platform.instagram.name(), true, baseNameClean, null, null);
 			String dircos = FileUtil.generateDir(false, Global.platform.instagram.name(), true,
 					new File(new File(filename).getParent()).getName(), null, null);
 			String description = parseObject.getString("description");
-			String display_id = parseObject.getString("display_id");
 			String uploader = parseObject.getString("uploader");
 			String uploader_url = parseObject.getString("uploader_url");
 			String upload_date = parseObject.getString("upload_date");
 			String name = new File(filename).getName();
 
-			String coverdb = dircos + baseName + ".webp";
+			String coverdb = dircos + baseNameClean + ".webp";
 
 			String videodb = dircos + name;
 
-			VideoDataEntity videoDataEntity = new VideoDataEntity(display_id, StringUtil.getFileName(baseName, display_id), StringUtil.cleanText(description),
+			VideoDataEntity videoDataEntity = new VideoDataEntity(display_id, baseNameClean, StringUtil.cleanText(description),
 					Global.platform.instagram.name(), coverdb, filename, videodb, url);
 			videoDataDao.save(videoDataEntity);
 			processHistoryService.saveProcess(saveProcess.getId(), url, platform);
@@ -441,26 +444,27 @@ public class AnalysisService {
 				// 先处理文件名
 				// System.out.println(filename);
 				String baseName = FilenameUtils.getBaseName(filename);
-				String baseNameNo = baseName.replaceAll("_", " ");
+				String display_id = parseObject.getString("display_id");
+				String baseNameClean = StringUtil.getFileName(baseName, display_id);
+				String baseNameNo = baseNameClean.replaceAll("_", " ");
 				String filedoc = new File(filename).getParent();
-				String dir = FileUtil.generateDir(true, Global.platform.youtube.name(), true, baseName, null, null);
+				String dir = FileUtil.generateDir(true, Global.platform.youtube.name(), true, baseNameClean, null, null);
 				String namefix = new File(new File(filename).getParent()).getName(); // 先这个搞
 				String dircos = FileUtil.generateDir(false, Global.platform.youtube.name(), true,
 						new File(new File(filename).getParent()).getName(), null, null);
 				// System.out.println(exec);
 				// String title = parseObject.getString("title");
 				String description = parseObject.getString("description");
-				String display_id = parseObject.getString("display_id");
 				String uploader = parseObject.getString("uploader");
 				String uploader_url = parseObject.getString("uploader_url");
 				String upload_date = parseObject.getString("upload_date");
 				String name = new File(filename).getName();
 
-				String coverdb = dircos + baseName + ".webp";
+				String coverdb = dircos + baseNameClean + ".webp";
 
 				String videodb = dircos + name;
 
-				VideoDataEntity videoDataEntity = new VideoDataEntity(display_id, StringUtil.getFileName(baseName, display_id), StringUtil.cleanText(description),
+				VideoDataEntity videoDataEntity = new VideoDataEntity(display_id, baseNameClean, StringUtil.cleanText(description),
 						Global.platform.youtube.name(), coverdb, filename, videodb, youtube);
 				videoDataEntity.setVideoauthor(uploader);
 				videoDataDao.save(videoDataEntity);

@@ -27,6 +27,7 @@ import com.flower.spirit.dao.VideoMixSegmentDao;
 import com.flower.spirit.dao.VideoDataDao;
 import com.flower.spirit.common.AjaxEntity;
 import com.flower.spirit.config.Global;
+import com.flower.spirit.utils.StringUtil;
 
 @Service
 public class VideoMixService {

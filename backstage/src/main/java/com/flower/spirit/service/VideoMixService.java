@@ -274,7 +274,7 @@ public class VideoMixService {
 						String vid = Integer.toString(mix.getId())+Long.toString(mix.getCreateTime().getTime());
 						String coverunaddr = FileUtil.generateDir(false, "svkpop", true, mix.getMixName(), null, "jpg");
 						String videounrealaddr = FileUtil.generateDir(false, "svkpop", true, mix.getMixName(), null, "mp4");
-						VideoDataEntity videoDataEntity = new VideoDataEntity(vid, mix.getMixName(), mix.getMixName(), "StreamVault", coverunaddr, outputFile,
+						VideoDataEntity videoDataEntity = new VideoDataEntity(vid, StringUtil.getFileName(mix.getMixName(), vid), StringUtil.cleanText(mix.getMixName()), "StreamVault", coverunaddr, outputFile,
 								videounrealaddr, "合并任务无地址");
 						videoDataDao.save(videoDataEntity);
 					} finally {

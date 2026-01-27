@@ -164,7 +164,7 @@ public class AnalysisService {
 					String name = new File(filename).getName();
 					String coverdb = dircos + baseName + ".webp";
 					String videodb = dircos + name;
-					VideoDataEntity videoDataEntity = new VideoDataEntity(display_id, baseName, description,detectedPlatform, coverdb, filename, videodb, url);
+					VideoDataEntity videoDataEntity = new VideoDataEntity(display_id, StringUtil.getFileName(baseName, display_id), StringUtil.cleanText(description), detectedPlatform, coverdb, filename, videodb, url);
 					videoDataDao.save(videoDataEntity);
 					processHistoryService.saveProcess(saveProcess.getId(), url, detectedPlatform);
 					sendNotify.sendNotifyData(namefix, url, detectedPlatform);
@@ -223,7 +223,7 @@ public class AnalysisService {
 							videofile);
 				}
 				videofile = videofile+filename + ".mp4";
-				VideoDataEntity videoDataEntity = new VideoDataEntity(videoId, title, title, platform, coverunaddr,
+				VideoDataEntity videoDataEntity = new VideoDataEntity(videoId, StringUtil.getFileName(title, videoId), StringUtil.cleanText(title), platform, coverunaddr,
 						videofile,
 						videounrealaddr, url);
 				videoDataEntity.setVideoauthor(author);
@@ -356,7 +356,7 @@ public class AnalysisService {
 
 				String videodb = dircos + name;
 
-				VideoDataEntity videoDataEntity = new VideoDataEntity(display_id, baseName, description,
+				VideoDataEntity videoDataEntity = new VideoDataEntity(display_id, StringUtil.getFileName(baseName, display_id), StringUtil.cleanText(description),
 						Global.platform.twitter.name(), coverdb, filename, videodb, url);
 				videoDataEntity.setVideoauthor(uploader);
 				videoDataDao.save(videoDataEntity);
@@ -406,7 +406,7 @@ public class AnalysisService {
 
 			String videodb = dircos + name;
 
-			VideoDataEntity videoDataEntity = new VideoDataEntity(display_id, baseName, description,
+			VideoDataEntity videoDataEntity = new VideoDataEntity(display_id, StringUtil.getFileName(baseName, display_id), StringUtil.cleanText(description),
 					Global.platform.instagram.name(), coverdb, filename, videodb, url);
 			videoDataDao.save(videoDataEntity);
 			processHistoryService.saveProcess(saveProcess.getId(), url, platform);
@@ -460,7 +460,7 @@ public class AnalysisService {
 
 				String videodb = dircos + name;
 
-				VideoDataEntity videoDataEntity = new VideoDataEntity(display_id, baseName, description,
+				VideoDataEntity videoDataEntity = new VideoDataEntity(display_id, StringUtil.getFileName(baseName, display_id), StringUtil.cleanText(description),
 						Global.platform.youtube.name(), coverdb, filename, videodb, youtube);
 				videoDataEntity.setVideoauthor(uploader);
 				videoDataDao.save(videoDataEntity);
@@ -549,7 +549,7 @@ public class AnalysisService {
 							filename + ".jpg", dir);
 					
 				}
-				VideoDataEntity videoDataEntity = new VideoDataEntity(cid, title, desc, platform, coverunaddr,
+				VideoDataEntity videoDataEntity = new VideoDataEntity(cid, StringUtil.getFileName(title, cid), StringUtil.cleanText(desc), platform, coverunaddr,
 						videoPath, videounaddr, video);
 				videoDataEntity.setVideoauthor(upname);
 				if(Global.danmudown && Global.biliodddmm) {
@@ -644,7 +644,7 @@ public class AnalysisService {
 		String coverdir = FileUtil.generateDir(true, Global.platform.douyin.name(), true, filename, null, null);
 		// HttpUtil.downloadFileWithOkHttp(cover, coverfile,coverdir);
 		HttpUtil.downloadFileWithOkHttp(cover, coverfile, coverdir, header);
-		VideoDataEntity videoDataEntity = new VideoDataEntity(awemeId, desc, desc, platform, coverunaddr, videofile+filename + ".mp4",
+		VideoDataEntity videoDataEntity = new VideoDataEntity(awemeId, StringUtil.getFileName(desc, awemeId), StringUtil.cleanText(desc), platform, coverunaddr, videofile+filename + ".mp4",
 				videounrealaddr, originaladdress);
 		// 生成元数据
 		if (Global.getGeneratenfo) {

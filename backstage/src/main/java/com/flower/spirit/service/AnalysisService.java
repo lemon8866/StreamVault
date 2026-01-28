@@ -157,6 +157,7 @@ public class AnalysisService {
 					JSONObject parseObject = jsonObjects.get(i);
 					String filename = parseObject.getString("filename");
 					String baseName = FilenameUtils.getBaseName(filename);
+					// baseName已经被yt-dlp的clean_title清理过了，直接使用即可
 					String namefix = new File(new File(filename).getParent()).getName(); 
 					String dircos = FileUtil.generateDir(false, detectedPlatform, true,new File(new File(filename).getParent()).getName(), null, null);
 					String description = parseObject.getString("description");
@@ -164,7 +165,7 @@ public class AnalysisService {
 					String name = new File(filename).getName();
 					String coverdb = dircos + baseName + ".webp";
 					String videodb = dircos + name;
-					VideoDataEntity videoDataEntity = new VideoDataEntity(display_id, baseName, description,detectedPlatform, coverdb, filename, videodb, url);
+					VideoDataEntity videoDataEntity = new VideoDataEntity(display_id, baseName, StringUtil.cleanText(description), detectedPlatform, coverdb, filename, videodb, url);
 					videoDataDao.save(videoDataEntity);
 					processHistoryService.saveProcess(saveProcess.getId(), url, detectedPlatform);
 					sendNotify.sendNotifyData(namefix, url, detectedPlatform);
@@ -223,7 +224,7 @@ public class AnalysisService {
 							videofile);
 				}
 				videofile = videofile+filename + ".mp4";
-				VideoDataEntity videoDataEntity = new VideoDataEntity(videoId, title, title, platform, coverunaddr,
+				VideoDataEntity videoDataEntity = new VideoDataEntity(videoId, StringUtil.getFileName(title, videoId), StringUtil.cleanText(title), platform, coverunaddr,
 						videofile,
 						videounrealaddr, url);
 				videoDataEntity.setVideoauthor(author);
@@ -337,6 +338,8 @@ public class AnalysisService {
 				JSONObject parseObject = jsonObjects.get(i);
 				String filename = parseObject.getString("filename");
 				String baseName = FilenameUtils.getBaseName(filename);
+				String display_id = parseObject.getString("display_id");
+				// baseName已经被yt-dlp的clean_title清理过了，直接使用即可
 				String baseNameNo = baseName.replaceAll("_", " ");
 				String filedoc = new File(filename).getParent();
 				String namefix = new File(new File(filename).getParent()).getName(); // 先这个搞
@@ -346,7 +349,6 @@ public class AnalysisService {
 				// System.out.println(exec);
 				// String title = parseObject.getString("title");
 				String description = parseObject.getString("description");
-				String display_id = parseObject.getString("display_id");
 				String uploader = parseObject.getString("uploader");
 				String uploader_url = parseObject.getString("uploader_url");
 				String upload_date = parseObject.getString("upload_date");
@@ -356,14 +358,14 @@ public class AnalysisService {
 
 				String videodb = dircos + name;
 
-				VideoDataEntity videoDataEntity = new VideoDataEntity(display_id, baseName, description,
+				VideoDataEntity videoDataEntity = new VideoDataEntity(display_id, baseName, StringUtil.cleanText(description),
 						Global.platform.twitter.name(), coverdb, filename, videodb, url);
 				videoDataEntity.setVideoauthor(uploader);
 				videoDataDao.save(videoDataEntity);
 				processHistoryService.saveProcess(saveProcess.getId(), url, platform);
 				if (Global.getGeneratenfo) {
 					EmbyMetadataGenerator.generateMetadata(namefix, upload_date.substring(0, 4), description, "twitter",
-							null, uploader, filedoc, null, uploader_url, dir + baseNameNo + ".webp");
+							null, uploader, filedoc, dir + baseNameNo + ".webp", uploader_url, dir + baseNameNo + ".webp");
 				}
 				sendNotify.sendNotifyData(namefix, url, platform);
 			}
@@ -389,6 +391,8 @@ public class AnalysisService {
 			// 先处理文件名
 			// System.out.println(filename);
 			String baseName = FilenameUtils.getBaseName(filename);
+			String display_id = parseObject.getString("display_id");
+			// baseName已经被yt-dlp的clean_title清理过了，直接使用即可
 			String baseNameNo = baseName.replaceAll("_", " ");
 			String filedoc = new File(filename).getParent();
 			String namefix = new File(new File(filename).getParent()).getName(); // 先这个搞
@@ -396,7 +400,6 @@ public class AnalysisService {
 			String dircos = FileUtil.generateDir(false, Global.platform.instagram.name(), true,
 					new File(new File(filename).getParent()).getName(), null, null);
 			String description = parseObject.getString("description");
-			String display_id = parseObject.getString("display_id");
 			String uploader = parseObject.getString("uploader");
 			String uploader_url = parseObject.getString("uploader_url");
 			String upload_date = parseObject.getString("upload_date");
@@ -406,13 +409,13 @@ public class AnalysisService {
 
 			String videodb = dircos + name;
 
-			VideoDataEntity videoDataEntity = new VideoDataEntity(display_id, baseName, description,
+			VideoDataEntity videoDataEntity = new VideoDataEntity(display_id, baseName, StringUtil.cleanText(description),
 					Global.platform.instagram.name(), coverdb, filename, videodb, url);
 			videoDataDao.save(videoDataEntity);
 			processHistoryService.saveProcess(saveProcess.getId(), url, platform);
 			if (Global.getGeneratenfo) {
 				EmbyMetadataGenerator.generateMetadata(namefix, upload_date.substring(0, 4), description, "instagram",
-						null, uploader, filedoc, null, uploader_url, dir + baseNameNo + ".webp");
+						null, uploader, filedoc, dir + baseNameNo + ".webp", uploader_url, dir + baseNameNo + ".webp");
 			}
 			sendNotify.sendNotifyData(namefix, url, platform);
 		} catch (Exception e) {
@@ -441,6 +444,8 @@ public class AnalysisService {
 				// 先处理文件名
 				// System.out.println(filename);
 				String baseName = FilenameUtils.getBaseName(filename);
+				String display_id = parseObject.getString("display_id");
+				// baseName已经被yt-dlp的clean_title清理过了，直接使用即可
 				String baseNameNo = baseName.replaceAll("_", " ");
 				String filedoc = new File(filename).getParent();
 				String dir = FileUtil.generateDir(true, Global.platform.youtube.name(), true, baseName, null, null);
@@ -450,7 +455,6 @@ public class AnalysisService {
 				// System.out.println(exec);
 				// String title = parseObject.getString("title");
 				String description = parseObject.getString("description");
-				String display_id = parseObject.getString("display_id");
 				String uploader = parseObject.getString("uploader");
 				String uploader_url = parseObject.getString("uploader_url");
 				String upload_date = parseObject.getString("upload_date");
@@ -460,14 +464,14 @@ public class AnalysisService {
 
 				String videodb = dircos + name;
 
-				VideoDataEntity videoDataEntity = new VideoDataEntity(display_id, baseName, description,
+				VideoDataEntity videoDataEntity = new VideoDataEntity(display_id, baseName, StringUtil.cleanText(description),
 						Global.platform.youtube.name(), coverdb, filename, videodb, youtube);
 				videoDataEntity.setVideoauthor(uploader);
 				videoDataDao.save(videoDataEntity);
 				processHistoryService.saveProcess(saveProcess.getId(), youtube, platform);
 				if (Global.getGeneratenfo) {
 					EmbyMetadataGenerator.generateMetadata(namefix, upload_date.substring(0, 4), description, "youtube",
-							null, uploader, filedoc, null, uploader_url, dir + baseNameNo + ".webp");
+							null, uploader, filedoc, dir + baseNameNo + ".webp", uploader_url, dir + baseNameNo + ".webp");
 				}
 				sendNotify.sendNotifyData(namefix, youtube, platform);
 			}
@@ -549,7 +553,7 @@ public class AnalysisService {
 							filename + ".jpg", dir);
 					
 				}
-				VideoDataEntity videoDataEntity = new VideoDataEntity(cid, title, desc, platform, coverunaddr,
+				VideoDataEntity videoDataEntity = new VideoDataEntity(cid, StringUtil.getFileName(title, cid), StringUtil.cleanText(desc), platform, coverunaddr,
 						videoPath, videounaddr, video);
 				videoDataEntity.setVideoauthor(upname);
 				if(Global.danmudown && Global.biliodddmm) {
@@ -644,7 +648,7 @@ public class AnalysisService {
 		String coverdir = FileUtil.generateDir(true, Global.platform.douyin.name(), true, filename, null, null);
 		// HttpUtil.downloadFileWithOkHttp(cover, coverfile,coverdir);
 		HttpUtil.downloadFileWithOkHttp(cover, coverfile, coverdir, header);
-		VideoDataEntity videoDataEntity = new VideoDataEntity(awemeId, desc, desc, platform, coverunaddr, videofile+filename + ".mp4",
+		VideoDataEntity videoDataEntity = new VideoDataEntity(awemeId, StringUtil.getFileName(desc, awemeId), StringUtil.cleanText(desc), platform, coverunaddr, videofile+filename + ".mp4",
 				videounrealaddr, originaladdress);
 		// 生成元数据
 		if (Global.getGeneratenfo) {

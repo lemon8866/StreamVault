@@ -318,7 +318,8 @@ public class CollectDataService {
 							HttpUtil.downBiliFromUrl(findVideoStreaming.get("pic"), filename + ".jpg", dir);
 							// 封面down
 							VideoDataEntity videoDataEntity = new VideoDataEntity(findVideoStreaming.get("cid"),
-									findVideoStreaming.get("title"), findVideoStreaming.get("desc"), "哔哩",
+									StringUtil.getFileName(findVideoStreaming.get("title"), findVideoStreaming.get("cid")), 
+									StringUtil.cleanText(findVideoStreaming.get("desc")), "哔哩",
 									codir + "/" + filename + ".jpg", findVideoStreaming.get("video"), videounaddr, bvid);
 							logger.info(vt + (i + 1) + "下载流程结束");
 
@@ -508,7 +509,7 @@ public class CollectDataService {
 						}
 					}
 					HttpUtil.downloadFileWithOkHttp(coveruri, filename + ".jpg", dir2, header);
-					VideoDataEntity videoDataEntity = new VideoDataEntity(awemeId, desc, desc, "抖音", coverunaddr,
+					VideoDataEntity videoDataEntity = new VideoDataEntity(awemeId, StringUtil.getFileName(desc, awemeId), StringUtil.cleanText(desc), "抖音", coverunaddr,
 							FileUtil.generateDir(true, Global.platform.douyin.name(), false, filename, taskname, "mp4"),
 							videounrealaddr, entity.getOriginaladdress());
 					if (Global.getGeneratenfo) {

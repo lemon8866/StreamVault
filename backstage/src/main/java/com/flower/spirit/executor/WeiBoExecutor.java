@@ -120,9 +120,9 @@ public class WeiBoExecutor {
     			}
     		}
 			graphicContentEntity.setOriginaladdress(weibourl);
-			graphicContentEntity.setTitle(text_raw);
+			graphicContentEntity.setTitle(StringUtil.getFileName(text_raw, weiboId));
 			graphicContentEntity.setMarkroute(markroute);
-			graphicContentEntity.setContent(text_raw);
+			graphicContentEntity.setContent(StringUtil.cleanText(text_raw));
 			graphicContentEntity.setImages(imageList.toJSONString());
 			graphicContentEntity.setAuthor(username);
 			graphicContentEntity.setCreatetime(new Date());

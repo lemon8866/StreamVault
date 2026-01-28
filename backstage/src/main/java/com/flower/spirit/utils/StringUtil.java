@@ -49,6 +49,25 @@ public class StringUtil {
 	}
 
 	/**
+	 * 清理文本，只保留汉字、英文字母、数字、空格和换行
+	 * 用于视频简介的统一处理
+	 * 
+	 * @param text 原始文本
+	 * @return 清理后的文本
+	 */
+	public static String cleanText(String text) {
+		if (text == null || text.trim().isEmpty()) {
+			return "";
+		}
+		// 只保留汉字、英文字母、数字、空格和换行
+		String result = text.replaceAll("[^A-Za-z0-9\\u4e00-\\u9fa5\\s\\n]", "");
+		// 合并多个空格为一个
+		result = result.replaceAll("[ \\t]+", " ");
+		// 去除首尾空格
+		return result.trim();
+	}
+
+	/**
 	 * 处理特殊字符串并返回安全的文件名
 	 * 
 	 * @param obj 原始文件名

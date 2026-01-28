@@ -115,9 +115,9 @@ public class DouYinExecutor {
 			}
 	
 			graphicContentEntity.setOriginaladdress(originaladdress);
-			graphicContentEntity.setTitle(desc);
+			graphicContentEntity.setTitle(StringUtil.getFileName(desc, post));
 			graphicContentEntity.setMarkroute(markroute);
-			graphicContentEntity.setContent(desc);
+			graphicContentEntity.setContent(StringUtil.cleanText(desc));
 			graphicContentEntity.setImages(imageList.toJSONString());
 			graphicContentEntity.setAuthor(nickname);
 			graphicContentEntity.setCreatetime(new Date());
@@ -191,9 +191,9 @@ public class DouYinExecutor {
 			}
 	
 			graphicContentEntity.setOriginaladdress(type);
-			graphicContentEntity.setTitle(desc);
+			graphicContentEntity.setTitle(StringUtil.getFileName(desc, post));
 			graphicContentEntity.setMarkroute(markroute);
-			graphicContentEntity.setContent(desc);
+			graphicContentEntity.setContent(StringUtil.cleanText(desc));
 			graphicContentEntity.setImages(imageList.toJSONString());
 			graphicContentEntity.setAuthor(nickname);
 			graphicContentEntity.setCreatetime(new Date());

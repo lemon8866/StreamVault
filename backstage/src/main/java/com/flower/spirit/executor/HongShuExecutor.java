@@ -127,7 +127,7 @@ public class HongShuExecutor {
 								videofile);
 					}
 					videofile = videofile+filename + ".mp4";
-					VideoDataEntity videoDataEntity = new VideoDataEntity(keyid, title, title, "小红书", coverunaddr,
+					VideoDataEntity videoDataEntity = new VideoDataEntity(keyid, StringUtil.getFileName(title, keyid), StringUtil.cleanText(title), "小红书", coverunaddr,
 							videofile,
 							videounrealaddr, url);
 					videoDataEntity.setVideoauthor(nickname);
@@ -172,9 +172,9 @@ public class HongShuExecutor {
 		graphicContentEntity.setVideoid(keyid);
 		graphicContentEntity.setPlatform(Global.platform.rednote.name());
 		graphicContentEntity.setOriginaladdress(url);
-		graphicContentEntity.setTitle(title);
+		graphicContentEntity.setTitle(StringUtil.getFileName(title, keyid));
 		graphicContentEntity.setMarkroute(markroute);
-		graphicContentEntity.setContent(desc);
+		graphicContentEntity.setContent(StringUtil.cleanText(desc));
 		graphicContentEntity.setImages(imageurl.toJSONString());
 		graphicContentEntity.setAuthor(nickname);
 		graphicContentEntity.setCreatetime(new Date());

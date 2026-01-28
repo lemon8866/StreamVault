@@ -55,33 +55,26 @@ public class YtDlpUtil {
 		command.add(url);
 		command.add("-o");
 		if (Global.getGeneratenfo && createnfo) {
-			command.add(outpath + File.separator + "%(title)s" + File.separator + "%(id)s.%(ext)s");
+			command.add(outpath + File.separator + "%(clean_title)s" + File.separator + "%(id)s.%(ext)s");
 		} else {
-			command.add(outpath + File.separator + "%(title)s" + File.separator + "%(title)s.%(ext)s");
+			command.add(outpath + File.separator + "%(clean_title)s" + File.separator + "%(clean_title)s.%(ext)s");
 		}
 
 		command.add("--write-thumbnail");
 		command.add("--convert-thumbnails");
 		command.add("webp");
-		// command.add("%(title)s.%(ext)s");
-//		command.add("--restrict-filenames");
-		command.add("--no-restrict-filenames");
-		command.add("--windows-filenames");
 		
-		command.add("--replace-in-metadata");
-		command.add("title");
-		command.add("#");
-		command.add("_");
+		// 使用 parse-metadata 创建清理后的标题字段
+		// 将 title 字段清理后保存到 clean_title 字段
+		command.add("--parse-metadata");
+		command.add("title:(?P<clean_title>.+)");
 		
+		// 清理标题中的特殊字符，只保留汉字、英文字母、数字
+		// 需要多次替换来清理各种特殊字符
 		command.add("--replace-in-metadata");
-		command.add("title");
-		command.add("\\?");
-		command.add("_");
-		
-		command.add("--replace-in-metadata");
-		command.add("title");
-		command.add("\\|");
-		command.add("_");
+		command.add("clean_title");
+		command.add("[^A-Za-z0-9\\u4e00-\\u9fa5]+");
+		command.add("");
 
 		if (null != Global.useragent && !"".equals(Global.useragent)) {
 			command.add("--user-agent");

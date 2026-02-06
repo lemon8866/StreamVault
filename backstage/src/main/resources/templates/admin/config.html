@@ -626,6 +626,8 @@
               option['rangenum'] = $("#rangenum").val();
               option['frontend'] = $("#frontend").val();
               option['danmudown'] = $("#danmudown").val();
+			// [修复] 补充 hiddenplatforms 字段，防止保存代理时清空隐藏平台设置
+              option['hiddenplatforms'] = $("#hiddenplatforms").val();
               $.post("/admin/api/saveConfig",option,function(data,status){
                   if(data.resCode =="000001"){
                       layer.closeAll();
@@ -786,6 +788,11 @@
             option['frontend'] = $("#frontend").val();
             option['danmudown'] = $("#danmudown").val();
             option['hiddenplatforms'] = $("#hiddenplatforms").val();
+			// [修复] 补充代理配置相关字段，防止保存系统常量时清空代理设置
+            option['agenttype'] = $(".agenttype").val();
+            option['agentaddress'] = $(".agentaddress").val();
+            option['agentport'] = $(".agentport").val();
+            option['agentaccpass'] = $(".agentaccpass").val();
             $.post("/admin/api/saveConfig",option,function(data,status){
                 if(data.resCode =="000001"){
                     layer.closeAll();

@@ -1,0 +1,54 @@
+# StreamVault
+
+> ⛔ **本项目已停止维护并删除。仓库仅保留此声明页面。**
+
+---
+
+## 声明
+
+1. **本项目（StreamVault，原名 spirit）已停止一切开发、维护和分发，代码库已删除，不再以任何形式提供下载或使用。**
+
+2. 本项目在存续期间，仅作为个人技术学习与研究用途开发
+
+
+3. **作者明确反对并禁止**任何利用本项目（或其衍生代码）进行的以下行为：
+   - 侵犯任何第三方知识产权（包括但不限于未经授权下载、复制、传播受版权保护的内容）
+   - 违反任何平台服务协议或用户协议
+   - 侵犯他人隐私权、肖像权等合法权益
+   - 任何违反使用者所在地适用法律法规的行为
+
+4. 任何人在本项目删除后继续使用其副本、衍生代码或二次开发版本所产生的一切法律后果，均由该行为人自行承担，与原作者无任何关联。作者不对任何第三方基于本项目的使用、修改、分发行为承担任何形式的法律责任。
+
+5. 本项目中参考或使用的第三方开源代码，其权利归各自原作者所有，使用者须遵守对应的开源许可协议。作者不对第三方代码的合规性做任何保证。
+
+---
+
+## 免责条款
+
+- 本项目按"原样"提供，作者不做任何明示或暗示的保证，包括但不限于适销性、特定用途适用性和非侵权性。
+- 在法律允许的最大范围内，作者不对因使用或无法使用本项目导致的任何直接、间接、附带、特殊或后果性损害承担责任。
+- 使用者因使用本项目所产生的任何法律纠纷或损失，均由使用者自行承担全部责任。
+
+---
+
+## 第三方开源许可
+
+| 项目 | 许可协议 |
+|------|----------|
+| [bilibili-API-collect](https://github.com/SocialSisterYi/bilibili-API-collect) | CC BY-NC 4.0（禁止商业使用） |
+| [f2](https://github.com/Johnserf-Seed/f2) | Apache License 2.0 |
+| [Light-Year-Admin-Template](https://gitee.com/yinqi/Light-Year-Admin-Template) | Apache License 2.0 |
+| [yt-dlp](https://github.com/yt-dlp/yt-dlp) | Unlicense |
+| [danmu2ass](https://github.com/gwy15/danmu2ass) | MIT |
+| [parsing-tiktok-video](https://toscode.gitee.com/zong_zh/parsing-tiktok-video) | 未知许可，请自行查阅原项目 |
+
+本项目主体代码采用 Apache License 2.0 授权。包含 bilibili-API-collect 相关代码的部分受 CC BY-NC 4.0 约束，仅限个人研究与非商业用途。
+
+---
+
+
+<div align="center">
+
+**本项目已永久停止维护并删除。**
+
+</div>

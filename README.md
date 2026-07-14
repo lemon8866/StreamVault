@@ -31,22 +31,6 @@
 
 ---
 
-## 第三方开源许可
-
-| 项目 | 许可协议 |
-|------|----------|
-| [bilibili-API-collect](https://github.com/SocialSisterYi/bilibili-API-collect) | CC BY-NC 4.0（禁止商业使用） |
-| [f2](https://github.com/Johnserf-Seed/f2) | Apache License 2.0 |
-| [Light-Year-Admin-Template](https://gitee.com/yinqi/Light-Year-Admin-Template) | Apache License 2.0 |
-| [yt-dlp](https://github.com/yt-dlp/yt-dlp) | Unlicense |
-| [danmu2ass](https://github.com/gwy15/danmu2ass) | MIT |
-| [parsing-tiktok-video](https://toscode.gitee.com/zong_zh/parsing-tiktok-video) | 未知许可，请自行查阅原项目 |
-
-本项目主体代码采用 Apache License 2.0 授权。包含 bilibili-API-collect 相关代码的部分受 CC BY-NC 4.0 约束，仅限个人研究与非商业用途。
-
----
-
-
 <div align="center">
 
 **本项目已永久停止维护并删除。**
